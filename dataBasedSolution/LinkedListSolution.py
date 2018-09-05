@@ -22,6 +22,12 @@ class RandomListNode(object):
 
 
 class LinkedListSolution(object):
+    def printLinked(self, node):
+        cur = node
+        while cur:
+            print(cur.val)
+            cur = cur.next
+
     def deleteNode(self, node):
         """
         :type node: ListNode
@@ -209,15 +215,102 @@ class LinkedListSolution(object):
             cur = cur.next
         return m[head] if head else None
 
-        # map = {}
-        # iterNode = head
-        # while iterNode:
-        #     map[iterNode] = RandomListNode(iterNode.label)
-        #     iterNode = iterNode.next
-        #
-        # iterNode = head
-        # while iterNode:
-        #     map[iterNode].next = map[iterNode.next] if iterNode.next else None
-        #     map[iterNode].random = map[iterNode.random] if iterNode.random else None
-        #     iterNode = iterNode.next
-        # return map[head] if head else None
+    def detectCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        # x: steps from head to ans node(cycle start), y: steps from ans node to meet(slow and fast meets in this node)
+        # when meets:
+        #     slow goes (x+y) steps, fast goes 2*(x+y) steps
+        #     fast goes one more cycle, a cycle consists of y and steps from meet to head
+        #     2*(x+y) - (x+y) == x+y means steps from meet to head equals x : which explains the second while in code
+        if not head:
+            return None
+        slow, fast, meet = head, head, None
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+            if slow == fast:
+                meet = slow
+                break
+        while head and meet:
+            if head == meet:
+                return meet
+            head, meet = head.next, meet.next
+
+    def reorderList(self, head):
+        """
+        :type head: ListNode
+        :rtype: void Do not return anything, modify head in-place instead.
+        """
+        # o(n) space and o(n) time
+        if not head or not head.next:
+            return
+        mid, cur = head, head.next
+        while cur and cur.next:
+            mid = mid.next
+            cur = cur.next.next
+        cur, halfs = mid.next, []
+
+        while cur:
+            halfs = [cur.val] + halfs
+            cur = cur.next
+        mid.next = None
+
+        cur = head
+        for i in halfs:
+            tmp = ListNode(i)
+            tmp.next = cur.next
+            cur.next = tmp
+            cur = cur.next.next
+
+    def reorderList1(self, head):
+        # o(n) time with no extra space
+        if not head:
+            return None
+
+        # 1st: find the mid
+        fast, slow = head.next, head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+
+        # 2nd: reverse the second half
+        run = slow.next
+        slow.next, l1 = None, None
+        while run:
+            runN = run.next
+            run.next = l1
+            l1 = run
+            run = runN
+
+        # 3rd: insert one by one
+        l0 = head
+        while l1:
+            l0n = l0.next
+            l1n = l1.next
+
+            l0.next = l1
+            l1.next = l0n
+
+            l0 = l0n
+            l1 = l1n
+
+    def insertionSortList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head or not head.next:
+            return head
+        nh, cur = ListNode(0), head.next
+        nh.next = ListNode(head.val)
+        while cur:
+            tmp = ListNode(cur.val)
+            ncur = nh
+            while ncur.next and ncur.next.val < tmp.val:
+                ncur = ncur.next
+            tmp.next = ncur.next
+            ncur.next = tmp
+            cur = cur.next
+        return nh.next

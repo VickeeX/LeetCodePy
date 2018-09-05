@@ -448,3 +448,20 @@ class TreeSolution:
 
         sumHelper(0, root)
         return self.tree_sum
+
+    def preorderTraversalIteral(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        ans, stack = [], [root]
+        while stack:
+            tmp = stack.pop()
+            ans.append(tmp.val)
+            if tmp.right:
+                stack.append(tmp.right)
+            if tmp.left:
+                stack.append(tmp.left)
+        return ans
