@@ -314,3 +314,18 @@ class LinkedListSolution(object):
             ncur.next = tmp
             cur = cur.next
         return nh.next
+
+    # def sortList(self, head):
+    #     """
+    #     :type head: ListNode
+    #     :rtype: ListNode
+    #     """
+    #     def findMid(node):
+    #         mid, fast = head, head.next
+    #         while fast and fast.next:
+    #             mid = mid.next
+    #             fast = fast.next.next
+    #         return mid
+    #
+    #     def merge(h1,h2):
+    #
