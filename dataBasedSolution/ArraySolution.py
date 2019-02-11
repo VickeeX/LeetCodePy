@@ -1112,4 +1112,40 @@ class ArraySolution:
         # return a
         return (sum(set(nums)) * 3 - sum(nums)) // 2
 
+    def findMedianSortedArrays(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: float
+        """
+        l1, l2 = len(nums1), len(nums2)
+        size = l1 + l2
+        p1, p2 = 0, 0  # record the visited position of nums1 and nums2
+        n1, n2 = 0, 0
 
+        for i in range(1, (size + 4) // 2):
+            n2 = n1
+            if p1 >= l1:
+                if p2 >= l2:
+                    break
+                n1 = nums2[p2]
+                p2 += 1
+            elif p2 >= l2:
+                n1 = nums1[p1]
+                p1 += 1
+            elif nums1[p1] < nums2[p2]:
+                n1 = nums1[p1]
+                p1 += 1
+            else:
+                n1 = nums2[p2]
+                p2 += 1
+
+        if size % 2 == 0:
+            return (n1 + n2)/2
+        else:
+            return n1
+
+        # use more space
+        # nums1.extend(nums2)
+        # nums1.sort()
+        # return nums1[len(nums1)//2] if len(nums1) % 2 == 1 else float(nums1[(len(nums1)//2)-1]+nums1[len(nums1)//2])/2
