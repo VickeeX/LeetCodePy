@@ -1141,11 +1141,13 @@ class ArraySolution:
                 p2 += 1
 
         if size % 2 == 0:
-            return (n1 + n2)/2
+            return (n1 + n2) / 2
         else:
             return n1
 
-        # use more space
-        # nums1.extend(nums2)
-        # nums1.sort()
-        # return nums1[len(nums1)//2] if len(nums1) % 2 == 1 else float(nums1[(len(nums1)//2)-1]+nums1[len(nums1)//2])/2
+            # use more space
+            # nums1.extend(nums2)
+            # nums1.sort()
+            # return nums1[len(nums1)//2] if len(nums1) % 2 == 1
+            # else float(nums1[(len(nums1)//2)-1]+nums1[len(nums1)//2])/2
+

@@ -430,3 +430,17 @@ class StringSolution:
         for i in range(1, len(s) + 1):
             ok += [any(ok[j] and s[j:i] in wordDict for j in range(i))]
         return ok[-1]
+
+    def isMatch(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        if not p:
+            return not s  # true: both s and o empty
+        first_match = bool(s) and p[0] in {s[0], '.'}  # whether first char matches
+        if len(p) >= 2 and p[1] == '*':
+            return self.isMatch(s, p[2:]) or first_match and self.isMatch(s[1:], p)
+        else:
+            return first_match and self.isMatch(s[1:], p[1:])
