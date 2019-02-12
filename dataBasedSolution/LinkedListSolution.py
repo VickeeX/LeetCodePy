@@ -329,3 +329,25 @@ class LinkedListSolution(object):
     #
     #     def merge(h1,h2):
     #
+
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        if not lists:
+            return []
+        empty_num, k, ans = 0, len(lists), []
+        while True:
+            first, pos, num, empty_num = True, -1, 0, 0
+            for i in range(0, k):
+                if not lists[i]:  # list is empty
+                    empty_num += 1
+                elif first or lists[i].val < num:  # first non-empty list or smaller number
+                    num, pos, first = lists[i].val, i, False
+            if lists[pos]:
+                lists[pos] = lists[pos].next
+            if empty_num < k:
+                ans = ans + [num]
+            else:
+                return ans
