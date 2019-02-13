@@ -351,3 +351,27 @@ class LinkedListSolution(object):
                 ans = ans + [num]
             else:
                 return ans
+
+    def reverseKGroup(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+        t, i = head, 0
+        while t:
+            t = t.next
+            i += 1
+        if i < k:  # the last group contained less than k elements does no change
+            return head
+
+        ans, tmp = head, head
+        for i in range(0, k):
+            tmp = tmp.next
+        ans.next, head = self.reverseKGroup(tmp, k), head.next  # recursion
+        for i in range(1, k):  # reverse the first group (k elements)
+            tmp = head.next
+            head.next = ans
+            ans = head
+            head = tmp
+        return ans
