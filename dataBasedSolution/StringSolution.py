@@ -475,3 +475,21 @@ class StringSolution:
             if not dic:
                 ans = ans + [i]
         return ans
+
+    def longestValidParentheses(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        ans, stack = 0, []
+        stack.append(-1)
+        for i in range(0, len(s)):
+            if s[i] == '(':
+                stack.append(i)
+            else:
+                stack.pop()
+                if not stack:
+                    stack.append(i)
+                else:
+                    ans = max(ans, i - stack[-1])  # parentheses: stack.peak to current pos
+        return ans
