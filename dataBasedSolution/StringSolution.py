@@ -444,3 +444,34 @@ class StringSolution:
             return self.isMatch(s, p[2:]) or first_match and self.isMatch(s[1:], p)
         else:
             return first_match and self.isMatch(s[1:], p[1:])
+
+    def findSubstring(self, s, words):
+        """
+        :type s: str
+        :type words: List[str]
+        :rtype: List[int]
+        """
+        if not s or not words:
+            return []
+        word_len, length = len(words[0]), len(words[0]) * len(words)
+        ans, words_dic = [], dict()
+        for word in words:  # get wrong while using set: the dup words would be omitted
+            if word in words_dic.keys():
+                words_dic[word] += 1
+            else:
+                words_dic[word] = 1
+        # print(words_dic)
+
+        for i in range(0, len(s) - length + 1):
+            dic, j = words_dic.copy(), i  # use dict.copy()
+            while dic:
+                if s[j:j + word_len] in dic.keys():
+                    dic[s[j:j + word_len]] -= 1
+                    if dic[s[j:j + word_len]] == 0:
+                        dic.pop(s[j:j + word_len])
+                    j += word_len
+                else:
+                    break
+            if not dic:
+                ans = ans + [i]
+        return ans
