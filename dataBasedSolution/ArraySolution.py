@@ -1151,3 +1151,38 @@ class ArraySolution:
             # return nums1[len(nums1)//2] if len(nums1) % 2 == 1
             # else float(nums1[(len(nums1)//2)-1]+nums1[len(nums1)//2])/2
 
+    def solveSudoku(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: void Do not return anything, modify board in-place instead.
+        """
+        self._solveSudoku(board)
+
+    def _solveSudoku(self, board):
+        x, y = -1, -1
+        for i in range(0, 9):
+            for j in range(0, 9):
+                if board[i][j] == '.':
+                    x, y = i, j
+                    break
+            if x != -1:
+                break
+        if x == -1:  # finished filling in 
+            return True
+
+        candiates = set("123456789")
+        for i in range(0, 9):
+            if board[x][i] in candiates:
+                candiates.remove(board[x][i])  # remove nums appeared in row
+            if board[i][y] in candiates:
+                candiates.remove(board[i][y])  # remove nums appeared in column
+        for i in range(x // 3 * 3, x // 3 * 3 + 3):
+            for j in range(y // 3 * 3, y // 3 * 3 + 3):
+                if board[i][j] in candiates:
+                    candiates.remove(board[i][j])  # remove nums appeared in sub box
+        for c in candiates:
+            board[x][y] = c
+            if self._solveSudoku(board):
+                return True
+            board[x][y] = '.'  # backtrace, select another candiate number
+        return False
