@@ -1186,3 +1186,23 @@ class ArraySolution:
                 return True
             board[x][y] = '.'  # backtrace, select another candiate number
         return False
+
+    def firstMissingPositive(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if not nums:
+            return 1
+        size = len(nums)  # 1 <= ans <= size+1
+        for i in range(0, size):  # put num in [1,size] to position (num-1)
+            cur = nums[i]
+            while 0 < cur < size + 1 and cur != nums[cur - 1]:
+                tmp = nums[cur - 1]
+                nums[cur - 1] = cur
+                cur = tmp
+
+        for i in range(0, size):
+            if nums[i] != i + 1:  # the first position i not put i+1 be the first missing 
+                return i + 1
+        return size + 1  # 1~size all exists, first missing: size+1 
