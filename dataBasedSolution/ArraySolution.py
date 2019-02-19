@@ -1206,3 +1206,37 @@ class ArraySolution:
             if nums[i] != i + 1:  # the first position i not put i+1 be the first missing 
                 return i + 1
         return size + 1  # 1~size all exists, first missing: size+1 
+
+    def trap_brute_force(self, height):  # O(n^2) time and const extra space
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        ans, l, r, size = 0, 0, 0, len(height)
+        for i in range(0, size):
+            if i != 0:
+                l = max(l, height[i - 1])
+            if i != size - 1:
+                r = max(height[i + 1:])
+            if min(l, r) > height[i]:
+                ans += min(l, r) - height[i]
+        return ans
+    
+    def trap_dynamic(self, height):  # O(n) time and O(n) extra space
+        size = len(height)
+        ans, left, right = 0, [0] * size, [0] * size  # store the left_max and right_max
+        for i in range(0, size):
+            if i == 0:
+                left[0] = height[0]
+            else:
+                left[i] = max(left[i - 1], height[i])
+            if i == 0:
+                right[-1] = height[-1]
+            else:
+                right[size - i - 1] = max(right[size - i], height[size - i - 1])
+        print(left, right)
+        for i in range(0, size):
+            m = min(left[i], right[i])
+            if m > height[i]:
+                ans += m - height[i]
+        return ans
