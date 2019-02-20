@@ -1309,3 +1309,22 @@ class ArraySolution:
             ans += [newInterval]
         print([[a.start, a.end] for a in ans])
         return ans
+
+    def fullJustify(self, words, maxWidth):
+        """
+        :type words: List[str]
+        :type maxWidth: int
+        :rtype: List[str]
+        """
+        if not words:
+            return [" " * maxWidth]
+        ans, cur, num = [], [], 0
+        for w in words:
+            if num + len(w) + len(cur) > maxWidth:
+                for i in range(maxWidth - num):
+                    cur[i % (len(cur) - 1 or 1)] += ' '
+                ans.append(''.join(cur))
+                cur, num = [], 0
+            cur, num = cur + [w], num + len(w)
+        return ans+[' '.join(cur).ljust(maxWidth)]
+
