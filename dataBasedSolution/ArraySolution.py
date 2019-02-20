@@ -1221,7 +1221,7 @@ class ArraySolution:
             if min(l, r) > height[i]:
                 ans += min(l, r) - height[i]
         return ans
-    
+
     def trap_dynamic(self, height):  # O(n) time and O(n) extra space
         size = len(height)
         ans, left, right = 0, [0] * size, [0] * size  # store the left_max and right_max
@@ -1240,3 +1240,15 @@ class ArraySolution:
             if m > height[i]:
                 ans += m - height[i]
         return ans
+
+    def jump(self, nums):
+        ans, i = 0, 0
+        while i < len(nums) - 1:
+            if nums[i] + i >= len(nums) - 1:
+                return ans + 1
+            nexts = [x + j for j, x in enumerate(nums[i + 1:i + 1 + nums[i]])]
+            i += nexts.index(max(nexts)) + 1  # greedy
+            ans += 1
+        return ans
+
+
