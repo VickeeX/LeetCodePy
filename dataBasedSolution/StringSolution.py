@@ -493,3 +493,39 @@ class StringSolution:
                 else:
                     ans = max(ans, i - stack[-1])  # parentheses: stack.peak to current pos
         return ans
+
+    def isNumber(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        s = s.strip()
+        try:
+            s = float(s)
+            return True
+        except:
+            return False
+
+    def isNumber_DFA(self, s):
+        state = [{},
+                 {'blank': 1, 'sign': 2, 'digit': 3, '.': 4},
+                 {'digit': 3, '.': 4},
+                 {'digit': 3, '.': 5, 'e': 6, 'blank': 9},
+                 {'digit': 5},
+                 {'digit': 5, 'e': 6, 'blank': 9},
+                 {'sign': 7, 'digit': 8},
+                 {'digit': 8},
+                 {'digit': 8, 'blank': 9},
+                 {'blank': 9}]
+        cur = 1
+        for c in s:
+            if c >= '0' and c <= '9':
+                c = 'digit'
+            if c == ' ':
+                c = 'blank'
+            if c in ['+', '-']:
+                c = 'sign'
+            if c not in state[cur].keys():
+                return False
+            cur = state[cur][c]
+        return cur in [3, 5, 8, 9]
