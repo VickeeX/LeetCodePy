@@ -1251,4 +1251,21 @@ class ArraySolution:
             ans += 1
         return ans
 
+    def solveNQueens(self, n):
+        """
+        :type n: int
+        :rtype: List[List[str]]
+        """
 
+        def dfs(queens, pos_sum, pos_dif):
+            cur = len(queens)
+            if cur == n:
+                ans.append(queens)
+                return
+            for i in range(n):
+                if i not in queens and cur + i not in pos_sum and cur - i not in pos_dif:
+                    dfs(queens + [i], pos_sum + [cur + i], pos_dif + [cur - i])
+
+        ans = []
+        dfs([], [], [])
+        return [['.' * i + 'Q' + '.' * (n - i - 1) for i in s] for s in ans]
