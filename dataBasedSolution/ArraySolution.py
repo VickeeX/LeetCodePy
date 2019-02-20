@@ -1275,6 +1275,7 @@ class ArraySolution:
         :type n: int
         :rtype: int
         """
+
         def dfs(queens, pos_sum, pos_dif):
             cur = len(queens)
             if cur == n:
@@ -1287,3 +1288,24 @@ class ArraySolution:
         ans = []
         dfs([], [], [])
         return len(ans)
+
+    def insert(self, intervals, newInterval):
+        """
+        :type intervals: List[Interval]
+        :type newInterval: Interval
+        :rtype: List[Interval]
+        """
+        ans, used = [], False
+        for i in range(0, len(intervals)):
+            if newInterval.start > intervals[i].end:  # newInterval starts later
+                ans += [intervals[i]]
+            elif newInterval.end < intervals[i].start:  # newIntervals ends earlier
+                ans, used = ans + [newInterval] + intervals[i:], True
+                break
+            else:  # encounters, modify newInterval to meet the next
+                newInterval.start = min(intervals[i].start, newInterval.start)
+                newInterval.end = max(intervals[i].end, newInterval.end)
+        if not used:
+            ans += [newInterval]
+        print([[a.start, a.end] for a in ans])
+        return ans
