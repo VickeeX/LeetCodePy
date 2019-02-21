@@ -1335,7 +1335,7 @@ class ArraySolution:
         :type word: str
         :rtype: bool
         """
-
+        # to prevent board changing, do not use deepcopy() -- time limit exceeded
         def search_helper(ni, nj, new_board, new_word):
             if len(new_word) == 0:
                 return True
