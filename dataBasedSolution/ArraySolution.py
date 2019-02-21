@@ -1335,6 +1335,7 @@ class ArraySolution:
         :type word: str
         :rtype: bool
         """
+
         # to prevent board changing, do not use deepcopy() -- time limit exceeded
         def search_helper(ni, nj, new_board, new_word):
             if len(new_word) == 0:
@@ -1354,3 +1355,18 @@ class ArraySolution:
                     if search_helper(i, j, board, word[1:]):
                         return True
         return False
+
+    def largestRectangleAreaDP(self, heights):
+        """
+        :type heights: List[int]
+        :rtype: int
+        """
+        if not heights:
+            return 0
+        ans, dp = max(heights), [h for h in heights]  # dp[i][j]: min num from heights[j] to heights[j+i+1]
+        for i in range(1, len(heights)):
+            for j in range(0, len(heights) - i):
+                dp[j] = min(dp[j], heights[i + j])
+                ans = max(ans, dp[j] * (i + 1))
+            # print(dp)
+        return ans
