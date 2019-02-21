@@ -565,3 +565,28 @@ class StringSolution:
         delete = self.minDistanceSlow(word1[1:], word2) + 1
         replace = self.minDistanceSlow(word1[1:], word2[1:]) + 1
         return min(insert, delete, replace)
+
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        if not s or not t:
+            return ""
+        need, count = Counter(t), len(t)
+        start, end, i = 0, 0, 0
+        for j, char in enumerate(s, 0):
+            count -= need[char] > 0  # match current char
+            need[char] -= 1
+            if count == 0:  # matches success
+                while i < j and need[s[i]] < 0:  # the char is redundant in the matching window
+                    need[s[i]] += 1
+                    i += 1
+                if end == 0 or j - i + 1 < end - start:  # first or shorter window
+                    start, end = i, j + 1
+                # remove current from window to match next
+                need[s[i]] += 1
+                count += 1
+                i += 1
+        return s[start:end]
