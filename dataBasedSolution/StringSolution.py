@@ -529,3 +529,39 @@ class StringSolution:
                 return False
             cur = state[cur][c]
         return cur in [3, 5, 8, 9]
+
+    def minDistance(self, word1, word2):
+        """
+        :type word1: str
+        :type word2: str
+        :rtype: int
+        """
+        row, col = len(word1), len(word2)
+        # dp[i][j] represents minDistance from word1[:i] to word2[:j]
+        dp = [[0] * (col + 1) for _ in range(0, row + 1)]
+        dp[0][0] = 0
+        for i in range(0, row + 1):
+            dp[i][0] = i
+        for i in range(0, col + 1):
+            dp[0][i] = i
+        for i in range(0, row):
+            for j in range(0, col):
+                if word1[i] == word2[j]:
+                    dp[i + 1][j + 1] = dp[i][j]
+                else:
+                    dp[i + 1][j + 1] = min(dp[i][j], dp[i + 1][j], dp[i][j + 1]) + 1
+        return dp[-1][-1]
+
+    def minDistanceSlow(self, word1, word2):
+        if not word1 and not word2:
+            return 0
+        if not word1:
+            return len(word2)
+        if not word2:
+            return len(word1)
+        if word1[0] == word2[0]:
+            return self.minDistanceSlow(word1[1:], word2[1:])
+        insert = self.minDistanceSlow(word1, word2[1:]) + 1
+        delete = self.minDistanceSlow(word1[1:], word2) + 1
+        replace = self.minDistanceSlow(word1[1:], word2[1:]) + 1
+        return min(insert, delete, replace)
