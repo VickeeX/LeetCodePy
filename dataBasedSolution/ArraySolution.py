@@ -9,6 +9,7 @@
 
 import math
 from collections import defaultdict
+from copy import deepcopy
 from itertools import permutations, combinations
 
 
@@ -1326,5 +1327,30 @@ class ArraySolution:
                 ans.append(''.join(cur))
                 cur, num = [], 0
             cur, num = cur + [w], num + len(w)
-        return ans+[' '.join(cur).ljust(maxWidth)]
+        return ans + [' '.join(cur).ljust(maxWidth)]
 
+    def exist(self, board, word):
+        """
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
+        """
+
+        def search_helper(ni, nj, new_board, new_word):
+            if len(new_word) == 0:
+                return True
+            tmp = new_board[ni][nj]
+            new_board[ni][nj] = '.'
+            for x, y in [(ni - 1, nj), (ni, nj - 1), (ni + 1, nj), (ni, nj + 1)]:
+                if 0 <= x < len(new_board) and 0 <= y < len(board[0]) and new_board[x][y] == new_word[0]:
+                    if search_helper(x, y, new_board, new_word[1:]):
+                        return True
+            new_board[ni][nj] = tmp  # restore the board
+            return False
+
+        for i, row in enumerate(board, 0):
+            for j, char in enumerate(row, 0):
+                if char == word[0]:
+                    if search_helper(i, j, board, word[1:]):
+                        return True
+        return False
