@@ -1356,6 +1356,22 @@ class ArraySolution:
                         return True
         return False
 
+    def largestRectangleArea(self, heights):
+        """
+        :type heights: List[int]
+        :rtype: int
+        """
+        s, res, heights = [], 0, [0] + heights + [0]
+        for i, height in enumerate(heights):
+            if len(s) > 0:
+                while height < heights[s[-1]]:
+                    print(height, s[-1], heights[s[-1]])
+                    top = s.pop()
+                    res = max(res, heights[top] * (i - s[-1] - 1))
+            s.append(i)
+            print(s)
+        return res
+
     def largestRectangleAreaDP(self, heights):
         """
         :type heights: List[int]
@@ -1368,5 +1384,5 @@ class ArraySolution:
             for j in range(0, len(heights) - i):
                 dp[j] = min(dp[j], heights[i + j])
                 ans = max(ans, dp[j] * (i + 1))
-            # print(dp)
+                # print(dp)
         return ans
