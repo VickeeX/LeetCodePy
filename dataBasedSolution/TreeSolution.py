@@ -465,3 +465,36 @@ class TreeSolution:
             if tmp.left:
                 stack.append(tmp.left)
         return ans
+
+    def recoverTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: None Do not return anything, modify root in-place instead.
+        """
+        self.s, nums = [], []
+
+        def mid_order(tmp):
+            if not tmp:
+                return
+            if tmp.left:
+                mid_order(tmp.left)
+            self.s += [tmp.val]
+            if tmp.right:
+                mid_order(tmp.right)
+            return
+
+        def swap(tmp, n1, n2):
+            if not tmp:
+                return
+            if tmp.val == n1:
+                tmp.val = n2
+            elif tmp.val == n2:
+                tmp.val = n1
+            swap(tmp.left, n1, n2)
+            swap(tmp.right, n1, n2)
+
+        mid_order(root)
+        for i, n in enumerate(sorted(self.s)):  # find the nums(not in sorted) to swap
+            if n != self.s[i]:
+                nums += [n]
+        swap(root, nums[0], nums[1])
