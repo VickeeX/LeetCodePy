@@ -8,7 +8,7 @@
 """
 
 from collections import defaultdict, Counter, deque
-from functools import reduce
+from functools import reduce,lru_cache
 import re, string
 
 
@@ -608,3 +608,27 @@ class StringSolution:
                         self.isScramble(s1[:i], s2[n - i:]) and self.isScramble(s1[i:], s2[:n - i])):
                 return True
         return False
+
+    def isInterleave(self, s1, s2, s3):
+        """
+        :type s1: str
+        :type s2: str
+        :type s3: str
+        :rtype: bool
+        """
+
+        @lru_cache(maxsize=None)
+        def helper(i1, i2):
+            i3 = i1 + i2
+            if i1 == len(s1):
+                return s2[i2:] == s3[i3:]
+            if i2 == len(s2):
+                return s1[i1:] == s3[i3:]
+
+            if s3[i3] == s1[i1] and helper(i1 + 1, i2):
+                return True
+            if s3[i3] == s2[i2] and helper(i1, i2 + 1):
+                return True
+            return False
+
+        return helper(0, 0)
