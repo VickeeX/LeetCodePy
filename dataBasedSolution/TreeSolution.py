@@ -498,3 +498,24 @@ class TreeSolution:
             if n != self.s[i]:
                 nums += [n]
         swap(root, nums[0], nums[1])
+
+    def recoverTreeStack(self, root):
+        swap = {0: None, 1: None}
+        prev = TreeNode(float('-inf'))
+        stack = [root]
+        while stack:
+            print([node.val for node in stack ])
+            if stack[-1].left:
+                stack.append(stack[-1].left)
+            else:
+                while stack:
+                    node = stack.pop()
+                    if not swap[0] and prev.val >= node.val:
+                        swap[0] = prev
+                    if swap[0] and prev.val >= node.val:
+                        swap[1] = node
+                    prev = node
+                    if node.right:
+                        stack.append(node.right)
+                        break
+        swap[1].val, swap[0].val = swap[0].val, swap[1].val
