@@ -8,7 +8,7 @@
 """
 
 from collections import defaultdict, Counter, deque
-from functools import reduce,lru_cache
+from functools import reduce, lru_cache
 import re, string
 
 
@@ -632,3 +632,23 @@ class StringSolution:
             return False
 
         return helper(0, 0)
+
+    def numDistinct(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: int
+        """
+        if len(s) < len(t) or (len(s) == len(t) and s != t):
+            return 0
+        # s, t = '*' + s, '*' + t
+        h, w = len(s) + 1, len(t) + 1
+        dp = [[0] * w for _ in range(0, h)]  # dp[i][j]: numDistenct(s[:i], t[:j])
+        for i in range(0, h):
+            dp[i][0] = 1
+        for i in range(1, h):
+            for j in range(1, w):
+                dp[i][j] = dp[i - 1][j]
+                if s[i - 1] == t[j - 1]:
+                    dp[i][j] += dp[i - 1][j - 1]
+        return dp[-1][-1]
