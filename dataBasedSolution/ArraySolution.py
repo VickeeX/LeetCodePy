@@ -1408,3 +1408,18 @@ class ArraySolution:
                     ans = max(ans, h * w)
                 stack.append(i)
         return ans
+
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        if len(prices) == 0 or len(prices) == 1:
+            return 0
+        b1, b2, s1, s2 = prices[0], prices[0], 0, 0
+        for price in prices[1:]:
+            b1 = min(b1, price)
+            s1 = max(s1, price - b1)
+            b2 = min(b2, price - s1)  # profit for last transaction is sell1
+            s2 = max(s2, price - b2)
+        return s2
