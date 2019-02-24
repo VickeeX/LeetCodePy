@@ -504,7 +504,7 @@ class TreeSolution:
         prev = TreeNode(float('-inf'))
         stack = [root]
         while stack:
-            print([node.val for node in stack ])
+            print([node.val for node in stack])
             if stack[-1].left:
                 stack.append(stack[-1].left)
             else:
@@ -519,3 +519,23 @@ class TreeSolution:
                         stack.append(node.right)
                         break
         swap[1].val, swap[0].val = swap[0].val, swap[1].val
+
+    def maxPathSum(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        self.ans = -float('inf')  # cache current max_sum path (includes left+node+path)
+
+        def dfs(node):  # return the max of left/right path
+            if not node:
+                return -float('inf')
+            lv, rv = dfs(node.left), dfs(node.right)
+            tmp_max = max(node.val, node.val + lv, node.val + rv)
+            self.ans = max(self.ans, tmp_max, lv + node.val + rv)
+            return tmp_max
+
+        dfs(root)
+        return self.ans
