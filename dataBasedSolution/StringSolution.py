@@ -652,3 +652,16 @@ class StringSolution:
                 if s[i - 1] == t[j - 1]:
                     dp[i][j] += dp[i - 1][j - 1]
         return dp[-1][-1]
+
+    def minCut(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        res = [i-1 for i in range(0, len(s) + 1)]
+        for i in range(0, len(s)):
+            for j in range(i, len(s)):
+                if s[i:j] == s[j:i:-1]:
+                    res[j + 1] = min(res[j + 1], res[i] + 1)
+        return res[-1]
+
