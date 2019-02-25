@@ -658,10 +658,9 @@ class StringSolution:
         :type s: str
         :rtype: int
         """
-        res = [i-1 for i in range(0, len(s) + 1)]
+        res = [i - 1 for i in range(0, len(s) + 1)]
         for i in range(0, len(s)):
             for j in range(i, len(s)):
                 if s[i:j] == s[j:i:-1]:
-                    res[j + 1] = min(res[j + 1], res[i] + 1)
+                    res[j + 1] = min(res[j + 1], res[i] + 1)  # dp
         return res[-1]
-
