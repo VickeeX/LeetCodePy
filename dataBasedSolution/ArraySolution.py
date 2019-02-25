@@ -1447,3 +1447,31 @@ class ArraySolution:
             dicts = new_dict
 
         return ans
+
+    def longestConsecutive(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        nums, ans = set(nums), 0
+        while nums:
+            n = nums.pop()
+            n1, n2 = n - 1, n + 1
+            while n1 in nums:
+                nums.remove(n1)
+                n1 -= 1
+            while n2 in nums:
+                nums.remove(n2)
+                n2 += 1
+            ans = max(ans, n2 - n1 - 1)
+        return ans
+
+    def longestConsecutive_(self, nums):
+        nums, ans = set(nums), 0
+        for n in nums:
+            if n - 1 not in nums:
+                nb = n + 1
+                while nb in nums:
+                    nb += 1
+                ans = max(ans, nb - n)
+        return ans
