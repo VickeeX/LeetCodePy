@@ -9,7 +9,6 @@
 
 import math
 from collections import defaultdict
-from copy import deepcopy
 from itertools import permutations, combinations
 
 
@@ -1423,3 +1422,28 @@ class ArraySolution:
             b2 = min(b2, price - s1)  # profit for last transaction is sell1
             s2 = max(s2, price - b2)
         return s2
+
+    def findLadders(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: List[List[str]]
+        """
+        words, dicts, ans = set(wordList), {}, []
+        dicts[beginWord] = [[beginWord]]
+        while dicts:
+            new_dict = defaultdict(list)  # current word path
+            for w in dicts:
+                if w == endWord:
+                    ans.extend(v for v in dicts[w])
+                else:
+                    for i in range(len(w)):
+                        for c in 'abcdefghijklmnopqrstuvwxyz':
+                            tw = w[:i] + c + w[i + 1:]
+                            if tw in words:
+                                new_dict[tw] += [j + [tw] for j in dicts[w]]
+            words -= set(new_dict.keys())
+            dicts = new_dict
+
+        return ans
