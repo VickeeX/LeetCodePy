@@ -1475,3 +1475,20 @@ class ArraySolution:
                     nb += 1
                 ans = max(ans, nb - n)
         return ans
+
+    def solve(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: None Do not return anything, modify board in-place instead.
+        """
+        if not board:
+            return
+        row, col = len(board), len(board[0])
+        border = [(i, j) for i in (0, row - 1) for j in range(col)] \
+                 + [(i, j) for i in range(1, row) for j in (0, col - 1)]  # record all the borders
+        while border:
+            i, j = border.pop()
+            if 0 <= i < row and 0 <= j < col and board[i][j] == 'O':
+                board[i][j] = '*'
+                border += [[i - 1, j], [i, j - 1], [i + 1, j], [i, j + 1]]  # DFS
+        board[:] = [['XO'[x == '*'] for x in line] for line in board]
