@@ -1492,3 +1492,18 @@ class ArraySolution:
                 board[i][j] = '*'
                 border += [[i - 1, j], [i, j - 1], [i + 1, j], [i, j + 1]]  # DFS
         board[:] = [['XO'[x == '*'] for x in line] for line in board]
+
+    def candy(self, ratings):
+        """
+        :type ratings: List[int]
+        :rtype: int
+        """
+        l = len(ratings)
+        ans = [1] * l
+        for i in range(1, l):
+            if ratings[i] > ratings[i - 1]:
+                ans[i] = ans[i - 1] + 1
+        for i in range(l - 2, -1, -1):
+            if ratings[i] > ratings[i + 1]:
+                ans[i] = max(ans[i], ans[i + 1] + 1)
+        return sum(ans)
