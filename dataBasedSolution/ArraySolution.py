@@ -1507,3 +1507,27 @@ class ArraySolution:
             if ratings[i] > ratings[i + 1]:
                 ans[i] = max(ans[i], ans[i + 1] + 1)
         return sum(ans)
+
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: Set[str]
+        :rtype: List[str]
+        """
+
+        def helper(s, memo):  # store traversed str to save time
+            if not s:
+                return []
+            if s in memo:
+                return memo[s]
+            tmp = []
+            for word in wordDict:
+                if s.startswith(word):
+                    if len(s) == len(word):
+                        tmp.append(s)
+                    else:
+                        tmp += ([word + " " + x for x in helper(s[len(word):], memo)])
+            memo[s] = tmp
+            return tmp
+
+        return helper(s, {})
