@@ -1531,3 +1531,21 @@ class ArraySolution:
             return tmp
 
         return helper(s, {})
+
+    def evalRPN(self, tokens: list) -> int:
+        operators = ['+', '-', '*', '/']
+        stack = [0]
+        for c in tokens:
+            if c not in operators:
+                stack += [int(c)]
+            else:
+                n1, n2 = stack.pop(), stack.pop()
+                if c == '+':
+                    stack += [n1 + n2]
+                elif c == '-':
+                    stack += [n2 - n1]
+                elif c == '*':
+                    stack += [n1 * n2]
+                else:
+                    stack += [int(n2 / n1)]
+        return stack[-1]
