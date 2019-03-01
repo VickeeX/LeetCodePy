@@ -664,3 +664,18 @@ class StringSolution:
                 if s[i:j] == s[j:i:-1]:
                     res[j + 1] = min(res[j + 1], res[i] + 1)  # dp
         return res[-1]
+
+    def reverseWords(self, s: str) -> str:
+        ans, last, first = "", 0, True
+        while last < len(s) and s[last] == ' ':
+            last += 1
+        for i in range(len(s)):
+            if s[i] != ' ' and (i == len(s) - 1 or s[i + 1] == ' '):
+                if first:
+                    ans, first = s[last:i + 1], False
+                else:
+                    ans = s[last:i + 1] + ' ' + ans
+                last = i + 1
+                while last < len(s) and s[last] == ' ':
+                    last += 1
+        return ans
