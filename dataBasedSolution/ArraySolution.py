@@ -1582,6 +1582,22 @@ class ArraySolution:
             else:
                 r = mid - 1
         return -1
-        # for i in range(len(nums)):
-        #     if nums[i] < nums[i - 1] and nums[i] < nums[i + 1 if i != len(nums) - 1 else 0]:
-        #         return nums[i]
+
+    def findMin_2(self, nums: list) -> int:
+        l, r = 0, len(nums) - 1
+        sigl, sigr = 0, 0
+        while r - l > 1:
+            if nums[l] > nums[r]:
+                l = (l + r) // 2
+                sigl, sigr = 1, 0
+            elif nums[l] < nums[r]:
+                l, r = max(l - (r - l), 0), l
+                sigl, sigr = 0, 1
+            else:
+                if sigl == 0 and sigr == 1:
+                    l = (l + r) // 2
+                elif sigr | sigl == 0:
+                    l += 1
+                else:
+                    l, r = max(l - (r - l), 0), l
+        return min(nums[l], nums[r])
