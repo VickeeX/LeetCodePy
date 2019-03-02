@@ -8,6 +8,8 @@
 """
 
 import math
+from operator import mul
+from functools import reduce
 from collections import defaultdict
 from itertools import permutations, combinations
 
@@ -1549,3 +1551,19 @@ class ArraySolution:
                 else:
                     stack += [int(n2 / n1)]
         return stack[-1]
+
+    def maxProduct(self, nums: list) -> int:
+        rev = nums[::-1]
+        for i in range(1, len(nums)):
+            nums[i] *= nums[i - 1] or 1
+            rev[i] *= rev[i - 1] or 1
+        return max(nums + rev)
+
+    def maxProduct_(self, nums: list) -> int:
+        m1, m2, ans = nums[0], nums[0], nums[0]
+        for i in range(1, len(nums)):
+            m1, m2 = max(nums[i], m1 * nums[i], m2 * nums[i]), \
+                     min(nums[i], m1 * nums[i], m2 * nums[i])
+            ans = max(ans, m1, m2)
+        return ans
+
