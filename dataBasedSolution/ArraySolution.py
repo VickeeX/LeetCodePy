@@ -1607,4 +1607,19 @@ class ArraySolution:
             return 0
         nums = sorted(nums)
         return max([nums[i] - nums[i - 1] for i in range(1, len(nums))])
+
     # Todo: buckets sorting.
+
+    def findPeakElement(self, nums: list) -> int:
+        # nums = [-float("inf")] + nums + [-float("inf")]
+        # for i in range(1, len(nums) + 1):
+        #     if nums[i - 1] < nums[i] and nums[i] > nums[i + 1]:
+        #         return i - 1
+        l, r = 0, len(nums) - 1
+        while l < r:
+            mid = l + (l - r) // 2
+            if nums[mid] < nums[mid + 1]:  # exists a peak bigger than neighbor, or the peak is last num
+                l = mid + 1
+            else:
+                r = mid
+        return r
