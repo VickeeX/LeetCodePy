@@ -699,9 +699,46 @@ class StringSolution:
     def compareVersion_(self, version1: str, version2: str) -> int:
         n1, n2 = [int(i) for i in version1.split('.')], [int(i) for i in version2.split('.')]
         for i in range(max(len(n1), len(n2))):
-            t1, t2 = n1[i] if i<len(n1) else 0, n2[i] if i<len(n2) else 0
+            t1, t2 = n1[i] if i < len(n1) else 0, n2[i] if i < len(n2) else 0
             if t1 > t2:
                 return 1
             elif t1 < t2:
                 return -1
         return 0
+
+    def fractionToDecimal(self, numerator: int, denominator: int) -> str:
+        ans = ""
+        if numerator / denominator < 0:
+            ans, numerator, denominator = "-", abs(numerator), abs(denominator)
+        dic, ans, numerator = dict(), ans + str(numerator // denominator), numerator % denominator * 10
+        if numerator != 0:
+            ans += '.'
+        while numerator != 0:
+            if numerator in dic:
+                ans = ans[:dic[numerator]] + "(" + ans[dic[numerator]:] + ")"
+                break
+            ans += str(numerator // denominator)
+            dic[numerator] = len(ans) - 1
+            numerator = numerator % denominator * 10
+        return ans
+
+    def fractionToDecimal_(self, numerator: int, denominator: int) -> str:
+        ans = ""
+        if numerator / denominator < 0:
+            ans = "-"
+        numerator, denominator = -numerator if numerator < 0 else numerator, -denominator if denominator < 0 else denominator
+        ans += str(numerator // denominator)
+        numerator %= denominator
+        mods = {}
+        if numerator > 0:
+            ans += "."
+            while numerator > 0 and numerator not in mods:
+                mods[numerator] = (numerator * 10) // denominator
+                numerator = (numerator * 10) % denominator
+        for i in mods:
+            if i == numerator:
+                ans += "("
+            ans += str(mods[i])
+        if numerator != 0:
+            ans += ")"
+        return ans
