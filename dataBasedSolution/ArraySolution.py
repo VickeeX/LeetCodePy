@@ -1617,7 +1617,7 @@ class ArraySolution:
         #         return i - 1
         l, r = 0, len(nums) - 1
         while l < r:
-            mid = l + (l - r) // 2
+            mid = l + (r - l) // 2
             if nums[mid] < nums[mid + 1]:  # exists a peak bigger than neighbor, or the peak is last num
                 l = mid + 1
             else:
