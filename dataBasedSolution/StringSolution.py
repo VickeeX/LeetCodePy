@@ -679,3 +679,29 @@ class StringSolution:
                 while last < len(s) and s[last] == ' ':
                     last += 1
         return ans
+
+    def compareVersion(self, version1: str, version2: str) -> int:
+        i, j, li, lj = 0, 0, 0, 0
+        while i < len(version1) or j < len(version2):
+            while i < len(version1) and version1[i] != '.':
+                i += 1
+            while j < len(version2) and version2[j] != '.':
+                j += 1
+            v1, v2 = int(version1[li:i] if i <= len(version1) else 0), int(version2[lj:j] if j <= len(version2) else 0)
+            if v1 < v2:
+                return -1
+            elif v1 > v2:
+                return 1
+            i, j = i + 1, j + 1
+            li, lj = i, j
+        return 0
+
+    def compareVersion_(self, version1: str, version2: str) -> int:
+        n1, n2 = [int(i) for i in version1.split('.')], [int(i) for i in version2.split('.')]
+        for i in range(max(len(n1), len(n2))):
+            t1, t2 = n1[i] if i<len(n1) else 0, n2[i] if i<len(n2) else 0
+            if t1 > t2:
+                return 1
+            elif t1 < t2:
+                return -1
+        return 0
