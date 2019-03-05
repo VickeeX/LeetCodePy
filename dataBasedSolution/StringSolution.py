@@ -755,3 +755,11 @@ class StringSolution:
             ans = dic[(n - 1) % 26] + ans
             n = (n - 1) // 26
         return ans
+
+    def titleToNumber(self, s: str) -> int:
+        ans = 0
+        for i, char in enumerate(s[::-1]):
+            ans += (ord(char) - 64) * 26 ** i
+        # for i in s:
+        #     ans = ans * 26 + (ord(i) - 64)
+        return ans
