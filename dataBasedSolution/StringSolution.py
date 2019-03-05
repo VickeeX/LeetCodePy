@@ -742,3 +742,16 @@ class StringSolution:
         if numerator != 0:
             ans += ")"
         return ans
+
+    def convertToTitle(self, n: int) -> str:
+        # ans= ""
+        # while n > 0:
+        #     ans = chr((n - 1) % 26 + 65) + ans
+        #     n = (n - 1) // 26
+        # return ans
+        ans, dic = "", {i: char for i, char in enumerate(string.ascii_uppercase)}
+        print(dic.keys())
+        while n > 0:
+            ans = dic[(n - 1) % 26] + ans
+            n = (n - 1) // 26
+        return ans
