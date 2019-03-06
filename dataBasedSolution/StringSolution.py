@@ -763,3 +763,10 @@ class StringSolution:
         # for i in s:
         #     ans = ans * 26 + (ord(i) - 64)
         return ans
+
+    def findRepeatedDnaSequences(self, s: str) -> list:
+        dic = defaultdict(int)
+        for i in range(len(s) - 9):
+            dic[s[i:i + 10]] += 1
+        return [k for k in dic if dic[k] > 1]
+        # or use str.contains(sub)
