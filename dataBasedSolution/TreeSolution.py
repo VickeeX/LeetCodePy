@@ -540,11 +540,28 @@ class TreeSolution:
         dfs(root)
         return self.ans
 
-    def postorderTraversal(self, root): # 145. Binary Tree Postorder Traversal
+    def postorderTraversal(self, root):  # 145. Binary Tree Postorder Traversal
         """
         :type root: TreeNode
         :rtype: List[int]
         """
         if not root:
             return []
-        return self.postorderTraversal(root.left)+self.postorderTraversal(root.right)+[root.val]
+        return self.postorderTraversal(root.left) + self.postorderTraversal(root.right) + [root.val]
+
+    def rightSideView(self, root: TreeNode) -> list:
+        self.ans = []
+
+        def helper(layer):
+            new_layer, self.ans = [], self.ans + [layer[-1].val]
+            for node in layer:
+                if node.left:
+                    new_layer += [node.left]
+                if node.right:
+                    new_layer += [node.right]
+            if new_layer:
+                helper(new_layer)
+
+        if root:
+            helper([root])
+        return self.ans
