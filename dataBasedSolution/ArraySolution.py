@@ -1623,3 +1623,19 @@ class ArraySolution:
             else:
                 r = mid
         return r
+
+    def largestNumber(self, nums: list) -> str:
+        def cmp(x, y):
+            return x + y > y + x
+
+        nums, ans = [str(x) for x in nums], ""
+        for i in range(len(nums)):
+            tmp = nums[i]
+            for j in range(i + 1, len(nums)):
+                if not cmp(tmp, nums[j]):
+                    print(tmp, nums[j])
+                    tmp, nums[j] = nums[j], tmp
+            ans += tmp
+            if i == 0 and tmp == '0':
+                break
+        return ans
