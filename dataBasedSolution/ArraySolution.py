@@ -1658,3 +1658,19 @@ class ArraySolution:
                 # min(dp[i], dp[i+1]) -> maybe out of index
                 dp[i] = max(min(dp[i:i + 2]) - row[i], 1)  # min life num in this pos(>=1)
         return dp[0]
+
+    def maxProfit_(self, k: int, prices: list) -> int:
+        if len(prices) == 0 or len(prices) == 1 or k == 0:
+            return 0
+        if k >= len(prices) / 2:
+            return sum(i - j for i, j in zip(prices[1:], prices[:-1]) if i - j > 0)
+        b, s = [prices[0]] * k, [0] * k
+        for p in prices[1:]:
+            for i in range(k):
+                if i == 0:
+                    b[0] = min(b[0], p)
+                    s[0] = max(s[0], p - b[0])
+                else:
+                    b[i] = min(b[i], p - s[i - 1])
+                    s[i] = max(s[i], p - b[i])
+        return s[-1]
