@@ -1639,3 +1639,22 @@ class ArraySolution:
             if i == 0 and tmp == '0':
                 break
         return ans
+
+    def calculateMinimumHP(self, dungeon: list) -> int:
+        n1, n2, dp = len(dungeon), len(dungeon[0]), []
+        for i in range(n1 + 1):
+            dp += [[2 ** 31] * (n2 + 1)]
+        dp[n1][n2 - 1] = dp[n1 - 1][n2] = 1
+        for row in (dungeon[::-1]):
+            n1 -= 1
+            for i in range(n2)[::-1]:
+                dp[n1][i] = max(min(dp[n1][i + 1], dp[n1 + 1][i]) - row[i], 1)
+        return dp[0][0]
+
+    def calculateMinimumHP_(self, dungeon: list) -> int:
+        dp = [2 ** 31] * (len(dungeon[0]) - 1) + [1]
+        for row in dungeon[::-1]:
+            for i in range(len(dungeon[0]))[::-1]:
+                # min(dp[i], dp[i+1]) -> maybe out of index
+                dp[i] = max(min(dp[i:i + 2]) - row[i], 1)  # min life num in this pos(>=1)
+        return dp[0]
