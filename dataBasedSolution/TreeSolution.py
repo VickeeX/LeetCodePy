@@ -580,3 +580,18 @@ class TreeSolution:
             if node.right:
                 stack.append([node.right, d + 1])
         return ans
+
+    def numIslands(self, grid: list) -> int:
+        ans = 0
+        for row in range(len(grid)):
+            for col in range(len(grid[0])):
+                if grid[row][col] == '1':
+                    ans += 1
+                    s = [[row, col]]
+                    while s:
+                        i, j = s.pop()
+                        for ni, nj in [[i - 1, j], [i + 1, j], [i, j - 1], [i, j + 1]]:
+                            if -1 < ni < len(grid) and -1 < nj < len(grid[0]) and grid[ni][nj] == '1':
+                                s.append([ni, nj])
+                                grid[ni][nj] = '0'
+        return ans
