@@ -1684,6 +1684,27 @@ class ArraySolution:
         return ans & m
 
     def rangeBitwiseAnd_(self, m: int, n: int) -> int:
-        while m<n:
-            n &= (n-1)
+        while m < n:
+            n &= (n - 1)
         return n
+
+    def canFinish(self, numCourses: int, prerequisites: list) -> bool:
+        graph, visit = [[] for _ in range(numCourses)], [0] * numCourses
+        for i, j in prerequisites:
+            graph[i].append(j)
+
+        def dfs(i):
+            if visit[i] == 1:  # has been visited
+                return False
+            visit[i] = 1
+            for j in graph[i]:
+                if not dfs(j):
+                    return False
+            visit[i] = 0  # set back to unvisited
+            return True
+
+        for i in range(numCourses):
+            if not dfs(i):
+                return False
+        return True
+        
