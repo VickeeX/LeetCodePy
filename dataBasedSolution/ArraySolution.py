@@ -1674,3 +1674,16 @@ class ArraySolution:
                     b[i] = min(b[i], p - s[i - 1])
                     s[i] = max(s[i], p - b[i])
         return s[-1]
+
+    def rangeBitwiseAnd(self, m: int, n: int) -> int:
+        count, tmp, ans = 1, n, n
+        while tmp >= m:
+            ans &= tmp
+            tmp = n - count
+            count *= 2
+        return ans & m
+
+    def rangeBitwiseAnd_(self, m: int, n: int) -> int:
+        while m<n:
+            n &= (n-1)
+        return n
