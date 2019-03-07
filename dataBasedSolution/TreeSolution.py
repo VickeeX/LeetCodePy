@@ -565,3 +565,18 @@ class TreeSolution:
         if root:
             helper([root])
         return self.ans
+
+    def rightSideView_(self, root: TreeNode) -> list:
+        if not root:
+            return []
+        stack, depth, ans = [[root, 1]], 0, []
+        while stack:
+            node, d = stack.pop()
+            if d > depth:
+                ans.append(node.val)
+                depth = d
+            if node.left:
+                stack.append([node.left, d + 1])
+            if node.right:
+                stack.append([node.right, d + 1])
+        return ans
