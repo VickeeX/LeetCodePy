@@ -1717,3 +1717,39 @@ class ArraySolution:
                 cur_sum -= nums[begin]
                 begin += 1
         return ans if ans <= len(nums) else 0
+
+    def findOrderDFS(self, numCourses: int, prerequisites: list) -> list:
+        pre, post = defaultdict(set), defaultdict(set)
+        for i, j in prerequisites:
+            pre[i].add(j)
+            post[j].add(i)
+        stack, ans = [i for i in range(numCourses) if not pre[i]], []  # the node to any position in the order
+        while stack:
+            node = stack.pop()
+            ans.append(node)
+            for i in post[node]:
+                pre[i].remove(node)
+                if not pre[i]:
+                    stack.append(i)
+            pre.pop(node)
+        return ans if not pre else []  # return the order if stack and pre are both empty
+
+
+
+
+
+        # pre, post = defaultdict(set), defaultdict(set)
+        # for i, j in prerequisites:
+        #     pre[i].add(j)
+        #     post[j].add(i)
+        # stack = [i for i in range(numCourses) if not pre[i]]
+        # ans = []
+        # while stack:
+        #     node = stack.pop()
+        #     ans.append(node)
+        #     for i in post[node]:
+        #         pre[i].remove(node)
+        #         if not pre[i]:
+        #             stack.append(i)
+        #     pre.pop(node)
+        # return ans if not pre else []
