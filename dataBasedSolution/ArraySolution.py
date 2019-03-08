@@ -1707,4 +1707,13 @@ class ArraySolution:
             if not dfs(i):
                 return False
         return True
-        
+
+    def minSubArrayLen(self, s: int, nums: list) -> int:
+        cur_sum, begin, ans = 0, 0, len(nums) + 1
+        for i, n in enumerate(nums):
+            cur_sum += n
+            while cur_sum >= s:
+                ans = min(ans, i - begin + 1)
+                cur_sum -= nums[begin]
+                begin += 1
+        return ans if ans <= len(nums) else 0
