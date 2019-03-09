@@ -770,3 +770,32 @@ class StringSolution:
             dic[s[i:i + 10]] += 1
         return [k for k in dic if dic[k] > 1]
         # or use str.contains(sub)
+
+    def shortestPalindromeBruteForce(self, s: str) -> str:
+        if len(s)<2:
+            return s
+        r = s[::-1]
+        for i in range(len(s)):
+            if s.startswith(r[i:]):
+                print(r,s)
+                return r[:i] + s
+
+        # def isPalindrome(t):
+        #     for i in range(len(t) // 2):
+        #         if t[i] != t[-i - 1]:
+        #             return False
+        #     return True
+        #
+        # l = len(s)
+        # r1, r2 = 1, [0, 1]
+        #
+        # for i in range(l - 1):
+        #     if isPalindrome(s[:l - i]) and l - i > r1:  # in front
+        #         r1, r2 = l - i, [0, l - i]
+        #         break
+        #         # if isPalindrome(s[i:]) and l - i > r1: # behind
+        #         #     r1, r2 = l - i, [i, l]
+        #         #     break
+        # i, j = r2
+        # return s[j:][::-1] + s
+        # # return s[j:][::-1] + s if i == 0 else s + s[:i][::-1]
