@@ -1733,23 +1733,3 @@ class ArraySolution:
                     stack.append(i)
             pre.pop(node)
         return ans if not pre else []  # return the order if stack and pre are both empty
-
-
-
-
-
-        # pre, post = defaultdict(set), defaultdict(set)
-        # for i, j in prerequisites:
-        #     pre[i].add(j)
-        #     post[j].add(i)
-        # stack = [i for i in range(numCourses) if not pre[i]]
-        # ans = []
-        # while stack:
-        #     node = stack.pop()
-        #     ans.append(node)
-        #     for i in post[node]:
-        #         pre[i].remove(node)
-        #         if not pre[i]:
-        #             stack.append(i)
-        #     pre.pop(node)
-        # return ans if not pre else []
