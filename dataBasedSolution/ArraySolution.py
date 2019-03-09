@@ -1733,3 +1733,15 @@ class ArraySolution:
                     stack.append(i)
             pre.pop(node)
         return ans if not pre else []  # return the order if stack and pre are both empty
+
+    def rob(self, nums: list) -> int:
+        if len(nums) == 1:
+            return nums[0]
+
+        def helper(i, j):
+            s1 = s2 = 0
+            for n in nums[i:j]:
+                s1, s2 = max(s1, s2 + n), s1
+            return s1
+
+        return max(helper(0, -1), helper(1, len(nums)))
