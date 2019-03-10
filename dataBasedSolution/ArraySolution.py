@@ -1745,3 +1745,9 @@ class ArraySolution:
             return s1
 
         return max(helper(0, -1), helper(1, len(nums)))
+
+    def findKthLargest(self, nums: list, k: int) -> int:
+        return sorted(nums)[len(nums) - k]
+
+    def combinationSum3(self, k: int, n: int) -> list:
+        return [list(c) for c in combinations(range(1, 10), k) if sum(c) == n]
