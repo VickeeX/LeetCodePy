@@ -1779,3 +1779,31 @@ class ArraySolution:
             if i >= k:
                 del buckets[nums[i - k] // w]
         return False
+
+    def maximalSquareBruteForce(self, matrix: list) -> int:
+        def isSquare(i, j, l):
+            for ni in range(i, i + l):
+                for nj in range(j, j + l):
+                    if matrix[ni][nj] != "1":
+                        return False
+            return True
+
+        if not matrix or not matrix[0]:
+            return 0
+        row, col, ans = len(matrix), len(matrix[0]), 0
+        for i in range(row):
+            for j in range(col):
+                if matrix[i][j] == "1":
+                    for l in range(ans + 1, min(row - i, col - j) + 1)[::-1]:
+                        if isSquare(i, j, l):
+                            ans = l
+                            break
+        return ans ** 2
+
+    def maximalSquare(self, matrix: list) -> int:
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                matrix[i][j] = int(matrix[i][j])
+                if matrix[i][j] and i and j:
+                    matrix[i][j] = min(matrix[i - 1][j], matrix[i - 1][j - 1], matrix[i][j - 1]) + 1
+        return max([max(row + [0]) for row in matrix] + [0]) ** 2
