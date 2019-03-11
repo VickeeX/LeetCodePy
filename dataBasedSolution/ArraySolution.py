@@ -10,7 +10,8 @@
 import math
 from operator import mul
 from functools import reduce
-from collections import defaultdict
+from heapq import heappush, heappop
+from collections import defaultdict, OrderedDict
 from itertools import permutations, combinations
 
 
@@ -1751,3 +1752,30 @@ class ArraySolution:
 
     def combinationSum3(self, k: int, n: int) -> list:
         return [list(c) for c in combinations(range(1, 10), k) if sum(c) == n]
+
+    def getSkyline(self, buildings: list) -> list:
+        events = sorted([(l, -h, r) for l, r, h in buildings] + [(r, 0, 0) for _, r, _ in buildings])
+        print(events)
+        ans, hp = [[0, 0]], [(0, float('inf'))]
+        for l, neg_h, r in events:
+            while l >= hp[0][1]:
+                heappop(hp)
+            if neg_h:
+                heappush(hp, (neg_h, r))
+            if ans[-1][1] != -hp[0][0]:
+                ans.append([l, -hp[0][0]])
+        return ans[1:]
+
+    def containsNearbyAlmostDuplicate(self, nums: list, k: int, t: int) -> bool:
+        if t < 0:
+            return False
+        buckets, w = {}, t + 1
+        for i, n in enumerate(nums):
+            m = n // w
+            if m in buckets or (m - 1 in buckets and abs(n - buckets[m - 1]) < w) or (
+                                m + 1 in buckets and abs(n - buckets[m + 1]) < w):
+                return True
+            buckets[m] = n
+            if i >= k:
+                del buckets[nums[i - k] // w]
+        return False
