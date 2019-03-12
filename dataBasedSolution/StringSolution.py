@@ -800,7 +800,7 @@ class StringSolution:
                 # return s[j:][::-1] + s
                 # # return s[j:][::-1] + s if i == 0 else s + s[:i][::-1]
 
-    def calculate(self, s: str) -> int:
+    def calculate_1(self, s: str) -> int:
         stack, ans, num, op = [], 0, 0, 1
         for c in s:
             if c.isdigit():
@@ -818,3 +818,42 @@ class StringSolution:
                 ans += stack.pop()  # the value before
                 num = 0
         return ans + num * op
+
+    def calculate_2(self, s: str) -> int:
+        stack, ans, num, op_mul, tag = [], 0, 0, False, False
+        for c in s + '+0':
+            if c.isdigit():
+                num = num * 10 + int(c)
+            elif c in '-+*/':
+                if tag:
+                    num = ans * num if op_mul else ans // num
+                    ans, tag = 0, False
+                if c in '-+':
+                    stack.append(num)
+                    stack.append(1 if c == '+' else '-1')
+                    num = 0
+                elif c in '*/':
+                    ans, num, tag, op_mul = num, 0, True, True if c == '*' else False
+        stack.append(num)
+        ans = stack[0]
+        for i, c in enumerate(stack[1:]):
+            if i % 2 == 1:
+                ans = ans + c if stack[i] == 1 else ans - c
+        return ans
+
+    def calculate_2_(self, s: str) -> int:
+        stack, num, op = [], 0, '+'
+        for c in s + '+0':
+            if c.isdigit():
+                num = num * 10 + int(c)
+            elif c in '+-*/':
+                if op == '+':
+                    stack.append(num)
+                elif op == '-':
+                    stack.append(-num)
+                elif op == '*':
+                    stack.append(stack.pop() * num)
+                else:
+                    stack.append(-(-stack.pop() // num) if stack[-1] < 0 else stack.pop() // num)
+                num, op = 0, c
+        return sum(stack)
