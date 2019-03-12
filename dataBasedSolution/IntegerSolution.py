@@ -157,13 +157,19 @@ class IntegerSolution:
         :rtype: float
         """
         if n < 0:
-            return 1/self.myPow(x, -n)
+            return 1 / self.myPow(x, -n)
         ans = 1
         while n > 0:
             if n % 2 == 1:
                 ans *= x
             x *= x
             n //= 2
+        return ans
+
+    def computeArea(self, A: int, B: int, C: int, D: int, E: int, F: int, G: int, H: int) -> int:
+        ans, l, r, d, u = (C - A) * (D - B) + (G - E) * (H - F), 0, 0, 0, 0
+        if (A <= E <= C or E <= A <= G) and (B <= F <= D or F <= B <= H):
+            ans -= (min(C, G) - max(A, E)) * (min(D, H) - max(B, F))
         return ans
 
 
