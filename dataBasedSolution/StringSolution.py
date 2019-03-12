@@ -772,30 +772,49 @@ class StringSolution:
         # or use str.contains(sub)
 
     def shortestPalindromeBruteForce(self, s: str) -> str:
-        if len(s)<2:
+        if len(s) < 2:
             return s
         r = s[::-1]
         for i in range(len(s)):
             if s.startswith(r[i:]):
-                print(r,s)
+                print(r, s)
                 return r[:i] + s
 
-        # def isPalindrome(t):
-        #     for i in range(len(t) // 2):
-        #         if t[i] != t[-i - 1]:
-        #             return False
-        #     return True
-        #
-        # l = len(s)
-        # r1, r2 = 1, [0, 1]
-        #
-        # for i in range(l - 1):
-        #     if isPalindrome(s[:l - i]) and l - i > r1:  # in front
-        #         r1, r2 = l - i, [0, l - i]
-        #         break
-        #         # if isPalindrome(s[i:]) and l - i > r1: # behind
-        #         #     r1, r2 = l - i, [i, l]
-        #         #     break
-        # i, j = r2
-        # return s[j:][::-1] + s
-        # # return s[j:][::-1] + s if i == 0 else s + s[:i][::-1]
+                # def isPalindrome(t):
+                #     for i in range(len(t) // 2):
+                #         if t[i] != t[-i - 1]:
+                #             return False
+                #     return True
+                #
+                # l = len(s)
+                # r1, r2 = 1, [0, 1]
+                #
+                # for i in range(l - 1):
+                #     if isPalindrome(s[:l - i]) and l - i > r1:  # in front
+                #         r1, r2 = l - i, [0, l - i]
+                #         break
+                #         # if isPalindrome(s[i:]) and l - i > r1: # behind
+                #         #     r1, r2 = l - i, [i, l]
+                #         #     break
+                # i, j = r2
+                # return s[j:][::-1] + s
+                # # return s[j:][::-1] + s if i == 0 else s + s[:i][::-1]
+
+    def calculate(self, s: str) -> int:
+        stack, ans, num, op = [], 0, 0, 1
+        for c in s:
+            if c.isdigit():
+                num = num * 10 + int(c)  # constant digit as one integer
+            elif c in '+-':
+                ans += num * op  # calculate the formula before
+                op, num = 1 if c == '+' else -1, 0  # using 1 or -1 to present + or -
+            elif c == '(':
+                stack.append(ans)  # the value
+                stack.append(op)  # the symbolic item for formula in next brackets
+                ans, op = 0, 1
+            elif c == ')':
+                ans += num * op
+                ans *= stack.pop()  # the symbolic item
+                ans += stack.pop()  # the value before
+                num = 0
+        return ans + num * op
