@@ -595,3 +595,31 @@ class TreeSolution:
                                 s.append([ni, nj])
                                 grid[ni][nj] = '0'
         return ans
+
+    def countNodes_(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+        ans = 1
+        if root.left:
+            ans += self.countNodes(root.left)
+        if root.left:
+            ans += self.countNodes(root.right)
+        return ans
+
+    def countNodes(self, root: TreeNode) -> int:
+        def getHeight(node, is_left):
+            h = 0
+            while node:
+                h += 1
+                if is_left:
+                    node = node.left
+                else:
+                    node = node.right
+            return h
+
+        if not root:
+            return 0
+        lh, rh = getHeight(root, True), getHeight(root, False)
+        if lh == rh:
+            return 2 ** lh - 1
+        return 1 + self.countNodes(root.left) + self.countNodes(root.right)
