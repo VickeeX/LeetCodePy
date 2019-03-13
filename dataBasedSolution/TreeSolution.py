@@ -623,3 +623,32 @@ class TreeSolution:
         if lh == rh:
             return 2 ** lh - 1
         return 1 + self.countNodes(root.left) + self.countNodes(root.right)
+
+    def kthSmallest_(self, root: TreeNode, k: int) -> int:
+        def helper(node, count):
+            if node.left:
+                count, val = helper(node.left, count)
+                if count == k:
+                    return k, val
+            count += 1
+            if count == k:
+                return k, node.val
+            if node.right:
+                count, val = helper(node.right, count)
+                return count, val
+            return count, node.val
+
+        _, ans = helper(root, 0)
+        return ans
+
+    def kthSmallest(self, root: TreeNode, k: int) -> int:
+        stack, tmp = [], root
+        while True:
+            while tmp:
+                stack.append(tmp)
+                tmp = tmp.left
+            tmp = stack.pop()
+            k -= 1
+            if k == 0:
+                return tmp.val
+            tmp = tmp.right
