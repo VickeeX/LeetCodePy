@@ -1807,3 +1807,14 @@ class ArraySolution:
                 if matrix[i][j] and i and j:
                     matrix[i][j] = min(matrix[i - 1][j], matrix[i - 1][j - 1], matrix[i][j - 1]) + 1
         return max([max(row + [0]) for row in matrix] + [0]) ** 2
+
+    def summaryRanges(self, nums: list) -> list:
+        ans, start = [], 0
+        for i, n in enumerate(nums):
+            if (i < len(nums) - 1 and n + 1 != nums[i + 1]) or i == len(nums) - 1:  # not continuous or end to array
+                if start == i:  # single number
+                    ans.append(str(n))
+                else:  # continuous numbers
+                    ans.append(str(nums[start]) + "->" + str(n))
+                start = i + 1
+        return ans
