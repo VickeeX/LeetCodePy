@@ -8,10 +8,9 @@
 """
 
 import math
-from operator import mul
 from functools import reduce
-from heapq import heappush, heappop
-from collections import defaultdict, OrderedDict
+from heapq import heappush, heappop, heapify, _heapify_max
+from collections import defaultdict, OrderedDict, deque
 from itertools import permutations, combinations
 
 
@@ -1170,7 +1169,7 @@ class ArraySolution:
                     break
             if x != -1:
                 break
-        if x == -1:  # finished filling in 
+        if x == -1:  # finished filling in
             return True
 
         candiates = set("123456789")
@@ -1206,9 +1205,9 @@ class ArraySolution:
                 cur = tmp
 
         for i in range(0, size):
-            if nums[i] != i + 1:  # the first position i not put i+1 be the first missing 
+            if nums[i] != i + 1:  # the first position i not put i+1 be the first missing
                 return i + 1
-        return size + 1  # 1~size all exists, first missing: size+1 
+        return size + 1  # 1~size all exists, first missing: size+1
 
     def trap_brute_force(self, height):  # O(n^2) time and const extra space
         """
@@ -1844,3 +1843,16 @@ class ArraySolution:
         product = reduce(lambda x, y: x * y or x or y, nums)
         count = 1 if count == 0 else 0
         return [product if n == 0 else product * count // n for n in nums]
+
+    def maxSlidingWindow(self, nums: list, k: int) -> list:
+        pos, ans = deque(), []  # pos to store the bigger nums' position, the num smaller than another traversed num will be throwed.
+        for i, n in enumerate(nums):
+            while pos and nums[pos[-1]] < n:
+                pos.pop()
+            pos += [i]
+            if pos[0] <= i - k:  # k size window
+                pos.popleft()
+            if i >= k - 1:
+                print([nums[p] for p in pos])
+                ans.append(nums[pos[0]])
+        return ans
