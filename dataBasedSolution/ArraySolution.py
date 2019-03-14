@@ -1834,3 +1834,13 @@ class ArraySolution:
             else:  # not the candidates
                 count1, count2 = count1 - 1, count2 - 1
         return [n for n in (candidate1, candidate2) if nums.count(n) > len(nums) // 3]
+
+    def productExceptSelf(self, nums: list) -> list:
+        count = 0
+        for n in nums:
+            if n == 0:
+                count += 1
+        if count > 1: return [0] * len(nums)
+        product = reduce(lambda x, y: x * y or x or y, nums)
+        count = 1 if count == 0 else 0
+        return [product if n == 0 else product * count // n for n in nums]
