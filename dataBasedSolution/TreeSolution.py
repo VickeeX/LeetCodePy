@@ -652,3 +652,10 @@ class TreeSolution:
             if k == 0:
                 return tmp.val
             tmp = tmp.right
+
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if root in (None, p, q): return root
+        # if root.left in (p, q) and root.right in (p, q): return root
+        l, r = (self.lowestCommonAncestor(node, p, q) for node in (root.left, root.right))
+        return root if l and r  else l or r
+      
