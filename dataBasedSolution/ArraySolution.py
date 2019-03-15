@@ -1885,3 +1885,12 @@ class ArraySolution:
             if row[j] == target:
                 return True
         return False
+
+    def singleNumber(self, nums: list) -> list:
+        sets = set()
+        for n in nums:
+            if n not in sets:
+                sets.add(n)
+            else:
+                sets.remove(n)
+        return list(sets)
