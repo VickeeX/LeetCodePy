@@ -1856,3 +1856,32 @@ class ArraySolution:
                 print([nums[p] for p in pos])
                 ans.append(nums[pos[0]])
         return ans
+
+    def searchMatrix(self, matrix, target):
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+        if not matrix or not matrix[0]:
+            return False
+        row, col, tmp = len(matrix) - 1, len(matrix[0]), 0
+        while row >= 0 and tmp < col:
+            if matrix[row][tmp] == target:
+                return True
+            elif matrix[row][tmp] > target:
+                row -= 1
+            else:
+                tmp += 1
+        return False
+
+    def searchMatrix_(self, matrix, target):
+        j = -1
+        for row in matrix:
+            if not row:
+                return False
+            while j + len(row) > 0 and row[j] > target:
+                j -= 1
+            if row[j] == target:
+                return True
+        return False
