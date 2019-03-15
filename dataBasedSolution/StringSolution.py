@@ -857,3 +857,18 @@ class StringSolution:
                     stack.append(-(-stack.pop() // num) if stack[-1] < 0 else stack.pop() // num)
                 num, op = 0, c
         return sum(stack)
+
+    def diffWaysToCompute(self, input: str) -> list:
+        ans = []
+        for i, c in enumerate(input):
+            if c in '-+*':
+                ans += [a + b if c == '+' else a - b if c == '-' else a * b
+                        for a in self.diffWaysToCompute(input[:i])
+                        for b in self.diffWaysToCompute(input[i + 1:])]
+        return ans or [int(input)]
+
+    def diffWaysToCompute_(self, input: str) -> list:
+        return [a + b if c == '+' else a - b if c == '-' else a * b
+                for i, c in enumerate(input) if c in '-+*'
+                for a in self.diffWaysToCompute(input[:i])
+                for b in self.diffWaysToCompute(input[i + 1:])] or [int(input)]
