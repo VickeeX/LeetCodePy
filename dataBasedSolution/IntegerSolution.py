@@ -172,6 +172,24 @@ class IntegerSolution:
             ans -= (min(C, G) - max(A, E)) * (min(D, H) - max(B, F))
         return ans
 
+    def numberToWords(self, num: int) -> str:
+        units = ["Thousand", "Million", "Billion"]
+        to19 = "One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve " \
+               "Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen".split()
+        tens = 'Twenty Thirty Forty Fifty Sixty Seventy Eighty Ninety'.split()
+
+        def helper(n):
+            if n < 20:
+                return to19[n - 1:n]
+            if n < 100:
+                return [tens[n // 10 - 2]] + helper(n % 10)
+            if n < 1000:
+                return [to19[n // 100 - 1]] + ['Hundred'] + helper(n % 100)
+            for i, u in enumerate(units, 2):
+                if n < 1000 ** i:
+                    return helper(n // 1000 ** (i - 1)) + [u] + helper(n % 1000 ** (i - 1))
+        return ' '.join(helper(num)) or "Zero"
+
 
 def guess(num):
     if num < 3:
