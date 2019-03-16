@@ -1902,3 +1902,10 @@ class ArraySolution:
             if citations[i] >= n - i:
                 return n - i
         return 0
+
+    def hIndex_2(self, citations: list) -> int:
+        n = len(citations)
+        for i in range(n):
+            if citations[i] >= n - i:
+                return n - i
+        return 0
