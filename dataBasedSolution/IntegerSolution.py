@@ -7,6 +7,8 @@
     Author       :    VickeeX
 """
 
+from math import sqrt
+
 
 class IntegerSolution:
     def reverseBits(self, n):
@@ -188,7 +190,24 @@ class IntegerSolution:
             for i, u in enumerate(units, 2):
                 if n < 1000 ** i:
                     return helper(n // 1000 ** (i - 1)) + [u] + helper(n % 1000 ** (i - 1))
+
         return ' '.join(helper(num)) or "Zero"
+
+    def numSquares(self, n: int) -> int:
+        if n < 4:
+            return n
+        pows, curs, ans = [i * i for i in range(1, int(sqrt(n) + 1)) if i * i <= n], {n}, 0
+        while curs:
+            tmp, ans = set(), ans + 1
+            for x in curs:
+                for y in pows:
+                    if x == y:  # finish
+                        return ans
+                    if x < y:  # not enogh to split
+                        break
+                    tmp.add(x-y)  # x>y, add to next layer
+            curs = tmp
+        return ans
 
 
 def guess(num):
