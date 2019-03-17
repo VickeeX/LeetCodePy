@@ -872,3 +872,57 @@ class StringSolution:
                 for i, c in enumerate(input) if c in '-+*'
                 for a in self.diffWaysToCompute(input[:i])
                 for b in self.diffWaysToCompute(input[i + 1:])] or [int(input)]
+
+    def addOperators(self, num: str, target: int) -> list:
+        def helper(pos, res, prev, expr):
+            if pos == len(num) and res == target:
+                ans.append(expr)
+                return
+            n = 0
+            for i in range(pos, len(num)):
+                n = n * 10 + int(num[i])
+                if pos == 0:  # first number with no prev
+                    helper(i + 1, n, n, str(n))
+                else:
+                    helper(i + 1, res + n, n, expr + "+" + str(n))  # add
+                    helper(i + 1, res - n, -n, expr + "-" + str(n))  # sub: note the third parameter is "-n"
+                    helper(i + 1, res - prev + prev * n, prev * n, expr + "*" + str(n))  # mul
+                if num[pos] == '0':
+                    break
+
+        ans = []
+        helper(0, 0, 0, "")
+        return ans
+        
+        # def helper(pos, cur_total, prev_n, expr):
+        #     if pos == len(num) and cur_total == target:
+        #         ans.append(expr)
+        #     else:
+        #         n = 0
+        #         for i in range(pos, len(num)):
+        #             n = n * 10 + int(num[i])
+        #             if pos == 0:
+        #                 helper(i + 1, cur_total + n, n, expr + str(n))
+        #             else:
+        #                 helper(i + 1, cur_total + n, n, expr + '+' + str(n))
+        #                 helper(i + 1, cur_total - n, -n, expr + '-' + str(n))
+        #                 helper(i + 1, cur_total - prev_n + prev_n * n, prev_n * n, expr + '*' + str(n))
+        #             if num[pos] == '0':
+        #                 break
+        #
+        # ans = []
+        # helper(0, 0, 0, "")
+        # return ans
+        # if not num:
+        #     return []
+        #
+        # def helper(s):
+        #     if not s:
+        #         return []
+        #     tmp = [s] if not (s[0] == '0' and len(s) > 1) else []
+        #     for i in range(1, len(s)):
+        #         tmp += [s[:i] + x + y for x in ('+', '-', '*') for y in helper(s[i:]) if
+        #                 not (s[0] == '0' and i > 1)]
+        #     return tmp
+        #
+        # return [x for x in helper(num) if self.calculate_2_(x) == target]
