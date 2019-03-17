@@ -1924,3 +1924,26 @@ class ArraySolution:
                 if tmp == -1:
                     break
         return 0
+
+    def gameOfLife(self, board: list) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        if not board or not board[0]:
+            return
+        row, col = len(board), len(board[0])
+        for i in range(row):
+            for j in range(col):
+                count = 0
+                for xi, xj in [[-1, -1], [-1, 0], [-1, 1], [0, 1], [0, -1], [1, -1], [1, 0], [1, 1]]:
+                    ti, tj = i + xi, j + xj
+                    if 0 <= ti < row and 0 <= tj < col and board[ti][tj] in (1, -2):
+                        count += 1
+                if board[i][j] == 0 and count == 3:
+                    board[i][j] = -1  # to live
+                elif board[i][j] == 1 and (count < 2 or count > 3):
+                    board[i][j] = -2  # to die
+        for i in range(row):
+            for j in range(col):
+                board[i][j] = 1 if board[i][j] == -1 else 0 if board[i][j] == -2 else board[i][j]
+                # print(board)
