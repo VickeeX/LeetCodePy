@@ -1909,3 +1909,18 @@ class ArraySolution:
             if citations[i] >= n - i:
                 return n - i
         return 0
+
+    def findDuplicate(self, nums: list) -> int:
+        # return sum(nums) - sum(range(1, len(nums))) # only find num that duplicated once
+        for i in range(len(nums)):
+            if nums[i] == i or nums[i] == -1:
+                continue
+            tmp, nums[i] = nums[i], -1
+            while True:
+                if nums[tmp] == tmp:
+                    return tmp
+                t = nums[tmp]
+                nums[tmp], tmp = tmp, t
+                if tmp == -1:
+                    break
+        return 0
