@@ -1947,3 +1947,18 @@ class ArraySolution:
             for j in range(col):
                 board[i][j] = 1 if board[i][j] == -1 else 0 if board[i][j] == -2 else board[i][j]
                 # print(board)
+
+    def lengthOfLIS(self, nums: list) -> int:
+        tails, ans = [0] * len(nums), 0
+        for n in nums:
+            i, j = 0, ans
+            while i != j:
+                m = (i + j) // 2
+                if tails[m] < n:
+                    i = m + 1
+                else:
+                    j = m
+            tails[i] = n  # to recover the one bigger than n but previous is smaller
+            ans = max(i + 1, ans)
+            # print(tails)
+        return ans
