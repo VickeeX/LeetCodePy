@@ -926,3 +926,16 @@ class StringSolution:
         #     return tmp
         #
         # return [x for x in helper(num) if self.calculate_2_(x) == target]
+
+    def getHint(self, secret: str, guess: str) -> str:
+        # it's also ok to use one record array and two travesal.
+        # or use defaultdict.
+        rec0, rec1, bulls = [0] * 10, [0] * 10, 0
+        for i in range(len(secret)):
+            if secret[i] == guess[i]:
+                bulls += 1
+            else:
+                rec0[int(secret[i])] += 1
+                rec1[int(guess[i])] += 1
+        # print(rec0, rec1)
+        return str(bulls) + "A" + str(sum([min(rec0[i], rec1[i]) for i in range(10)])) + "B"
