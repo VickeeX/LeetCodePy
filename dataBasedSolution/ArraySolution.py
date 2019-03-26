@@ -1962,3 +1962,58 @@ class ArraySolution:
             ans = max(i + 1, ans)
             # print(tails)
         return ans
+
+    def removeInvalidParentheses_(self, s: str) -> list:
+        def isvaild(x):
+            cnt = 0
+            for c in x:
+                if c == '(':
+                    cnt += 1
+                elif c == ')':
+                    cnt -= 1
+                    if cnt < 0:
+                        return False
+            return cnt == 0
+
+        level = {s}
+        while True:
+            valid = list(filter(isvaild, level))
+            if valid:
+                return valid
+            level = {x[:i] + x[i + 1:] for x in level for i in range(len(x))}
+
+    def removeInvalidParentheses(self, s: str) -> list:
+        removed, l, r, results = 0, 0, 0, {s}
+        for i, c in enumerate(s):  # remove redundant ")"
+            if c == ")" and l == r:
+                print(i)
+                new_results = set()
+                while results:
+                    result = results.pop()
+                    for j in range(i - removed + 1):
+                        if result[j] == ")":
+                            new_results.add(result[:j] + result[j + 1:])
+                results = new_results
+                removed += 1
+            elif c == "(":
+                l += 1
+            elif c == ")":
+                r += 1
+        l, r, i, ll = 0, 0, len(s), len(s) - removed
+        for ii in range(ll - 1, -1, -1):  # remove redundant "("
+            i -= 1
+            c = s[i]
+            if c == "(" and l == r:
+                new_results = set()
+                while results:
+                    result = results.pop()
+                    for j in range(ii, ll):
+                        if result[j] == "(":
+                            new_results.add(result[:j] + result[j + 1:])
+                results = new_results
+                ll -= 1
+            elif c == "(":
+                l += 1
+            elif c == ")":
+                r += 1
+        return list(results)
