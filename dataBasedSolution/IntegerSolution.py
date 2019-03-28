@@ -205,9 +205,21 @@ class IntegerSolution:
                         return ans
                     if x < y:  # not enogh to split
                         break
-                    tmp.add(x-y)  # x>y, add to next layer
+                    tmp.add(x - y)  # x>y, add to next layer
             curs = tmp
         return ans
+
+    def isAdditiveNumber(self, num: str) -> bool:
+        for i in range(1, len(num) // 2 + 2):
+            for j in range(i + 1, len(num)):
+                if (i > 1 and num[0] == '0') or (j - i > 1 and num[i] == '0'):  # no preceeding zeros
+                    break
+                m = str(int(num[:i]) + int(num[i:j]))
+                # print(num[:i], num[i:j], m)
+                if num[j:] == m or \
+                        (num[j:].startswith(m) and self.isAdditiveNumber(num[i:])):  # finished or next iteration
+                    return True
+        return False
 
 
 def guess(num):
