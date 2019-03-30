@@ -27,6 +27,26 @@ class GraphNodeSolution(object):
         while nodes:
             n = nodes.pop()
             res[n].val, res[n].neighbors = n.val, [res[x] for x in n.neighbors]
-            nodes.extend(x for x in n.neighbors if x not in seen )
+            nodes.extend(x for x in n.neighbors if x not in seen)
             seen.add(n)
         return res[node]
+
+    def findMinHeightTrees(self, n: int, edges: list) -> list:
+        if n == 1:
+            return [0]
+        adjacent = [set() for _ in range(n)]  # adjacent[i] is the set of i's neighbors
+        for i, j in edges:
+            adjacent[i].add(j)
+            adjacent[j].add(i)
+
+        leaves = [i for i in range(n) if len(adjacent[i]) == 1]
+        while n > 2:  # at most two rooted trees can reach the min height
+            n -= len(leaves)  # the left nums
+            new = []
+            for i in leaves:  # leaves cannot reach the min height in priority
+                j = adjacent[i].pop()
+                adjacent[j].remove(i)
+                if len(adjacent[j]) == 1:
+                    new.append(j)
+                leaves = new
+        return leaves
