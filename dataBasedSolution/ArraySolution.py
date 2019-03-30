@@ -1425,6 +1425,16 @@ class ArraySolution:
             s2 = max(s2, price - b2)
         return s2
 
+    def maxProfit309(self, prices: list) -> int:
+        # free    : the max profit while being free to buy
+        # cooldown: the max profit while cooling down
+        # kept    : the max profit while having stock
+        free, cooldown, kept = 0, float('-inf'), float('-inf')
+        for p in prices:
+            free, cooldown, kept = max(free, cooldown), kept + p, max(kept, free - p)
+            # print(free, cooldown, kept)
+        return max(free, cooldown)
+
     def findLadders(self, beginWord, endWord, wordList):
         """
         :type beginWord: str
