@@ -8,6 +8,7 @@
 """
 
 from math import sqrt
+from heapq import heappush, heappop
 
 
 class IntegerSolution:
@@ -220,6 +221,26 @@ class IntegerSolution:
                         (num[j:].startswith(m) and self.isAdditiveNumber(num[i:])):  # finished or next iteration
                     return True
         return False
+
+    def nthSuperUglyNumber(self, n: int, primes: list) -> int:
+        # heap, count, ans = [1], 1, 1
+        # while count < n:
+        #     ans = heappop(heap)
+        #     count += 1
+        #     for p in primes:
+        #         if ans * p not in heap:
+        #             heappush(heap, ans * p)
+        # return heap[0]
+        size = len(primes)
+        last, dp, index, ugly_nums = 1, [1], [0] * size, [1] * size
+        for i in range(1, n):
+            for j in range(0, size):
+                if ugly_nums[j] == last:
+                    ugly_nums[j] = dp[index[j]] * primes[j]
+                    index[j] += 1
+            last = min(ugly_nums)
+            dp.append(last)
+        return dp[-1]
 
 
 def guess(num):
