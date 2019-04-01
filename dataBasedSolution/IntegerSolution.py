@@ -7,8 +7,9 @@
     Author       :    VickeeX
 """
 
+from itertools import groupby, islice
 from math import sqrt
-from heapq import heappush, heappop
+from heapq import heappush, heappop, merge
 
 
 class IntegerSolution:
@@ -248,6 +249,32 @@ class IntegerSolution:
             ans.append(last)
 
         return ans[-1]
+
+    def nthSuperUglyNumber_yield(self, n: int, primes: list) -> int:
+        def gen(prime):
+            for u in ans:
+                yield u * prime
+
+        ans, merged = [1], merge(*map(gen, primes))  # generator
+        while len(ans) < n:
+            u = next(merged)
+            if u != ans[-1]:
+                ans.append(u)
+        return ans[-1]
+
+
+
+        # def gen(prime):
+        #     for u in ans:
+        #         yield u * prime
+        #
+        # merged = merge(*map(gen, primes))
+        # ans = [1]
+        # while len(ans) < n:
+        #     u = next(merged)
+        #     if u != ans[-1]:
+        #         ans.append(u)
+        # return ans[-1]
 
 
 def guess(num):
