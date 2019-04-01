@@ -231,16 +231,23 @@ class IntegerSolution:
         #         if ans * p not in heap:
         #             heappush(heap, ans * p)
         # return heap[0]
+        # ------------
+        # last: records the latest ugly_num
+        # ans: records the ugly_nums
+        # index: index of the last ugly_num the prime results in
+        # latest_ones: last ugly_num the prime results in
+
         size = len(primes)
-        last, dp, index, ugly_nums = 1, [1], [0] * size, [1] * size
+        last, ans, index, latest_ones = 1, [1], [0] * size, [1] * size
         for i in range(1, n):
             for j in range(0, size):
-                if ugly_nums[j] == last:
-                    ugly_nums[j] = dp[index[j]] * primes[j]
-                    index[j] += 1
-            last = min(ugly_nums)
-            dp.append(last)
-        return dp[-1]
+                if latest_ones[j] == last:
+                    latest_ones[j] = ans[index[j]] * primes[j]  # update the one to new ugly_num
+                    index[j] += 1  # index of the num which should be ready to multipy the prime next
+            last = min(latest_ones)
+            ans.append(last)
+
+        return ans[-1]
 
 
 def guess(num):
