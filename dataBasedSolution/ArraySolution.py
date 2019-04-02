@@ -2027,3 +2027,16 @@ class ArraySolution:
             elif c == ")":
                 r += 1
         return list(results)
+
+    def maxCoins(self, nums: list) -> int:
+        n = len(nums) + 2
+        nums, dp = [1] + nums + [1], [[0] * n for _ in range(n)]
+        # nums: image nums[-1] = nums[n] = 1
+        # dp[i][j]: maxCoins from nums[i] to nums[j]
+        for gap in range(2, n):  # the interval
+            for i in range(n - gap):  # i is the left, j is the right one
+                j = i + gap
+                for k in range(i + 1, j):  # k is the one to be burst
+                    dp[i][j] = max(dp[i][j], nums[i] * nums[k] * nums[j] + dp[i][k] + dp[k][j])
+
+        return dp[0][n - 1]
