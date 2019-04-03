@@ -2038,5 +2038,23 @@ class ArraySolution:
                 j = i + gap
                 for k in range(i + 1, j):  # k is the one to be burst
                     dp[i][j] = max(dp[i][j], nums[i] * nums[k] * nums[j] + dp[i][k] + dp[k][j])
-
         return dp[0][n - 1]
+
+    def countSmaller(self, nums: list) -> list:
+        def sort(enum):  # from bottom to up
+            # l and r are partly sorted and have counted the smaller in the num self's part;
+            # compare l and r, count the smaller from the other part.
+            mid = len(enum) // 2
+            if mid:
+                l, r = sort(enum[:mid]), sort(enum[mid:])
+                for i in range(len(enum))[::-1]:  # each turn pop the largest one
+                    if not r or l and l[-1][1] > r[-1][1]:
+                        ans[l[-1][0]] += len(r)  # add the count of smaller from right part
+                        enum[i] = l.pop()
+                    else:
+                        enum[i] = r.pop()
+            return enum
+
+        ans = [0] * len(nums)
+        sort(list(enumerate(nums)))
+        return ans
