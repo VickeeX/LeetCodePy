@@ -939,3 +939,13 @@ class StringSolution:
                 rec1[int(guess[i])] += 1
         # print(rec0, rec1)
         return str(bulls) + "A" + str(sum([min(rec0[i], rec1[i]) for i in range(10)])) + "B"
+
+    def removeDuplicateLetters(self, s: str) -> str:
+        for c in sorted(set(s)):
+            suffix = s[s.index(c):]
+            if set(suffix) == set(s):  # the max char's min pos if suffix contains all chars
+                return c + self.removeDuplicateLetters(suffix.replace(c, ''))
+                # ```else: continue ```
+                # if the current max char's suffix doesn't contains all, then next
+
+        return ''
