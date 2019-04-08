@@ -7,7 +7,7 @@
     Author       :    VickeeX
 """
 
-import math
+import math, operator
 from functools import reduce
 from heapq import heappush, heappop, heapify, _heapify_max
 from collections import defaultdict, OrderedDict, deque
@@ -2058,3 +2058,27 @@ class ArraySolution:
         ans = [0] * len(nums)
         sort(list(enumerate(nums)))
         return ans
+
+    def maxProduct318(self, words: list) -> int:
+        # chars, size, ans = [set(w) for w in words], [len(w) for w in words], 0
+        # for i in range(len(words) - 1):
+        #     for j in range(i, len(words)):
+        #         if not chars[i].intersection(chars[j]):
+        #             ans = max(ans, size[i] * size[j])
+        # return ans
+
+        d = {}
+        for word in words:
+            mask = 0  # 26-bit stores the char-set of word, 1 presents containing the char
+            for c in set(word):
+                mask |= (1 << (ord(c) - 97))  # "or" to get the final num that presents char-set
+                # print(word, bin(mask))
+            d[mask] = max(d.get(mask, 0), len(word))  # stores the max-length
+        return max([d[i] * d[j] for i in d for j in d if not i & j] or [0])  # if i&j: the two set intersects
+
+    def maxProduct318_(self, words: list) -> int:
+        d = {}
+        for word in words:
+            mask = reduce(operator.or_, [1 << (ord(c) - 97) for c in set(word)] + [0])
+            d[mask] = max(d.get(mask, 0), len(word))
+        return max([d[i] * d[j] for i in d for j in d if not i & j] + [0])
