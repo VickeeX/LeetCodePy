@@ -261,9 +261,6 @@ class IntegerSolution:
             if u != ans[-1]:
                 ans.append(u)
         return ans[-1]
-
-
-
         # def gen(prime):
         #     for u in ans:
         #         yield u * prime
@@ -275,6 +272,13 @@ class IntegerSolution:
         #     if u != ans[-1]:
         #         ans.append(u)
         # return ans[-1]
+
+    def bulbSwitch(self, n: int) -> int:
+        # if i's factor num(contains 1) is even: on
+        # if i's factor num(contains 1) is odd: off
+        # factor appear in pairs
+        # if i is a perfect square: one pair factors are the same num -> even factors -> on
+        return sqrt(n)
 
 
 def guess(num):
