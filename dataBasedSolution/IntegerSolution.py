@@ -280,6 +280,16 @@ class IntegerSolution:
         # if i is a perfect square: one pair factors are the same num -> even factors -> on
         return sqrt(n)
 
+    def countBits(self, num: int) -> list:
+        # ans = [num // (i + 1) for i in range(1, num + 1) for]
+        ans = [0] * (num + 1)
+        for i in range(1, num + 1):
+            # print(i, i >> 1, i & 1, ans)
+            ans[i] = ans[i >> 1] + (i & 1)
+            # i&1: whether the last bit is 1
+            # ans[i>>1]: the num of 1 of pre n bits
+        return ans
+
 
 def guess(num):
     if num < 3:
