@@ -290,6 +290,23 @@ class IntegerSolution:
             # ans[i>>1]: the num of 1 of pre n bits
         return ans
 
+    def maxNumber(self, nums1: list, nums2: list, k: int) -> list:
+        def prep(nums, k):
+            rest, out = len(nums) - k, []  # rest records if there's rest nums to reach total count k
+            for num in nums:
+                while rest and out and out[-1] < num:
+                    out.pop()
+                    rest -= 1
+                out.append(num)
+            return out[:k]
+
+        def merge(a, b):
+            return [max(a, b).pop(0) for _ in a + b]
+
+        # split k to nums1 and nums2
+        return max(merge(prep(nums1, i), prep(nums2, k - i))
+                   for i in range(k + 1) if i <= len(nums1) and k - i <= len(nums2))
+
 
 def guess(num):
     if num < 3:
