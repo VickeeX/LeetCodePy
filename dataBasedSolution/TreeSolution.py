@@ -658,3 +658,34 @@ class TreeSolution:
         # if root.left in (p, q) and root.right in (p, q): return root
         l, r = (self.lowestCommonAncestor(node, p, q) for node in (root.left, root.right))
         return root if l and r else l or r
+
+    def rob(self, root: TreeNode) -> int:
+        # use records to memory traced path
+        records = {}
+
+        def helper(node):
+            if not node:
+                return 0
+            if node in records.keys():
+                return records[node]
+            ans = 0
+            if node.left:
+                ans += helper(node.left.left) + helper(node.left.right)
+            if node.right:
+                ans += helper(node.right.left) + helper(node.right.right)
+            ans = max(node.val + ans, helper(node.left) + helper(node.right))
+            records[node] = ans
+            return ans
+
+        return helper(root)
+
+    def rob_(self, root: TreeNode) -> int:
+        def helper(node):
+            if not node:
+                return 0, 0
+            l0, l1 = helper(node.left)
+            r0, r1 = helper(node.right)
+            # the greedy max without node, greedy max with node
+            return max(l0, l1) + max(r0, r1), node.val + l0 + r0
+
+        return max(helper(root))
