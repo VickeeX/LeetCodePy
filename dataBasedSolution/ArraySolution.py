@@ -7,7 +7,7 @@
     Author       :    VickeeX
 """
 
-import math, operator
+import math, operator, sys
 from functools import reduce
 from heapq import heappush, heappop, heapify, _heapify_max
 from collections import defaultdict, OrderedDict, deque
@@ -2082,3 +2082,12 @@ class ArraySolution:
             mask = reduce(operator.or_, [1 << (ord(c) - 97) for c in set(word)] + [0])
             d[mask] = max(d.get(mask, 0), len(word))
         return max([d[i] * d[j] for i in d for j in d if not i & j] + [0])
+
+    def coinChange(self, coins: list, amount: int) -> int:
+        # dp
+        MAX = sys.maxsize
+        dp = [0] + [MAX] * amount
+        for i in range(1, amount + 1):
+            dp[i] = min([dp[i - c] if i - c >= 0 else MAX for c in coins]) + 1
+        # return dp[-1] if dp[-1] < MAX else -1
+        return [dp[-1], -1][dp[-1] >= MAX]
