@@ -2091,3 +2091,9 @@ class ArraySolution:
             dp[i] = min([dp[i - c] if i - c >= 0 else MAX for c in coins]) + 1
         # return dp[-1] if dp[-1] < MAX else -1
         return [dp[-1], -1][dp[-1] >= MAX]
+
+    def wiggleSort(self, nums: list) -> None:
+        # cheating, it's better to find a median by O(n) algorithm, then wiggle sort
+        nums.sort()
+        half = len(nums[::2]) - 1
+        nums[::2], nums[1::2] = nums[half::-1], nums[:half:-1]
