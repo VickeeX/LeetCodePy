@@ -2097,3 +2097,23 @@ class ArraySolution:
         nums.sort()
         half = len(nums[::2]) - 1
         nums[::2], nums[1::2] = nums[half::-1], nums[:half:-1]
+
+    def longestIncreasingPath(self, matrix: list) -> int:
+        # increasing path wont't be repeated, so it's no need to change matrix to record traversed pos.
+        # use dp to record the longest increasing path of pos[i][j]
+        if not matrix or not matrix[0]:
+            return 0
+        h, w = len(matrix), len(matrix[0])
+        dp = [[0] * w for i in range(h)]
+
+        def helper(i, j):
+            if not dp[i][j]:
+                v = matrix[i][j]  # read once
+                dp[i][j] = 1 + max(helper(i - 1, j) if i > 0 and v < matrix[i - 1][j] else 0,
+                                   helper(i, j - 1) if j > 0 and v < matrix[i][j - 1]  else 0,
+                                   helper(i + 1, j) if i + 1 < h and v < matrix[i + 1][j]  else 0,
+                                   helper(i, j + 1) if j + 1 < w and v < matrix[i][j + 1] else 0)
+                # can be reduced to one-line but condition process would be more
+            return dp[i][j]
+
+        return max(helper(x, y) for x in range(h) for y in range(w))
