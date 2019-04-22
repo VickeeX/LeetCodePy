@@ -2117,3 +2117,17 @@ class ArraySolution:
             return dp[i][j]
 
         return max(helper(x, y) for x in range(h) for y in range(w))
+
+    def minPatches(self, nums: list, n: int) -> int:
+        # miss: the smallest sum in [0, n]
+        # i: the index of pos that has traversed
+        miss, ans, i = 1, 0, 0
+        while miss <= n:
+            if i < len(nums) and nums[i] <= miss:
+                miss += nums[i]  # the smallest sum can be reached
+                i += 1
+            else:
+                print(miss)
+                miss += miss  # add miss
+                ans += 1
+        return ans
