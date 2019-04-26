@@ -2117,3 +2117,20 @@ class ArraySolution:
             return dp[i][j]
 
         return max(helper(x, y) for x in range(h) for y in range(w))
+    
+    def increasingTriplet(nums: list) -> bool:
+        if len(nums) < 3:
+            return False
+        # n1,n2 records the increasing two nums
+        # m records the min nums which may be followed with bigger num.
+        n1, n2, m, tag = 0, 0, nums[0], False
+        for x in nums[1:]:
+            # print(n1, n2, m)
+            if tag and x > n2:
+                return True
+            elif x > m and (not tag or x < n2):
+                n1, n2 = m, x
+                tag = True
+            elif x < m:
+                m = x
+        return False
