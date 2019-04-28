@@ -2149,3 +2149,15 @@ class ArraySolution:
     
         dfs("JFK")
         return ans[::-1]
+    
+    def isValidSerialization(self, preorder: str) -> bool:
+        match = 1  # there's n non-null nodes and (n+1) null nodes for each tree
+        for p in preorder.split(","):
+            if match == 0:  # more null nodes than required
+                return False
+            if p == "#":
+                match -= 1
+            else:
+                match += 1
+        return match == 0
+
