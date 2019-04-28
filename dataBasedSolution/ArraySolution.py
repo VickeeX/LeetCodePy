@@ -2134,3 +2134,18 @@ class ArraySolution:
             elif x < m:
                 m = x
         return False
+    
+    def findItinerary(tickets: list) -> list:
+        dic = collections.defaultdict(list)
+        for fr, to in sorted(tickets)[::-1]:  # pop the smallest first
+            dic[fr].append(to)
+        ans = []
+    
+        def dfs(port):
+            # print(port, dic[port])
+            while dic[port]:
+                dfs(dic[port].pop())
+            ans.append(port)
+    
+        dfs("JFK")
+        return ans[::-1]
