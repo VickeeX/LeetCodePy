@@ -2160,4 +2160,21 @@ class ArraySolution:
             else:
                 match += 1
         return match == 0
-
+    
+    def countRangeSum(self, nums: List[int], lower: int, upper: int) -> int:
+        pre = [0]
+        for n in nums:
+            pre.append(pre[-1] + n)
+        def sort(low,high):
+            mid = (low+high)//2
+            if mid == low:
+                return 0
+            cnt = sort(low,mid)+sort(mid,high)
+            i = j = mid
+            for n in pre[low:mid]:
+                while i<high and pre[i]-n<lower: i+=1
+                while j<high and pre[j]-n<=upper: j+=1
+                cnt += j-i
+            pre[low:high] = sorted(pre[low:high])
+            return cnt
+        return sort(0,len(pre))
