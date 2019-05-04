@@ -2178,3 +2178,22 @@ class ArraySolution:
             pre[low:high] = sorted(pre[low:high])
             return cnt
         return sort(0,len(pre))
+    
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        def isPalindrome(word):
+            return word == word[::-1]
+        words = {w:i for i,w in enumerate(words)}
+        ans = []
+        for w,k in words.items():
+            n = len(w)
+            for i in range(n+1):
+                pre, suf = w[:i], w[i:]
+                if isPalindrome(pre):
+                    need = suf[::-1]
+                    if need!=w and need in words: 
+                        ans.append([words[need], k])
+                if i!=n and isPalindrome(suf): # i!= n: prevent repeating
+                    need = pre[::-1]
+                    if need!=w and need in words: 
+                        ans.append([k,words[need]])
+        return ans
