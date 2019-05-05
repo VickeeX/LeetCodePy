@@ -2161,41 +2161,44 @@ class ArraySolution:
                 match += 1
         return match == 0
 
-    def countRangeSum(self, nums: List[int], lower: int, upper: int) -> int:
+    def countRangeSum(self, nums: list, lower: int, upper: int) -> int:
         pre = [0]
         for n in nums:
             pre.append(pre[-1] + n)
-        def sort(low,high):
-            mid = (low+high)//2
+
+        def sort(low, high):
+            mid = (low + high) // 2
             if mid == low:
                 return 0
-            cnt = sort(low,mid)+sort(mid,high)
+            cnt = sort(low, mid) + sort(mid, high)
             i = j = mid
             for n in pre[low:mid]:
-                while i<high and pre[i]-n<lower: i+=1
-                while j<high and pre[j]-n<=upper: j+=1
-                cnt += j-i
+                while i < high and pre[i] - n < lower: i += 1
+                while j < high and pre[j] - n <= upper: j += 1
+                cnt += j - i
             pre[low:high] = sorted(pre[low:high])
             return cnt
-        return sort(0,len(pre))
 
-    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        return sort(0, len(pre))
+
+    def palindromePairs(self, words: list) -> list:
         def isPalindrome(word):
             return word == word[::-1]
-        words = {w:i for i,w in enumerate(words)}
+
+        words = {w: i for i, w in enumerate(words)}
         ans = []
-        for w,k in words.items():
+        for w, k in words.items():
             n = len(w)
-            for i in range(n+1):
+            for i in range(n + 1):
                 pre, suf = w[:i], w[i:]
                 if isPalindrome(pre):
                     need = suf[::-1]
-                    if need!=w and need in words:
+                    if need != w and need in words:
                         ans.append([words[need], k])
-                if i!=n and isPalindrome(suf): # i!= n: prevent repeating
+                if i != n and isPalindrome(suf):  # i!= n: prevent repeating
                     need = pre[::-1]
-                    if need!=w and need in words:
-                        ans.append([k,words[need]])
+                    if need != w and need in words:
+                        ans.append([k, words[need]])
         return ans
 
     def minPatches(self, nums: list, n: int) -> int:

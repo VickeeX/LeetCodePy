@@ -330,6 +330,7 @@ class IntegerSolution:
             dp[i] = dp[i - 3] * 3  # factor 3
         return dp[-1]
 
+
 def guess(num):
     if num < 3:
         return 1
