@@ -307,6 +307,28 @@ class IntegerSolution:
         return max(merge(prep(nums1, i), prep(nums2, k - i))
                    for i in range(k + 1) if i <= len(nums1) and k - i <= len(nums2))
 
+    def integerBreak(n: int) -> int:
+        # if n == 2 or n == 3:
+        #     return n - 1
+        # ans = 1
+        # while n > 4:
+        #     ans *= 3
+        #     n -= 3
+        # ans *= n
+        # return ans
+        #
+        # if n <= 6:
+        #     return [0, 0, 1, 2, 4, 6, 9][n]
+        # dp = [0, 0, 1, 2, 4, 6, 9] + [0 for _ in range(7, n + 1)]
+        # for i in range(7, n + 1):
+        #     dp[i] = max(dp[i - 2] * 2, dp[i - 3] * 3)  # factor 2 or 3
+        # return dp[-1]
+        if n <= 6:
+            return [0, 0, 1, 2, 4, 6][n]
+        dp = [0, 0, 1, 2, 4, 6, 9] + [0 for _ in range(7, n + 1)]
+        for i in range(7, n + 1):
+            dp[i] = dp[i - 3] * 3  # factor 3
+        return dp[-1]
 
 def guess(num):
     if num < 3:

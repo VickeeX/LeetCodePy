@@ -2118,6 +2118,86 @@ class ArraySolution:
 
         return max(helper(x, y) for x in range(h) for y in range(w))
 
+    def increasingTriplet(nums: list) -> bool:
+        if len(nums) < 3:
+            return False
+        # n1,n2 records the increasing two nums
+        # m records the min nums which may be followed with bigger num.
+        n1, n2, m, tag = 0, 0, nums[0], False
+        for x in nums[1:]:
+            # print(n1, n2, m)
+            if tag and x > n2:
+                return True
+            elif x > m and (not tag or x < n2):
+                n1, n2 = m, x
+                tag = True
+            elif x < m:
+                m = x
+        return False
+
+    def findItinerary(tickets: list) -> list:
+        dic = collections.defaultdict(list)
+        for fr, to in sorted(tickets)[::-1]:  # pop the smallest first
+            dic[fr].append(to)
+        ans = []
+
+        def dfs(port):
+            # print(port, dic[port])
+            while dic[port]:
+                dfs(dic[port].pop())
+            ans.append(port)
+
+        dfs("JFK")
+        return ans[::-1]
+
+    def isValidSerialization(self, preorder: str) -> bool:
+        match = 1  # there's n non-null nodes and (n+1) null nodes for each tree
+        for p in preorder.split(","):
+            if match == 0:  # more null nodes than required
+                return False
+            if p == "#":
+                match -= 1
+            else:
+                match += 1
+        return match == 0
+
+    def countRangeSum(self, nums: List[int], lower: int, upper: int) -> int:
+        pre = [0]
+        for n in nums:
+            pre.append(pre[-1] + n)
+        def sort(low,high):
+            mid = (low+high)//2
+            if mid == low:
+                return 0
+            cnt = sort(low,mid)+sort(mid,high)
+            i = j = mid
+            for n in pre[low:mid]:
+                while i<high and pre[i]-n<lower: i+=1
+                while j<high and pre[j]-n<=upper: j+=1
+                cnt += j-i
+            pre[low:high] = sorted(pre[low:high])
+            return cnt
+        return sort(0,len(pre))
+
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        def isPalindrome(word):
+            return word == word[::-1]
+        words = {w:i for i,w in enumerate(words)}
+        ans = []
+        for w,k in words.items():
+            n = len(w)
+            for i in range(n+1):
+                pre, suf = w[:i], w[i:]
+                if isPalindrome(pre):
+                    need = suf[::-1]
+                    if need!=w and need in words:
+                        ans.append([words[need], k])
+                if i!=n and isPalindrome(suf): # i!= n: prevent repeating
+                    need = pre[::-1]
+                    if need!=w and need in words:
+                        ans.append([k,words[need]])
+        return ans
+
     def minPatches(self, nums: list, n: int) -> int:
         # miss: the smallest sum in [0, n]
         # i: the index of pos that has traversed
