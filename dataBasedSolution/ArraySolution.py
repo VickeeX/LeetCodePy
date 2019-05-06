@@ -7,8 +7,8 @@
     Author       :    VickeeX
 """
 
-import math, operator, sys
-from functools import reduce
+import math, operator, sys, bisect
+from functools import reduce, cmp_to_key
 from heapq import heappush, heappop, heapify, _heapify_max
 from collections import defaultdict, OrderedDict, deque
 from itertools import permutations, combinations
@@ -2214,3 +2214,26 @@ class ArraySolution:
                 miss += miss  # add miss
                 ans += 1
         return ans
+
+    def maxEnvelopes(self, envelopes: list) -> int:
+        # O(nlgn):
+        if not envelopes:
+            return 0
+        envelopes.sort(key=lambda x: (x[0], -x[1]))
+        # envelopes.sort(key=cmp_to_key(lambda x, y: -1 if x[0] < y[0] or (x[0] == y[0] and x[1] > y[1]) else 1))
+        # print(envelopes)
+        lis = [envelopes[0][1]]  # record h: decreasing sort, first the max h of same width
+        for w, h in envelopes[1:]:
+            j = bisect.bisect_left(lis, h)
+            if j >= len(lis):
+                lis.append(h)
+            else:
+                lis[j] = h
+        return len(lis)
+        # # Dynamic programming: O(n^2)
+        # dp = [1] * len(envelopes)
+        # for i in range(len(envelopes) - 1):
+        #     for j in range(i + 1, len(envelopes)):
+        #         if envelopes[i][0] < envelopes[j][0] and envelopes[i][1] < envelopes[j][1]:
+        #             dp[j] = max(dp[j], dp[i] + 1)
+        # return max(dp)
