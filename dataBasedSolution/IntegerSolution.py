@@ -330,6 +330,20 @@ class IntegerSolution:
             dp[i] = dp[i - 3] * 3  # factor 3
         return dp[-1]
 
+    def countNumbersWithUniqueDigits(self, n: int) -> int:
+        def cal(n1, n2):
+            ans = 1
+            while n2 > 0:
+                ans *= n1
+                n1 -= 1
+                n2 -= 1
+            return ans
+
+        ans = 1
+        for i in range(n):
+            ans += i * cal(9, i) + cal(9, i + 1)
+        return ans
+
 
 def guess(num):
     if num < 3:
