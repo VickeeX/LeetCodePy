@@ -344,6 +344,16 @@ class IntegerSolution:
             ans += i * cal(9, i) + cal(9, i + 1)
         return ans
 
+    def canMeasureWater(self, x: int, y: int, z: int) -> bool:
+        def gcd(a, b):
+            while b > 0:
+                a, b = b, a % b
+            return a
+
+        if z > x + y: return False
+        if z == x or z == y or z == x + y or z % gcd(x, y) == 0: return True
+        return False
+
 
 def guess(num):
     if num < 3:
