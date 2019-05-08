@@ -2237,3 +2237,56 @@ class ArraySolution:
         #         if envelopes[i][0] < envelopes[j][0] and envelopes[i][1] < envelopes[j][1]:
         #             dp[j] = max(dp[j], dp[i] + 1)
         # return max(dp)
+
+    def largestDivisibleSubset(self, nums: list) -> list:
+        # dynamic programming but in low speed
+        if not nums: return []
+        nums.sort()
+        # dp: the max-size subset
+        # pre: the pre num's index
+        dp, pre = [1] * len(nums), [-1] * len(nums)
+        for i, n in enumerate(nums):
+            for j in range(i):
+                if n % nums[j] == 0 and 1 + dp[j] > dp[i]:
+                    dp[i], pre[i] = 1 + dp[j], j
+        ans, idx = [], dp.index(max(dp))
+        while idx != -1:
+            ans.append(nums[idx])
+            idx = pre[idx]
+        return ans[::-1]
+
+    def largestDivisibleSubset_(self, nums: list) -> list:
+        if not nums:
+            return []
+        nums.sort()
+        dp = {}
+
+        max_id_ = nums[0]
+        max_len = 1
+
+        for idx, n in enumerate(nums):
+            max_id = -1
+            cur_len = 1
+
+            for b in range(1, int(n ** 0.5) + 1):
+                if n % b == 0:
+                    if b in dp and cur_len < 1 + dp[b][1]:
+                        cur_len = 1 + dp[b][1]
+                        max_id = b
+                    if n // b in dp and cur_len < 1 + dp[n // b][1]:
+                        cur_len = 1 + dp[n // b][1]
+                        max_id = n // b
+            if max_id == -1:
+                dp[n] = [n, 1]
+            else:
+                dp[n] = [max_id, 1 + dp[max_id][1]]
+                if dp[n][1] > max_len:
+                    max_id_ = n
+                    max_len = dp[n][1]
+
+        cur_id = max_id_
+        ans = [cur_id]
+        while dp[cur_id][0] != cur_id:
+            cur_id = dp[cur_id][0]
+            ans = [cur_id] + ans
+        return ans
