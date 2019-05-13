@@ -7,8 +7,8 @@
     Author       :    VickeeX
 """
 
-from itertools import groupby, islice
 from math import sqrt
+from functools import reduce
 from heapq import heappush, heappop, merge
 
 
@@ -353,6 +353,25 @@ class IntegerSolution:
         if z > x + y: return False
         if z == x or z == y or z == x + y or z % gcd(x, y) == 0: return True
         return False
+
+    def superPow(self, a: int, b: list) -> int:
+        # base = 1337
+        #
+        # def helper(x, y):
+        #     x %= base
+        #     result = 1
+        #     for _ in range(y):
+        #         result = (result * x) % base
+        #     return result
+        #
+        # if not b:
+        #     return 1
+        # last = b.pop()
+        # return helper(self.superPow(a, b), 10) * helper(a, last) % base
+        #
+        # p = reduce(lambda x, y: (10 * x + y) % 1140, b)
+        # return pow(a, p, 1337)
+        return pow(a, int(''.join(map(str, b))), 1337)
 
 
 def guess(num):
