@@ -8,10 +8,10 @@
 """
 
 import math, operator, sys, bisect
-from functools import reduce, cmp_to_key
-from heapq import heappush, heappop, heapify, _heapify_max
-from collections import defaultdict, OrderedDict, deque
-from itertools import permutations, combinations
+from functools import reduce
+from heapq import heappush, heappop
+from collections import defaultdict, deque
+from itertools import combinations
 
 
 class Interval:
@@ -2290,3 +2290,17 @@ class ArraySolution:
             cur_id = dp[cur_id][0]
             ans = [cur_id] + ans
         return ans
+
+    def kSmallestPairs(self, nums1: list, nums2: list, k: int) -> list:
+        heap = []  # smallests heap: push -(n1+n2)
+        for x in nums1:
+            for y in nums2:
+                if len(heap) < k:
+                    heappush(heap, (-x - y, [x, y]))
+                else:
+                    if heap and heap[0][0] < -x - y:
+                        heappop(heap)
+                        heappush(heap, (-x - y, [x, y]))
+                    else:
+                        break  # sorted nums: the inner loop will all satisfy (-heap[0][0] > n1 + n2)
+        return [heappop(heap)[1] for _ in range(k) if heap]
