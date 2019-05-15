@@ -373,6 +373,14 @@ class IntegerSolution:
         # return pow(a, p, 1337)
         return pow(a, int(''.join(map(str, b))), 1337)
 
+    def getMoneyAmount(self, n: int) -> int:
+        """a bad problem"""
+        need = [[0] * (n + 1) for _ in range(n + 1)]
+        for low in range(n, 0, -1):
+            for high in range(low + 1, n + 1):
+                need[low][high] = min(x + max(need[low][x - 1], need[x + 1][high]) for x in range(low, high))
+        return need[1][n]
+
 
 def guess(num):
     if num < 3:
