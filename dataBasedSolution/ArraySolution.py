@@ -2304,3 +2304,23 @@ class ArraySolution:
                     else:
                         break  # sorted nums: the inner loop will all satisfy (-heap[0][0] > n1 + n2)
         return [heappop(heap)[1] for _ in range(k) if heap]
+
+    def wiggleMaxLength(self, nums: list) -> int:
+        dp = [[1, 1] for _ in range(len(nums))]
+        for i, n in enumerate(nums):
+            for j in range(i):
+                if nums[j] < n:
+                    dp[i][0] = max(dp[i][0], 1 + dp[j][1])
+                elif nums[j] > n:
+                    dp[i][1] = max(dp[i][1], 1 + dp[j][0])
+        return max([i if i > j else j for i, j in dp]) if dp else 0
+
+    def wiggleMaxLength_(self, nums: list) -> int:
+        if len(nums) < 2: return len(nums)
+        inc, dec = 1, 1
+        for i in range(1, len(nums)):
+            if nums[i] > nums[i - 1]:
+                inc = dec + 1
+            elif nums[i] < nums[i - 1]:
+                dec = inc + 1
+        return max(inc, dec)
