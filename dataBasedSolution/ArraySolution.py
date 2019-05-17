@@ -2347,3 +2347,47 @@ class ArraySolution:
             elif nums[i] < nums[i - 1]:
                 dec = inc + 1
         return max(inc, dec)
+
+    def kthSmallest_(self, matrix: list, k: int) -> int:
+        if not matrix or not matrix[0]: return 0
+        ans = matrix[0][0]
+        wid = len(matrix[0])
+        hei = len(matrix)
+        idx = [0] * wid
+        num = [n for n in matrix[0]]
+        ma = matrix[-1][-1]
+        while k != 0:
+            tmp, index = ma, -1
+            for i in range(wid):
+                if idx[i] < hei and num[i] <= tmp:
+                    index = i
+                    tmp = num[i]
+            ans = tmp
+            idx[index] += 1
+            if idx[index] < hei:
+                num[index] = matrix[idx[index]][index]
+            k -= 1
+
+        return ans
+
+    def kthSmallest(self, matrix: list, k: int) -> int:
+        lo = matrix[0][0]
+        m = len(matrix)
+        n = len(matrix[0])
+        hi = matrix[m - 1][n - 1]
+        while lo < hi:
+            mid = (lo + hi) // 2
+            count = 0
+            j = n - 1
+            i = 0
+            while j >= 0 and i < n:
+                if matrix[i][j] <= mid:  # 小于当前值的个数
+                    count += (j + 1)
+                    i += 1
+                else:
+                    j -= 1
+            if count < k:  # 若小于当前值的个数小于k 当前值不够大, 区间右移
+                lo = mid + 1
+            else:
+                hi = mid
+        return lo
