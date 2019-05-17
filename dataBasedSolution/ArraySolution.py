@@ -673,6 +673,32 @@ class ArraySolution:
                     ans.append([candidates[i]] + ta)
         return ans
 
+    def combinationSum3(self, k: int, n: int) -> list:
+        return [list(c) for c in combinations(range(1, 10), k) if sum(c) == n]
+
+    def combinationSum4(self, nums: list, target: int) -> int:
+        # # recursive in low speed
+        # if target == 0: return 1
+        # ans = 0
+        # for n in nums:
+        #     if n <= target:
+        #         ans += self.combinationSum4(nums, target - n)
+        # return ans
+        dp = [1] + [-1] * target
+
+        def helper(targ):
+            ans = 0
+            if dp[targ] != -1:
+                return dp[targ]
+            for n in nums:
+                if n <= targ:
+                    ans += helper(targ - n)
+            dp[targ] = ans
+            return ans
+
+        helper(target)
+        return dp[-1]
+
     def permute(self, nums):
         """
         :type nums: List[int]
@@ -1758,9 +1784,6 @@ class ArraySolution:
 
     def findKthLargest(self, nums: list, k: int) -> int:
         return sorted(nums)[len(nums) - k]
-
-    def combinationSum3(self, k: int, n: int) -> list:
-        return [list(c) for c in combinations(range(1, 10), k) if sum(c) == n]
 
     def getSkyline(self, buildings: list) -> list:
         events = sorted([(l, -h, r) for l, r, h in buildings] + [(r, 0, 0) for _, r, _ in buildings])
