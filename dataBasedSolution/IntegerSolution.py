@@ -381,6 +381,17 @@ class IntegerSolution:
                 need[low][high] = min(x + max(need[low][x - 1], need[x + 1][high]) for x in range(low, high))
         return need[1][n]
 
+    def lexicalOrder(self, n: int) -> list:
+        ans = [1]
+        while len(ans) < n:
+            new = ans[-1] * 10
+            while new > n:
+                new = new // 10 + 1
+                while new % 10 == 0:
+                    new //= 10
+            ans.append(new)
+        return ans
+
 
 def guess(num):
     if num < 3:
