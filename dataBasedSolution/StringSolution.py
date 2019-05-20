@@ -949,3 +949,14 @@ class StringSolution:
                 # if the current max char's suffix doesn't contains all, then next
 
         return ''
+
+    def lengthLongestPath(self, input: str) -> int:
+        ans, path = 0, {0: 0}  # index each depth once at a time
+        for line in input.splitlines():
+            name = line.lstrip('\t')
+            depth = len(line) - len(name)
+            if '.' in name:
+                ans = max(ans, path[depth] + len(name))
+            else:
+                path[depth + 1] = path[depth] + len(name) + 1
+        return ans
