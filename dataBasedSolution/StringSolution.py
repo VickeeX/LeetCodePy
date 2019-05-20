@@ -960,3 +960,18 @@ class StringSolution:
             else:
                 path[depth + 1] = path[depth] + len(name) + 1
         return ans
+
+    def isSubsequence(self, s: str, t: str) -> bool:
+        # if not s: return True
+        # if not t: return False
+        # if len(s) == 1:
+        #     return s in t
+        # for i, c in enumerate(t):
+        #     if c == s[0] and self.isSubsequence(s[1:], t[i + 1:]):
+        #         return True
+        # return False
+        for c in s:
+            if c not in t:
+                return False
+            t = t[t.index(c) + 1:]
+        return True

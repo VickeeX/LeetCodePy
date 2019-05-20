@@ -392,6 +392,27 @@ class IntegerSolution:
             ans.append(new)
         return ans
 
+    def validUtf8(self, data: list) -> bool:
+        count = 0
+        for n in data:
+            if 128 <= n <= 191:
+                if count == 0: return False
+                count -= 1
+            else:
+                if count:  # consecutive 10/110/1110/11110
+                    return False
+                if n < 128:  # 1 bytes startswith('0b0')
+                    continue
+                elif n < 224:  # 2 bytes
+                    count = 1
+                elif n < 240:  # 3 bytes
+                    count = 2
+                elif n < 248:  # 4 bytes
+                    count = 3
+                else:
+                    return False
+        return count == 0
+
 
 def guess(num):
     if num < 3:
