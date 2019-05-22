@@ -975,3 +975,22 @@ class StringSolution:
                 return False
             t = t[t.index(c) + 1:]
         return True
+
+    def decodeString(self, s: str) -> str:
+        stack, count, num = [""], [1], ""
+        for c in s:
+            if c.isdigit():
+                num += c
+            elif c == '[':
+                count.append(int(num))
+                stack.append("")
+                num = ""
+            elif c == ']':
+                curs = stack.pop()
+                stack[-1] += curs * count.pop()
+            else:
+                stack[-1] += c
+        return stack[-1]
+        # while '[' in s:
+        # s = re.sub(r'(\d+)\[([a-z]*)\]', lambda m: int(m.group(1)) * m.group(2), s)
+        # return s
