@@ -994,3 +994,20 @@ class StringSolution:
         # while '[' in s:
         # s = re.sub(r'(\d+)\[([a-z]*)\]', lambda m: int(m.group(1)) * m.group(2), s)
         # return s
+
+    def longestSubstring(self, s: str, k: int) -> int:
+        # for c in set(s):
+        #     if s.count(c) < k:
+        #         return max(self.longestSubstring(t, k) for t in s.split(c))
+        # return len(s)
+        stack = [s]
+        ans = 0
+        while stack:
+            s = stack.pop()
+            for c in set(s):
+                if s.count(c) < k:
+                    stack.extend([t for t in s.split(c)])
+                    break
+            else:
+                ans = max(ans, len(s))  # if each count(c)>=k
+        return ans
