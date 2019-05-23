@@ -2401,3 +2401,16 @@ class ArraySolution:
             last += s - l * A[l - i]
             ans = max(ans, last)
         return ans
+    
+    def integerReplacement(self, n: int) -> int:
+        cnt = 0
+        while n > 1:
+            cnt += 1
+            if n % 2 == 0:  # make division
+                n //= 2
+            elif n % 4 == 1 or n == 3:  # n-1: to be multiple of 4 for consecutive divisions; 3 is the exception
+                n -= 1
+            else:  # n+1: to be multiple of 4 for consecutive divisions
+                n += 1
+        return cnt
+    
