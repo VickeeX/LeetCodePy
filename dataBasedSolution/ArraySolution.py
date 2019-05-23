@@ -2391,3 +2391,13 @@ class ArraySolution:
             else:
                 hi = mid
         return lo
+    
+    def maxRotateFunction(self, A: List[int]) -> int:
+        l = len(A)
+        if l < 2: return 0
+        ans = sum([i * A[i] for i in range(1, l)])
+        s, last = sum(A), ans
+        for i in range(1, l):
+            last += s - l * A[l - i]
+            ans = max(ans, last)
+        return ans
