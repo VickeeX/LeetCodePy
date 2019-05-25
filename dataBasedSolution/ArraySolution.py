@@ -2413,4 +2413,33 @@ class ArraySolution:
             else:  # n+1: to be multiple of 4 for consecutive divisions
                 n += 1
         return cnt
+
+    def calcEquation(self, equations: list, values: list, queries: list) -> list:
+        def add_edge(a, b, v):
+            if a not in graph:
+                graph[a] = [(b, v)]
+            else:
+                graph[a].append((b, v))
+    
+        def query(a, b):  # BFS
+            if a not in graph or b not in graph:
+                return -1.0
+            stack = collections.deque([(a, 1.0)])
+            visited = set()
+            while stack:
+                n, curv = stack.popleft()
+                if n == b:
+                    return curv
+                visited.add(n)
+                for x, v in graph[n]:
+                    if x not in visited:
+                        stack.append((x, curv * v))
+            return -1.0
+    
+        graph = {}
+        for [a, b], v in zip(equations, values):
+            add_edge(a, b, v)
+            add_edge(b, a, 1 / v)
+        return [query(a, b) for [a, b] in queries]
+
     
