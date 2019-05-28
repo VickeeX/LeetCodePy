@@ -415,21 +415,21 @@ class IntegerSolution:
         return count == 0
 
     def removeKdigits(self, num: str, k: int) -> str:
-        if len(num)<=k: return '0'
+        if len(num) <= k: return '0'
         stack = deque([])
         for n in num:
-            while stack and k and stack[-1]>n: # pop those bigger than following num
+            while stack and k and stack[-1] > n:  # pop those bigger than following num
                 stack.pop()
-                k-=1
+                k -= 1
             stack.append(n)
-        while stack and k: # the nums in stack keeps increasing, so pop them sequentially from tail
-            k-=1
+        while stack and k:  # the nums in stack keeps increasing, so pop them sequentially from tail
+            k -= 1
             stack.pop()
-        while stack and stack[0]=='0': # eleminate the leading zero
+        while stack and stack[0] == '0':  # eleminate the leading zero
             stack.popleft()
         return ''.join(stack) if stack else '0'
 
-    
+
 def guess(num):
     if num < 3:
         return 1

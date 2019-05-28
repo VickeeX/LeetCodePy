@@ -2141,7 +2141,7 @@ class ArraySolution:
 
         return max(helper(x, y) for x in range(h) for y in range(w))
 
-    def increasingTriplet(nums: list) -> bool:
+    def increasingTriplet(self, nums: list) -> bool:
         if len(nums) < 3:
             return False
         # n1,n2 records the increasing two nums
@@ -2158,8 +2158,8 @@ class ArraySolution:
                 m = x
         return False
 
-    def findItinerary(tickets: list) -> list:
-        dic = collections.defaultdict(list)
+    def findItinerary(self, tickets: list) -> list:
+        dic = defaultdict(list)
         for fr, to in sorted(tickets)[::-1]:  # pop the smallest first
             dic[fr].append(to)
         ans = []
@@ -2391,8 +2391,8 @@ class ArraySolution:
             else:
                 hi = mid
         return lo
-    
-    def maxRotateFunction(self, A: List[int]) -> int:
+
+    def maxRotateFunction(self, A: list) -> int:
         l = len(A)
         if l < 2: return 0
         ans = sum([i * A[i] for i in range(1, l)])
@@ -2401,7 +2401,7 @@ class ArraySolution:
             last += s - l * A[l - i]
             ans = max(ans, last)
         return ans
-    
+
     def integerReplacement(self, n: int) -> int:
         cnt = 0
         while n > 1:
@@ -2420,11 +2420,11 @@ class ArraySolution:
                 graph[a] = [(b, v)]
             else:
                 graph[a].append((b, v))
-    
+
         def query(a, b):  # BFS
             if a not in graph or b not in graph:
                 return -1.0
-            stack = collections.deque([(a, 1.0)])
+            stack = deque([(a, 1.0)])
             visited = set()
             while stack:
                 n, curv = stack.popleft()
@@ -2435,11 +2435,9 @@ class ArraySolution:
                     if x not in visited:
                         stack.append((x, curv * v))
             return -1.0
-    
+
         graph = {}
         for [a, b], v in zip(equations, values):
             add_edge(a, b, v)
             add_edge(b, a, 1 / v)
         return [query(a, b) for [a, b] in queries]
-
-    
