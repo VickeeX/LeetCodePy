@@ -2441,3 +2441,10 @@ class ArraySolution:
             add_edge(a, b, v)
             add_edge(b, a, 1 / v)
         return [query(a, b) for [a, b] in queries]
+
+    def reconstructQueue(self, people: list) -> list:
+        # (h,k) sort from higher to shorter h, smaller to bigger k
+        people, ans = sorted(people, key=lambda x: (-x[0], x[1])), []
+        for p in people:
+            ans.insert(p[1], p)  # insert p according to p[1]
+        return ans
