@@ -2448,3 +2448,19 @@ class ArraySolution:
         for p in people:
             ans.insert(p[1], p)  # insert p according to p[1]
         return ans
+
+    def canCross(self, stones: list) -> bool:
+        target = stones[-1]
+        # set() has fast travesal speed than list
+        # failed: records the failed pos and step pair
+        # travesal: pos and step pair to travesal
+        stones, failed, travesal = set(stones), set(), [(0, 0)]
+        while travesal:
+            pos, step = travesal.pop()
+            for s in (step - 1, step, step + 1):
+                p = pos + s
+                if s > 0 and p in stones and (p, s) not in failed:
+                    if p == target: return True
+                    travesal.append((p, s))
+            failed.add((pos, step))
+        return False
