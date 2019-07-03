@@ -2486,3 +2486,37 @@ class ArraySolution:
                     heappush(heap, (max(heightMap[x][y], height), x, y))
                     visited[x][y] = 1
         return ans
+
+    def numberOfArithmeticSlices(self, A: list) -> int:
+        if len(A) < 3:  # the length of arithmetic slices should be greater than 3
+            return 0
+
+        ans, l = 0, len(A) - 1
+        last, start, step = A[1], 0, A[1] - A[0]
+        for i, n in enumerate(A[2:], 2):
+            if n - last == step:
+                last = n
+                if i == l:  # the last num
+                    ans += (i - start) * (i - start - 1) // 2  # the num of sub slices meet the requirement
+            else:
+                ans += (i - start - 1) * (i - start - 2) // 2
+                step = n - last
+                last, start = n, i - 1
+        return ans
+
+    def canPartition(self, nums: list) -> bool:
+        # reachSum = {0}
+        # for n in nums:
+        #     reachSum.update({v + n for v in reachSum})
+        # return sum(nums) / 2 in reachSum
+        def helper(rest, idx):
+            if rest == 0:
+                return True
+            if rest < 0 or idx < 0 or nums[idx] > rest:  # if nums[idx]>rest: unreachable
+                return False
+            return helper(rest - nums[idx], idx - 1) or helper(rest, idx - 1)  # use nums[idx] or not
+
+        s = sum(nums)
+        if s % 2 == 1:
+            return False
+        return helper(s / 2, len(nums) - 1)
