@@ -7,7 +7,7 @@
     Author       :    VickeeX
 """
 
-import math, operator, sys, bisect
+import math, operator, sys, bisect, heapq
 from functools import reduce
 from heapq import heappush, heappop
 from collections import defaultdict, deque
@@ -2464,3 +2464,25 @@ class ArraySolution:
                     travesal.append((p, s))
             failed.add((pos, step))
         return False
+
+    def trapRainWater(self, heightMap: list) -> int:
+        if not heightMap or not heightMap[0]:
+            return 0
+        h, w = len(heightMap), len(heightMap[0])
+        heap, visited = [], [[0] * w for _ in range(h)]
+
+        for i in range(h):
+            for j in range(w):
+                if i == 0 or j == 0 or i == h - 1 or j == w - 1:
+                    heappush(heap, (heightMap[i][j], i, j))
+                    visited[i][j] = 1
+
+        ans = 0
+        while heap:
+            height, i, j = heappop(heap)
+            for x, y in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)):
+                if 0 <= x < h and 0 <= y < w and not visited[x][y]:
+                    ans += max(0, height - heightMap[x][y])
+                    heappush(heap, (max(heightMap[x][y], height), x, y))
+                    visited[x][y] = 1
+        return ans
