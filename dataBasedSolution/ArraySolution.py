@@ -2520,3 +2520,22 @@ class ArraySolution:
         if s % 2 == 1:
             return False
         return helper(s / 2, len(nums) - 1)
+
+    def pacificAtlantic(self, matrix: list) -> list:
+        if not matrix or not matrix[0]:
+            return []
+        h, w = len(matrix), len(matrix[0])
+
+        def helper(reached):  # BFS for single ocean
+            q = list(reached)
+            while q:
+                i, j = q.pop()
+                for x, y in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)):
+                    if 0 <= x < h and 0 <= y < w and (x, y) not in reached and matrix[x][y] >= matrix[i][j]:
+                        reached.add((x, y))
+                        q.append((x, y))
+            return reached
+
+        # return the intersection
+        return list(helper(set([(0, i) for i in range(w)] + [(i, 0) for i in range(1, h)])) &
+                    helper(set([(h - 1, i) for i in range(w)] + [(i, w - 1) for i in range(h - 1)])))
