@@ -2539,3 +2539,12 @@ class ArraySolution:
         # return the intersection
         return list(helper(set([(0, i) for i in range(w)] + [(i, 0) for i in range(1, h)])) &
                     helper(set([(h - 1, i) for i in range(w)] + [(i, w - 1) for i in range(h - 1)])))
+
+    def countBattleships(self, board: list) -> int:
+        if not board or not board[0]: return 0
+        ans = 0
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == 'X' and (i == 0 or board[i - 1][j] == '.') and (j == 0 or board[i][j - 1] == '.'):
+                    ans += 1
+        return ans
