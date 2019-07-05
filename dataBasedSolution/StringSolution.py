@@ -1011,3 +1011,47 @@ class StringSolution:
             else:
                 ans = max(ans, len(s))  # if each count(c)>=k
         return ans
+
+    def strongPasswordChecker(self, s: str) -> int:
+        lower, upper, digit = 1, 1, 1
+        for c in s:  # missed time for required characters
+            if c.isdigit():
+                digit = 0
+            elif c.islower():
+                lower = 0
+            elif c.isupper():
+                upper = 0
+        required, l = lower + upper + digit, len(s)
+        if l < 6: return max(required, 6 - l)
+
+        replaced, onedel, twodel, i = 0, 0, 0, 0
+        while i < l:
+            cl = 1
+            while i + cl < l and s[i] == s[i + cl]:
+                cl += 1
+            if cl > 2:
+                replaced += cl // 3
+                if cl % 3 == 0: onedel += 1
+                if cl % 3 == 1: twodel += 2
+            i += cl
+        # last, cl = s[0], 1
+        # for i, c in enumerate(s[1:], 1):
+        #     if c == last:
+        #         cl += 1
+        #     if c != last or i == l - 1:
+        #         if cl > 2:
+        #             replaced += cl // 3
+        #             if cl % 3 == 0: onedel += 1
+        #             if cl % 3 == 1: twodel += 2
+        #         cl, last = 1, c
+
+        print(replaced)
+
+        if l <= 20:
+            return max(required, replaced)
+        todel = l - 20
+        replaced -= min(todel, onedel)  # every del saves one replace
+        replaced -= min(max(todel - onedel, 0), twodel) // 2  # every two dels saves one replace
+        replaced -= max(todel - onedel - twodel, 0) // 3
+
+        return todel + max(required, replaced)
