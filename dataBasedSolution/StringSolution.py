@@ -1088,3 +1088,24 @@ class StringSolution:
         for i, n in enumerate(nums):
             ans += str(i) * n
         return ans
+
+    def characterReplacement(self, s: str, k: int) -> int:  # sliding window
+        # ans = left = 0
+        # counts = Counter()
+        # for right in range(len(s)):
+        #     counts[s[right]] += 1
+        #     commonc = counts.most_common(1)[0][1]  # the repeated char
+        #     if right - left + 1 - commonc > k:  # use "if" not "while", because right grow 1 at each time, consider "AABAC"
+        #         counts[s[left]] -= 1
+        #         left += 1
+        #     ans = max(ans, right - left + 1)
+        # return ans
+
+        left, freq, count = 0, 0, defaultdict(int)
+        for right in range(len(s)):
+            count[s[right]] += 1
+            freq = max(freq, count[s[right]])
+            if (right - left + 1 - freq) > k:  # after the max sub string, the length of window keeps the max
+                count[s[left]] -= 1
+                left += 1
+        return len(s) - left
