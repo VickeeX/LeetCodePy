@@ -1055,3 +1055,36 @@ class StringSolution:
         replaced -= max(todel - onedel - twodel, 0) // 3
 
         return todel + max(required, replaced)
+
+    def originalDigits(self, s: str) -> str:
+        # # {0: "zero", 1: "one", 2: "two", 3: "three", 4: "four",
+        # #  5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
+        # countChar, nums = defaultdict(int), [0] * 10
+        # for c in s: countChar[c] += 1
+        # nums[0] = countChar['z']  # only "zero" contains "z"
+        # nums[2] = countChar['w']  # only "two" contains "w"
+        # nums[4] = countChar['u']  # only "four" contains "u"
+        # nums[6] = countChar['x']  # only "six" contains 'x'
+        # nums[8] = countChar['g']  # only "eight" contains 'g'
+        # nums[1] = countChar['o'] - nums[0] - nums[2] - nums[4]  # 'o'
+        # nums[3] = countChar['h'] - nums[8]  # 'h'
+        # nums[5] = countChar['f'] - nums[4]  # 'f'
+        # nums[7] = countChar['s'] - nums[6]  # 's'
+        # nums[9] = countChar['i'] - nums[5] - nums[6] - nums[8]
+
+        nums = [0] * 10
+        nums[0] = s.count('z')  # only "zero" contains "z"
+        nums[2] = s.count('w')  # only "two" contains "w"
+        nums[4] = s.count('u')  # only "four" contains "u"
+        nums[6] = s.count('x')  # only "six" contains 'x'
+        nums[8] = s.count('g')  # only "eight" contains 'g'
+        nums[1] = s.count('o') - nums[0] - nums[2] - nums[4]  # 'o'
+        nums[3] = s.count('h') - nums[8]  # 'h'
+        nums[5] = s.count('f') - nums[4]  # 'f'
+        nums[7] = s.count('s') - nums[6]  # 's'
+        nums[9] = s.count('i') - nums[5] - nums[6] - nums[8]
+
+        ans = ""
+        for i, n in enumerate(nums):
+            ans += str(i) * n
+        return ans
