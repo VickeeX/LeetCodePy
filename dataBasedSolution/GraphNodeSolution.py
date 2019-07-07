@@ -50,3 +50,32 @@ class GraphNodeSolution(object):
                     new.append(j)
                 leaves = new
         return leaves
+
+
+class Node:
+    def __init__(self, val, prev, next, child):
+        self.val = val
+        self.prev = prev
+        self.next = next
+        self.child = child
+
+
+class NodeSolution:
+    def flatten(self, head: 'Node') -> 'Node':
+        if not head: return None
+        dummy, stack = Node(0, None, None, None), [head]
+        pre = dummy
+        while stack:
+            tmp = stack.pop()
+            pre.next = tmp
+            tmp.prev = pre
+
+            if tmp.next: # the sort is not matter
+                stack.append(tmp.next)
+                tmp.next = None
+            if tmp.child:
+                stack.append(tmp.child)
+                tmp.child = None
+            pre = tmp
+        dummy.next.prev = None
+        return dummy.next
