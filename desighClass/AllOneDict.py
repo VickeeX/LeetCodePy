@@ -45,66 +45,109 @@ class DoubleLinked():  # to store Node, each Node stores keys in matching number
         prenode.nxt, node.nxt.prev = node.nxt, prenode
 
 
+# class AllOne:
+#     def __init__(self):
+#         """
+#         Initialize your data structure here.
+#         """
+#         self.list = DoubleLinked()
+#         self.counter = defaultdict(int)
+#         self.nodes = {0: self.list.head}
+#
+#     def rm_key_node(self, pre, key):
+#         node = self.nodes[pre]
+#         node.remove_key(key)
+#         if len(node.keys) == 0:
+#             self.list.remove(node)
+#             self.nodes.pop(pre)
+#
+#     def inc(self, key: str) -> None:
+#         """
+#         Inserts a new key <Key> with value 1. Or increments an existing key by 1.
+#         """
+#         self.counter[key] += 1
+#         cur, pre = self.counter[key], self.counter[key] - 1
+#         if cur not in self.nodes:
+#             self.nodes[cur] = self.list.insert_after(self.nodes[pre])
+#         self.nodes[cur].keys.add(key)
+#         # print(self.nodes[cur].keys)
+#         if pre > 0:
+#             self.rm_key_node(pre, key)
+#         print(self.counter)
+#
+#     def dec(self, key: str) -> None:
+#         """
+#         Decrements an existing key by 1. If Key's value is 1, remove it from the data structure.
+#         """
+#         if key in self.counter:
+#             self.counter[key] -= 1
+#             cur, pre = self.counter[key], self.counter[key] + 1
+#             if cur != 0:
+#                 if cur not in self.nodes:
+#                     self.nodes[cur] = self.list.insert_before(self.nodes[pre])
+#                 self.nodes[cur].keys.add(key)
+#             self.rm_key_node(pre, key)
+#
+#     def getMaxKey(self) -> str:
+#         """
+#         Returns one of the keys with maximal value.
+#         """
+#         return self.list.tail.prev.get_any()
+#
+#     def getMinKey(self) -> str:
+#         """
+#         Returns one of the keys with Minimal value.
+#         """
+#         return self.list.head.nxt.get_any()
+
+
+
 class AllOne:
     def __init__(self):
         """
         Initialize your data structure here.
         """
-        self.list = DoubleLinked()
-        self.counter = defaultdict(int)
-        self.nodes = {0: self.list.head}
-
-    def rm_key_node(self, pre, key):
-        node = self.nodes[pre]
-        node.remove_key(key)
-        if len(node.keys) == 0:
-            self.list.remove(node)
-            self.nodes.pop(pre)
+        self.dict = {}
 
     def inc(self, key: str) -> None:
         """
         Inserts a new key <Key> with value 1. Or increments an existing key by 1.
         """
-        self.counter[key] += 1
-        cur, pre = self.counter[key], self.counter[key] - 1
-        if cur not in self.nodes:
-            self.nodes[cur] = self.list.insert_after(self.nodes[pre])
-        self.nodes[cur].keys.add(key)
-        # print(self.nodes[cur].keys)
-        if pre > 0:
-            self.rm_key_node(pre, key)
-        print(self.counter)
+        if key in self.dict:
+            self.dict[key] += 1
+        else:
+            self.dict[key] = 1
 
     def dec(self, key: str) -> None:
         """
         Decrements an existing key by 1. If Key's value is 1, remove it from the data structure.
         """
-        if key in self.counter:
-            self.counter[key] -= 1
-            cur, pre = self.counter[key], self.counter[key] + 1
-            if cur != 0:
-                if cur not in self.nodes:
-                    self.nodes[cur] = self.list.insert_before(self.nodes[pre])
-                self.nodes[cur].keys.add(key)
-            self.rm_key_node(pre, key)
+        if key in self.dict:
+            self.dict[key] -= 1
+            if self.dict[key] == 0:
+                self.dict.pop(key)
 
     def getMaxKey(self) -> str:
         """
         Returns one of the keys with maximal value.
         """
-        return self.list.tail.prev.get_any()
+        if self.dict:
+            return max(self.dict, key=lambda x: self.dict[x])
+        else:
+            return ""
 
     def getMinKey(self) -> str:
         """
         Returns one of the keys with Minimal value.
         """
-        return self.list.head.nxt.get_any()
+        if self.dict:
+            return min(self.dict, key=lambda x: self.dict[x])
+        else:
+            return ""
 
-
-
-        # Your AllOne object will be instantiated and called as such:
-        # obj = AllOne()
-        # obj.inc(key)
-        # obj.dec(key)
-        # param_3 = obj.getMaxKey()
-        # param_4 = obj.getMinKey()
+# Your AllOne object will be instantiated and called as such:
+# obj = AllOne()
+# obj.inc(key)
+# obj.dec(key)
+# param_3 = obj.getMaxKey()
+# param_4 = obj.getMinKey()
