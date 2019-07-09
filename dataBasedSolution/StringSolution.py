@@ -1109,3 +1109,21 @@ class StringSolution:
                 count[s[left]] -= 1
                 left += 1
         return len(s) - left
+
+    def minMutation(self, start: str, end: str, bank: list) -> int:
+        if end not in bank: return -1
+        mutations = {"A": ["C", "G", "T"], "C": ["A", "G", "T"], "G": ["A", "C", "T"], "T": ["A", "C", "G"]}
+        stack, bank = deque(), set(bank)
+        stack.append((start, 0))  # BFS
+
+        while stack:
+            mid, step = stack.popleft()
+            if mid == end:
+                return step
+            for i, x in enumerate(mid):
+                for y in mutations[x]:
+                    nxt = mid[:i] + y + mid[i + 1:]
+                    if nxt in bank:
+                        bank.remove(nxt)  # to prevent loop
+                        stack.append((nxt, step + 1))
+        return -1
