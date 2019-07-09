@@ -2548,3 +2548,13 @@ class ArraySolution:
                 if board[i][j] == 'X' and (i == 0 or board[i - 1][j] == '.') and (j == 0 or board[i][j - 1] == '.'):
                     ans += 1
         return ans
+
+    def eraseOverlapIntervals(self, intervals: list) -> int:
+        intervals.sort()
+        count = 0
+        for i in range(len(intervals) - 1):
+            if intervals[i][1]>intervals[i+1][0]:
+                intervals[i+1][1] = min(intervals[i][1],intervals[i+1][1]) # the first element is unrelated in next step
+                count+=1
+        return count
+    
