@@ -2567,3 +2567,12 @@ class ArraySolution:
         # return ans
         l = sorted([(e[0], i) for i, e in enumerate(intervals)]) + [(float('inf'), -1)]
         return [l[bisect.bisect_left(l, (end,))][1] for _, end in intervals]
+
+    def findDuplicates(self, nums: list) -> list:  # without extra space and O(n) time
+        ans = []
+        for n in nums:
+            if nums[abs(n) - 1] < 0:
+                ans.append(abs(n))
+            else:
+                nums[abs(n) - 1] *= -1  # tag that n has been visited
+        return ans
