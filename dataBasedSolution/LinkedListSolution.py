@@ -399,3 +399,23 @@ class LinkedListSolution(object):
             pre, slow, fast = slow, slow.next, fast.next.next
         pre.next = None
         return merge(*map(self.sortList, (head, slow)))
+
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        def toInt(l: ListNode):
+            if not l: return 0
+            tmp, ans = l, l.val
+            while tmp.next:
+                tmp = tmp.next
+                ans = ans * 10 + tmp.val
+            return ans
+
+        tmp, head = toInt(l1) + toInt(l2), ListNode(0)
+        while tmp:
+            val, tmp = tmp % 10, tmp // 10
+            cur = ListNode(val)
+            if not head.next:
+                head.next = cur
+            else:
+                cur.next = head.next
+                head.next = cur
+        return head.next or head
