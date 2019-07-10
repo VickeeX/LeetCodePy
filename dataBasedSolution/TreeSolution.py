@@ -689,3 +689,22 @@ class TreeSolution:
             return max(l0, l1) + max(r0, r1), node.val + l0 + r0
 
         return max(helper(root))
+
+    def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
+        if not root: return root
+        if root.val > key:
+            root.left = self.deleteNode(root.left, key)
+        elif root.val < key:
+            root.right = self.deleteNode(root.right, key)
+        else: # the operation node
+            if not root.right:
+                return root.left
+            if not root.left:
+                return root.right
+            tmp, tmpv = root.right, root.right.val  # replace root.val with minimum val in root's right sub tree
+            while tmp.left:
+                tmp = tmp.left
+                tmpv = tmp.val
+            root.val = tmpv
+            root.right = self.deleteNode(root.right, root.val)
+        return root
