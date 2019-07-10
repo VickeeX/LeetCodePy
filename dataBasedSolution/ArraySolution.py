@@ -2553,8 +2553,17 @@ class ArraySolution:
         intervals.sort()
         count = 0
         for i in range(len(intervals) - 1):
-            if intervals[i][1]>intervals[i+1][0]:
-                intervals[i+1][1] = min(intervals[i][1],intervals[i+1][1]) # the first element is unrelated in next step
-                count+=1
+            if intervals[i][1] > intervals[i + 1][0]:
+                intervals[i + 1][1] = min(intervals[i][1],
+                                          intervals[i + 1][1])  # the first element is unrelated in next step
+                count += 1
         return count
-    
+
+    def findRightInterval(self, intervals: list) -> list:
+        # l, ans = sorted((e[0], i) for i, e in enumerate(intervals)), []
+        # for _, end in intervals:
+        #     r = bisect.bisect_left(l, (end,))
+        #     ans.append(l[r][1] if r < len(l) else -1)
+        # return ans
+        l = sorted([(e[0], i) for i, e in enumerate(intervals)]) + [(float('inf'), -1)]
+        return [l[bisect.bisect_left(l, (end,))][1] for _, end in intervals]
