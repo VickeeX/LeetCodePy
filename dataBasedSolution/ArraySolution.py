@@ -2576,3 +2576,29 @@ class ArraySolution:
             else:
                 nums[abs(n) - 1] *= -1  # tag that n has been visited
         return ans
+
+    def lexicalOrder(self, n: int) -> list:
+        ans = [1]
+        while len(ans) < n:
+            new = ans[-1] * 10
+            while new > n:
+                new = new // 10 + 1
+                while new % 10 == 0:
+                    new //= 10
+
+        return ans
+
+    def findKthNumber(self, n: int, k: int) -> int:
+        ans, k = 1, k - 1
+        while k > 0:
+            count, interval = 0, [ans, ans + 1]
+            while interval[0] <= n:  # to compute next interval less than n
+                count += min(n + 1, interval[1]) - interval[0]
+                interval = [10 * interval[0], 10 * interval[1]]
+            if k >= count:
+                ans += 1  # skip this interval
+                k -= count
+            else:
+                ans *= 10  # increase one bit for a smaller interval
+                k -= 1
+        return ans
