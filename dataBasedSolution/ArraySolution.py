@@ -10,7 +10,7 @@
 import math, operator, sys, bisect, heapq
 from functools import reduce
 from heapq import heappush, heappop
-from collections import defaultdict, deque
+from collections import defaultdict, deque, Counter
 from itertools import combinations
 
 
@@ -2601,4 +2601,13 @@ class ArraySolution:
             else:
                 ans *= 10  # increase one bit for a smaller interval
                 k -= 1
+        return ans
+
+    def findMinArrowShots(self, points: list) -> int:
+        points = sorted(points, key=lambda x: x[1])
+        ans, end = 0, -float('inf')
+        for x, y in points: # greedy
+            if x > end:
+                ans += 1
+                end = y
         return ans
