@@ -1127,3 +1127,8 @@ class StringSolution:
                         bank.remove(nxt)  # to prevent loop
                         stack.append((nxt, step + 1))
         return -1
+
+    def frequencySort(self, s: str) -> str:
+        counter = Counter(s)
+        arr = sorted([(-counter[k], k) for k in counter.keys()]) # first sort by -counter[k], then character sort
+        return ''.join([c * (-n) for n, c in arr])
