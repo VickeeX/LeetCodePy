@@ -2606,8 +2606,29 @@ class ArraySolution:
     def findMinArrowShots(self, points: list) -> int:
         points = sorted(points, key=lambda x: x[1])
         ans, end = 0, -float('inf')
-        for x, y in points: # greedy
+        for x, y in points:  # greedy
             if x > end:
                 ans += 1
                 end = y
+        return ans
+
+    def fourSumCount(self, A: list, B: list, C: list, D: list) -> int:
+        # O(n^2), Counter is slower
+        # AB = Counter([a + b for a in A for b in B])
+        # return sum(AB[-c - d] for c in C for d in D)
+        # A, B, C, D = Counter(A), Counter(B), Counter(C), Counter(D)
+        aA, bB, cC, dD = defaultdict(int), defaultdict(int), defaultdict(int), defaultdict(int)
+        for i in range(len(A)):
+            aA[A[i]] += 1
+            bB[B[i]] += 1
+            cC[C[i]] += 1
+            dD[D[i]] += 1
+        AB = defaultdict(int)
+        for a in aA:
+            for b in bB:
+                AB[a + b] += aA[a] * bB[b]
+        ans = 0
+        for c in cC:
+            for d in dD:
+                ans += AB[-c - d] * cC[c] * dD[d]
         return ans
