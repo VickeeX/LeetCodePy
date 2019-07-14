@@ -2632,3 +2632,36 @@ class ArraySolution:
             for d in dD:
                 ans += AB[-c - d] * cC[c] * dD[d]
         return ans
+
+    def find132pattern(self, nums: list) -> bool:
+        # # O(n^2) time limit exceeded
+        # dic = {}
+        # for i, x in enumerate(nums[:-2]):
+        #     for j, y in enumerate(nums[i + 1:-1], i+1):
+        #         if x < y and ((j, y) not in dic or dic[(j, y)] > x):
+        #             dic[(j,y)] = x
+        # for (pos, mid), fir in dic.items():
+        #     for x in nums[pos + 1:]:
+        #         if fir < x < mid:
+        #             return True
+        # return False
+
+        if len(set(nums)) < 3: return False
+        stack, cmin = [[nums[0], nums[0]]], nums[0]
+        for i, n in enumerate(nums[1:], 1):
+            print(stack)
+            if n < cmin:
+                stack.append([n, n])  # the min num as first of 132
+                cmin = n
+            elif n >= stack[0][1]:  # the mid num is better to be larger
+                stack = [[cmin, n]]
+            elif n == cmin:
+                continue
+            else:
+                while stack and n > stack[-1][0]:
+                    if n < stack[-1][1]:
+                        return True
+                    else:
+                        stack.pop()  # current interval is more strict than [cur_min, cur]
+                stack.append([cmin, n])  # current least strict interval
+        return False
