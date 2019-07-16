@@ -2665,3 +2665,8 @@ class ArraySolution:
                         stack.pop()  # current interval is more strict than [cur_min, cur]
                 stack.append([cmin, n])  # current least strict interval
         return False
+    
+    def minMoves2(self, nums: List[int]) -> int:
+        median = sorted(nums)[len(nums)//2]
+        return sum([abs(median-x) for x in nums])                            
+    
