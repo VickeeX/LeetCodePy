@@ -2668,5 +2668,33 @@ class ArraySolution:
     
     def minMoves2(self, nums: List[int]) -> int:
         median = sorted(nums)[len(nums)//2]
-        return sum([abs(median-x) for x in nums])                            
+        return sum([abs(median-x) for x in nums])
     
+    def circularArrayLoop(self, nums: list) -> bool:
+        # l = len(nums)
+        # for i in range(l):
+        #     tmp, count, dir = i, 0, nums[i] // abs(nums[i])
+        #     while tmp >= i and count < l:
+        #         tmp = (tmp + nums[tmp]) % l
+        #         if nums[tmp] % l == 0 or nums[tmp] * dir < 0:
+        #             break
+        #         elif tmp == i:
+        #             return True
+        #         count += 1
+        # return False
+        l, failed = len(nums), set()
+        for i in range(l):
+            if i in failed:
+                continue
+            seen, direc = set(), 1 if nums[i] > 0 else -1
+            while nums[i] * direc > 0:
+                nex = (i + nums[i]) % l
+                if i == nex:  # nums[i] % l == 0
+                    break
+                if nex in seen:
+                    return True
+                else:
+                    seen.add(nex)
+                i = nex
+            failed |= seen
+        return False
