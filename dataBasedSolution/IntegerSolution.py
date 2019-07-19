@@ -428,6 +428,26 @@ class IntegerSolution:
         while stack and stack[0] == '0':  # eleminate the leading zero
             stack.popleft()
         return ''.join(stack) if stack else '0'
+    
+    def canIWin(self, maxChoosableInteger: int, desiredTotal: int) -> bool:
+        if (1 + maxChoosableInteger) * maxChoosableInteger / 2 < desiredTotal:  # can never reach
+            return False
+        dic = {}
+
+        def helper(nums, total):
+            s = str(nums)
+            if s in dic:
+                return dic[s]
+            if nums[-1] >= total:  # can win
+                return True
+            for i in range(len(nums)):
+                if not helper(nums[:i] + nums[i + 1:], total - nums[i]):  # the enemy loses in this situation
+                    dic[s] = True
+                    return True
+            dic[s] = False
+            return False
+
+        return helper([x for x in range(1, maxChoosableInteger + 1)], desiredTotal)
 
 
 def guess(num):
