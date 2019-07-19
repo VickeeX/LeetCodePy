@@ -2698,3 +2698,34 @@ class ArraySolution:
                 i = nex
             failed |= seen
         return False
+    
+    def findSubstringInWraproundString(self, p: str) -> int:   
+        if not p:
+            return 0
+        match, dic = {chr(i): chr(i + 1) if i != 122 else chr(i - 25) for i in range(97, 123)}, defaultdict(int)
+        dic[p[0]], count = 1, 1
+        for i, c in enumerate(p[1:], 1):
+            if match[p[i - 1]] == c:
+                count += 1
+            else:
+                count = 1
+            dic[c] = max(dic[c], count)  # the longest substring ended with c
+        print(dic)
+        return sum(dic.values())
+        # if not p:
+        #     return 0
+        # match = {chr(i): chr(i + 1) if i != 122 else chr(i - 25) for i in range(97, 123)}
+        # dic, count, prev = {chr(i): 0 for i in range(97, 123)}, 1, p[0]
+        # dic[prev] = 1
+        #
+        # for i in range(1, len(p)):
+        #     c = p[i]
+        #     if match[prev] == c:
+        #         count += 1
+        #     else:
+        #         count = 1
+        #     if count > dic[c]:
+        #         dic[c] = count
+        #     prev = c
+        # print(dic)
+        # return sum(dic.values())
