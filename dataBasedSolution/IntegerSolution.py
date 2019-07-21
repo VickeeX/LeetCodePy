@@ -449,6 +449,15 @@ class IntegerSolution:
 
         return helper([x for x in range(1, maxChoosableInteger + 1)], desiredTotal)
 
+    def rand10(self):
+        """
+        :rtype: int
+        """
+        cur = 40 
+        while cur>=40:
+            cur = 7*(rand7()-1) + rand7()-1 # rand49()
+        return cur % 10 + 1
+
 
 def guess(num):
     if num < 3:
