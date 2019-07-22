@@ -458,7 +458,25 @@ class IntegerSolution:
             cur = 7*(rand7()-1) + rand7()-1 # rand49()
         return cur % 10 + 1
 
+    def totalHammingDistance(self, nums: list) -> int:
+        # tot, counts = len(nums), [0] * 32
+        # for x in nums:
+        #     i = 0
+        #     while x != 0:
+        #         counts[i] += (x % 2)
+        #         i += 1
+        #         x //= 2
+        #     # for i, c in enumerate(bin(x)[:1:-1]):
+        #     #     if c == "1":
+        #     #         counts[i] += 1
+        # return sum([x * (tot - x) for x in counts])
+        ans, tot = 0, len(nums)
+        for bit in zip(*map("{:032b}".format, nums)):
+            ones = bit.count("1")
+            ans += ones * (tot - ones)
+        return ans
 
+    
 def guess(num):
     if num < 3:
         return 1
