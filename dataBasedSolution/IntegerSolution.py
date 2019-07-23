@@ -428,7 +428,7 @@ class IntegerSolution:
         while stack and stack[0] == '0':  # eleminate the leading zero
             stack.popleft()
         return ''.join(stack) if stack else '0'
-    
+
     def canIWin(self, maxChoosableInteger: int, desiredTotal: int) -> bool:
         if (1 + maxChoosableInteger) * maxChoosableInteger / 2 < desiredTotal:  # can never reach
             return False
@@ -453,9 +453,14 @@ class IntegerSolution:
         """
         :rtype: int
         """
-        cur = 40 
-        while cur>=40:
-            cur = 7*(rand7()-1) + rand7()-1 # rand49()
+
+        def rand7(x):
+            # emulate the API
+            return x
+
+        cur = 40
+        while cur >= 40:
+            cur = 7 * (rand7() - 1) + rand7() - 1  # rand49()
         return cur % 10 + 1
 
     def totalHammingDistance(self, nums: list) -> int:
@@ -476,7 +481,7 @@ class IntegerSolution:
             ans += ones * (tot - ones)
         return ans
 
-    
+
 def guess(num):
     if num < 3:
         return 1
