@@ -1130,22 +1130,59 @@ class StringSolution:
 
     def frequencySort(self, s: str) -> str:
         counter = Counter(s)
-        arr = sorted([(-counter[k], k) for k in counter.keys()]) # first sort by -counter[k], then character sort
+        arr = sorted([(-counter[k], k) for k in counter.keys()])  # first sort by -counter[k], then character sort
         return ''.join([c * (-n) for n, c in arr])
-    
+
     def validIPAddress(self, IP: str) -> str:
         def IPV4Part(s):
-            try: return str(int(s))==s and 0<=int(s)<=255
-            except: return False
-        
+            try:
+                return str(int(s)) == s and 0 <= int(s) <= 255
+            except:
+                return False
+
         def IPV6Part(s):
-            if len(s)>4: return False
-            try: return int(s, 16) >= 0 and s[0] != '-'
-            except: return False
-        
-        if IP.count('.')==3 and all(IPV4Part(s) for s in IP.split(".")):
+            if len(s) > 4: return False
+            try:
+                return int(s, 16) >= 0 and s[0] != '-'
+            except:
+                return False
+
+        if IP.count('.') == 3 and all(IPV4Part(s) for s in IP.split(".")):
             return "IPv4"
-        if IP.count(':')==7 and all(IPV6Part(s) for s in IP.split(":")):
+        if IP.count(':') == 7 and all(IPV6Part(s) for s in IP.split(":")):
             return "IPv6"
         return "Neither"
 
+    def getMaxRepetitions(self, s1: str, n1: int, s2: str, n2: int) -> int:
+        if len(s1) * n1 < len(s2) * n2:
+            return 0
+        s1_round = s2_round = idx = 0
+        record, l2 = {}, len(s2)
+        # pos, s2set = defaultdict(list), set(s2)
+        # for i, c in enumerate(s1):
+        #     if c in s2set:
+        #         pos[c].append(i)
+        # for c in s2set:
+        #     if not pos[c]:
+        #         return 0
+        while s1_round < n1:
+            s1_round += 1
+            for c in s1:
+                if c == s2[idx]:
+                    idx += 1
+                    if idx == l2:
+                        s2_round += 1
+                        idx = 0
+            if idx in record:
+                s1r, s2r = record[idx]
+                c1, c2 = s1_round - s1r, s2_round - s2r
+                ans = (n1 - s1r) // c1 * c2  # the count or s2 between last idx pos to current pos
+                left_s1 = (n1 - s1r) % c1 + s1r
+                for k, v in record.items():  # the left count of s1
+                    if v[0] == left_s1:
+                        ans += v[1]
+                        break
+                return ans // n2
+            else:
+                record[idx] = (s1_round, s2_round)
+        return s2_round // n2
