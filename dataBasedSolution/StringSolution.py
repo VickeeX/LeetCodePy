@@ -1210,6 +1210,30 @@ class StringSolution:
         strs.sort()
         dp, l, dic = {}, len(strs), {s: [s.count('0'), s.count('1')] for s in set(strs)}
 
+        def helper(pre, pos, rm, rn):
+            if rm < 0 or rn < 0: return None
+            if pos == l: return 0
+            s = strs[pos]
+            if (pos, rm, rn) in dp:
+                return dp[(pos, rm, rn)]
+            z, o = dic[s]
+            # if pre == s:
+            #     return helper(pre, pos + 1, rm - z, rn - o)
+            ans = helper(s, pos + 1, rm, rn)  # do not format current
+            if ans is None: ans = 0
+            if z <= rm and o <= rn:
+                tmp = helper(s, pos + 1, rm - z, rn - o)
+                if tmp is not None and tmp >= ans:
+                    ans = tmp + 1
+            dp[(pos, rm, rn)] = ans
+            return ans
+
+        return helper("", 0, m, n)
+
+    def findMaxForm_(self, strs: list, m: int, n: int) -> int:
+        strs.sort()
+        dp, l, dic = {}, len(strs), {s: [s.count('0'), s.count('1')] for s in set(strs)}
+
         def helper(start, rm, rn):
             if rm < 0 or rn < 0:
                 return None
