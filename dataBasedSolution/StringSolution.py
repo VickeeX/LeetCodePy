@@ -1186,3 +1186,45 @@ class StringSolution:
             else:
                 record[idx] = (s1_round, s2_round)
         return s2_round // n2
+
+    def findMaxForm(self, strs: list, m: int, n: int) -> int:
+        # # dp: TLE
+        # dic = {s: [s.count("0"), s.count("1")] for s in set(strs)}
+        # dp = [[0] * (n + 1) for _ in range(m + 1)]
+        #
+        # for i,s in enumerate(strs):
+        #     z, o = dic[s]
+        #     for x in range(m, -1, -1):
+        #         for y in range(n, -1, -1):
+        #             if x >= z and y >= o:
+        #                 dp[x][y] = max(1 + dp[x - z][y - o], dp[x][y])
+        # return dp[m][n]
+
+        # recursive solution: TLE
+        # c0, c1 = strs[0].count("0"), strs[0].count("1")
+        # ans = self.findMaxForm(strs[1:], m, n)
+        # if c0 <= m and c1 <= n:
+        #     ans = max(ans, 1 + self.findMaxForm(strs[1:], m - c0, n - c1))
+        # return ans
+
+        strs.sort()
+        dp, l, dic = {}, len(strs), {s: [s.count('0'), s.count('1')] for s in set(strs)}
+
+        def helper(start, rm, rn):
+            if rm < 0 or rn < 0:
+                return None
+            if (start, rm, rn) in dp:
+                return dp[(start, rm, rn)]
+
+            ans, tag = 0, False
+            for i in range(start, l):
+                if i > start and strs[i] == strs[i - 1]:  # searched before when dfs(i-1,...)
+                    continue
+                z, o = dic[strs[i]]
+                r = helper(i + 1, rm - z, rn - o)
+                if r is not None and (not tag or r > ans):
+                    ans, tag = r, True
+            dp[(start, rm, rn)] = ans + 1 if tag else 0
+            return dp[(start, rm, rn)]
+
+        return helper(0, m, n)
