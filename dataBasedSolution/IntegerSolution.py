@@ -481,6 +481,31 @@ class IntegerSolution:
             ans += ones * (tot - ones)
         return ans
 
+    def magicalString(self, n: int) -> int:
+        queue = [1, 2, 2]
+        idx = 2
+        while len(queue) < n:
+            queue += [3 - queue[-1]] * queue[idx]
+            idx += 1
+        return queue[:n].count(1)
+        # # optimize the storage
+        # if n == 0:
+        #     return 0
+        # queue, ans, cur, n = deque([2]), 1, -1, n - 3
+        # while n > 0:
+        #     nex = 3 - queue[-1]
+        #     tmp = queue.popleft()
+        #     queue.append(nex)
+        #     if tmp == 2:
+        #         queue.append(nex)
+        #     n -= tmp
+        #     if nex == 1:
+        #         if n < 0:
+        #             ans += 1
+        #         else:
+        #             ans += tmp
+        # return ans
+
 
 def guess(num):
     if num < 3:
