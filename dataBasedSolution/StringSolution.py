@@ -1252,3 +1252,45 @@ class StringSolution:
             return dp[(start, rm, rn)]
 
         return helper(0, m, n)
+
+    def findAllConcatenatedWordsInADict(self, words: list) -> list:
+        # note: comprised **entirely** of at least two shorter words in the given array
+        words.sort(key=len)
+        preWords, ans = set(), []
+
+        def form(word):
+            if not word:
+                return False
+            wl = len(word)
+            dp = [True] + [False] * wl
+            for i in range(1, wl + 1):  # split the word into segments
+                for j in range(i - 1, -1, -1):  # pre and current segment both meet the requirement
+                    if dp[j] and word[j:i] in preWords:
+                        dp[i] = True
+                        break
+            return dp[-1]
+
+        for w in words:
+            if form(w):
+                ans.append(w)
+            else:
+                preWords.add(w)
+        return ans
+
+    def findAllConcatenatedWordsInADict_(self, words: list) -> list:
+        words, ans = set(words), []
+
+        def form(word):
+            if word in words:
+                return True
+            for i in range(1, len(word)):
+                if word[:i] in words and form(word[i:]):
+                    return True
+            return False
+
+        for w in words:
+            words.remove(w)
+            if form(w):
+                ans.append(w)
+            words.add(w)
+        return ans
