@@ -506,6 +506,14 @@ class IntegerSolution:
         #             ans += tmp
         # return ans
 
+    def fib(self, N: int) -> int:
+        if N < 2: return N
+        a, b = 0, 1
+        while N > 1:
+            a, b = b, a + b
+            N -= 1
+        return b
+
 
 def guess(num):
     if num < 3:
