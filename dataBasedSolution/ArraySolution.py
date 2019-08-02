@@ -2665,11 +2665,11 @@ class ArraySolution:
                         stack.pop()  # current interval is more strict than [cur_min, cur]
                 stack.append([cmin, n])  # current least strict interval
         return False
-    
+
     def minMoves2(self, nums: list) -> int:
-        median = sorted(nums)[len(nums)//2]
-        return sum([abs(median-x) for x in nums])
-    
+        median = sorted(nums)[len(nums) // 2]
+        return sum([abs(median - x) for x in nums])
+
     def circularArrayLoop(self, nums: list) -> bool:
         # l = len(nums)
         # for i in range(l):
@@ -2698,8 +2698,8 @@ class ArraySolution:
                 i = nex
             failed |= seen
         return False
-    
-    def findSubstringInWraproundString(self, p: str) -> int:   
+
+    def findSubstringInWraproundString(self, p: str) -> int:
         if not p:
             return 0
         match, dic = {chr(i): chr(i + 1) if i != 122 else chr(i - 25) for i in range(97, 123)}, defaultdict(int)
@@ -2729,3 +2729,33 @@ class ArraySolution:
         #     prev = c
         # print(dic)
         # return sum(dic.values())
+
+    def PredictTheWinner(self, nums: list) -> bool:
+        # def helper(s1, s2, s, e, tag):
+        #     if s >= e:
+        #         return s1 >= s2
+        #     if tag:
+        #         return helper(s1 + nums[s], s2, s + 1, e, False) or helper(s1 + nums[e], s2, s, e - 1, False)
+        #     else:
+        #         return helper(s1, s2 + nums[s], s + 1, e, True) and helper(s1, s2 + nums[e], s, e - 1, True)
+        #
+        # return helper(0, 0, 0, len(nums) - 1, True)
+        if not nums: return True
+        n = len(nums)
+        if n & 1 == 0: return True
+        dp = [0] * n
+        for i in range(n - 1, -1, -1):
+            for j in range(i, n):
+                if i == j:
+                    dp[i] = nums[i]
+                else:
+                    dp[j] = max(nums[i] - dp[j], nums[j] - dp[j - 1])
+        return dp[-1] >= 0
+
+        # n = len(nums)
+        # if n == 1 or n % 2 == 0: return True
+        # dp = [[0] * n for _ in range(n)]
+        # for i in range(n - 1, -1, -1):
+        #     for j in range(i + 1, n):
+        #         dp[i][j] = max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j - 1])
+        # return dp[0][-1] >= 0
