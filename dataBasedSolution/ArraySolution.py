@@ -2759,3 +2759,13 @@ class ArraySolution:
         #     for j in range(i + 1, n):
         #         dp[i][j] = max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j - 1])
         # return dp[0][-1] >= 0
+
+    def medianSlidingWindow(self, nums: list, k: int) -> list:
+        # time complexity: O(n·logk)
+        window, ans, odd_even = nums[:k - 1], [], k % 2
+        window.sort()
+        for i, n in enumerate(nums[k - 1:], k - 1):
+            bisect.insort(window, n)
+            ans.append((window[k // 2 - 1] + window[k // 2]) / 2 if not odd_even else window[k // 2])
+            window.pop(bisect.bisect(window, nums[i + 1 - k]) - 1)  # pop the stale num
+        return ans
