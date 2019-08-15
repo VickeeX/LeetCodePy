@@ -2769,3 +2769,11 @@ class ArraySolution:
             ans.append((window[k // 2 - 1] + window[k // 2]) / 2 if not odd_even else window[k // 2])
             window.pop(bisect.bisect(window, nums[i + 1 - k]) - 1)  # pop the stale num
         return ans
+
+    def findPoisonedDuration(self, timeSeries: list, duration: int) -> int:
+        if not timeSeries: return 0
+        pre, ans = timeSeries[0], duration
+        for x in timeSeries[1:]:
+            ans += duration if pre + duration <= x else x - pre
+            pre = x
+        return ans

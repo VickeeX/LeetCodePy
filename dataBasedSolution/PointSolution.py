@@ -42,3 +42,18 @@ class PointSolution(object):
         for l in lines:
             ans = max(ans, sum([point_count[(p[0], p[1])] for p in lines[l]]))
         return ans
+
+
+class RandomPointInCircle:
+    def __init__(self, radius: float, x_center: float, y_center: float):
+        self.xmin, self.xmax = x_center - radius, x_center + radius
+        self.ymin, self.ymax = y_center - radius, y_center + radius
+        self.x_center, self.y_center = x_center, y_center
+        self.radius_pow = radius ** 2
+
+    def randPoint(self) -> list:
+        import random
+        while True:
+            x, y = random.uniform(self.xmin, self.xmax), random.uniform(self.ymin, self.ymax)
+            if (x - self.x_center) ** 2 + (y - self.y_center) ** 2 <= self.radius_pow:
+                return [x, y]
