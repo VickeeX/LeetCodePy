@@ -1294,3 +1294,25 @@ class StringSolution:
                 ans.append(w)
             words.add(w)
         return ans
+
+    def findMinStep(self, board: str, hand: str) -> int:
+        dic = Counter(hand)
+
+        def helper(board, dic):
+            if not board: return 0
+            ans, i = float('inf'), 0
+            while i < len(board):
+                j = i + 1
+                while j < len(board) and board[j] == board[i]:
+                    j += 1
+                need = 3 - (j - i) if j - i < 3 else 0  # need
+                if dic[board[i]] >= need:
+                    dic[board[i]] -= need  # eliminate board[i] now or not(while traverse others)
+                    tmp = helper(board[:i] + board[j:], dic)
+                    if tmp >= 0:
+                        ans = min(ans, tmp + need)
+                    dic[board[i]] += need
+                i = j
+            return ans if ans != float('inf') else -1
+
+        return helper(board, dic)
