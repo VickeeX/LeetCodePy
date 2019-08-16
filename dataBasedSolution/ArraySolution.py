@@ -2777,3 +2777,17 @@ class ArraySolution:
             ans += duration if pre + duration <= x else x - pre
             pre = x
         return ans
+
+    def reversePairs(self, nums: list) -> int:
+        arr, ans = [], 0
+        # for i, x in enumerate(nums):
+        #     pos = bisect.bisect_right(arr, 2 * x)  # insert to pos: nums behind pos are greater then 2*x
+        #     ans += i - pos
+        #     bisect.insort(arr, x)
+        # return ans
+
+        for x in nums:
+            ans += len(arr) - bisect.bisect_right(arr, 2 * x)
+            idx = bisect.bisect_right(arr, x)
+            arr[idx:idx] = [x]  # much faster than '''bisect.insort(arr, x)'''
+        return ans
