@@ -2791,3 +2791,11 @@ class ArraySolution:
             idx = bisect.bisect_right(arr, x)
             arr[idx:idx] = [x]  # much faster than '''bisect.insort(arr, x)'''
         return ans
+
+    def findSubsequences(self, nums: list) -> list:
+        # 491. Increasing Subsequences
+        ans = {()}  # set to eliminate duplicate
+        for n in nums:
+            ans |= {item + (n,) for item in ans if not item or n >= item[-1]}
+        return [item for item in ans if len(item) > 1]
+
