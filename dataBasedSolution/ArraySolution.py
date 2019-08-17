@@ -2799,3 +2799,35 @@ class ArraySolution:
             ans |= {item + (n,) for item in ans if not item or n >= item[-1]}
         return [item for item in ans if len(item) > 1]
 
+    def findTargetSumWays(self, nums: list, S: int) -> int:
+        # 494. Target Sum
+        # if not nums: return 0
+        # dic = {nums[0]: 1, -nums[0]: 1} if nums[0] != 0 else {0: 2}
+        # for n in nums[1:]:  # dp
+        #     tmp = {}
+        #     for m in dic:
+        #         for x in [m + n, m - n]:
+        #             tmp[x] = tmp.get(x, 0) + dic.get(m, 0)
+        #     dic = tmp
+        # return dic.get(S, 0)
+
+        newt = (sum(nums) + S) // 2
+        if sum(nums) < S or (sum(nums) + S) % 2 == 1:
+            return 0
+        dp = [0 for i in range(newt + 1)]
+        dp[0] = 1
+        for n in nums:
+            for i in range(newt, n - 1, -1):
+                dp[i] += dp[i - n]
+        return dp[newt]
+
+    def findDiagonalOrder(self, matrix: list) -> list:
+        # 498. Diagonal Traverse
+        if not matrix or not matrix[0]: return []
+        m, n, dic, ans = len(matrix), len(matrix[0]), defaultdict(list), []
+        for i in range(m):
+            for j in range(n):
+                dic[i + j].append(matrix[i][j])
+        for k in dic:
+            ans += (dic[k][::-1 if k % 2 == 0 else 1])
+        return ans
