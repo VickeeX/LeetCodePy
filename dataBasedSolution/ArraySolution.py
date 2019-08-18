@@ -218,7 +218,7 @@ class ArraySolution:
         # (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2))
         ans, size = 0, len(points)
         triangleAreaCompute = lambda x, y, z: abs(
-                (x[0] * (y[1] - z[1]) + y[0] * (z[1] - x[1]) + z[0] * (x[1] - y[1])) * 0.5)
+            (x[0] * (y[1] - z[1]) + y[0] * (z[1] - x[1]) + z[0] * (x[1] - y[1])) * 0.5)
         for i in range(size):
             for j in range(i + 1, size):
                 for k in range(j + 1, size):
@@ -1805,7 +1805,7 @@ class ArraySolution:
         for i, n in enumerate(nums):
             m = n // w
             if m in buckets or (m - 1 in buckets and abs(n - buckets[m - 1]) < w) or (
-                                m + 1 in buckets and abs(n - buckets[m + 1]) < w):
+                    m + 1 in buckets and abs(n - buckets[m + 1]) < w):
                 return True
             buckets[m] = n
             if i >= k:
@@ -2133,8 +2133,8 @@ class ArraySolution:
             if not dp[i][j]:
                 v = matrix[i][j]  # read once
                 dp[i][j] = 1 + max(helper(i - 1, j) if i > 0 and v < matrix[i - 1][j] else 0,
-                                   helper(i, j - 1) if j > 0 and v < matrix[i][j - 1]  else 0,
-                                   helper(i + 1, j) if i + 1 < h and v < matrix[i + 1][j]  else 0,
+                                   helper(i, j - 1) if j > 0 and v < matrix[i][j - 1] else 0,
+                                   helper(i + 1, j) if i + 1 < h and v < matrix[i + 1][j] else 0,
                                    helper(i, j + 1) if j + 1 < w and v < matrix[i][j + 1] else 0)
                 # can be reduced to one-line but condition process would be more
             return dp[i][j]
@@ -2831,3 +2831,21 @@ class ArraySolution:
         for k in dic:
             ans += (dic[k][::-1 if k % 2 == 0 else 1])
         return ans
+
+    def findMaximizedCapital(self, k: int, W: int, Profits: list, Capital: list) -> int:
+        from heapq import heapify, heappop, heappush
+        projects = [[-Profits[i], Capital[i]] for i in range(len(Profits))]
+        heapify(projects)
+        tmp = []
+        while k > 0 and projects:  # use heap to reduce the complexity while same projects have been choosed
+            while projects:
+                p, c = heappop(projects)
+                if c <= W:
+                    W -= p
+                    k -= 1
+                    while tmp:
+                        heappush(projects, tmp.pop())
+                    break
+                else:
+                    tmp.append([p, c])
+        return W
