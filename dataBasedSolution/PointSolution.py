@@ -7,8 +7,8 @@
     Author       :    VickeeX
 """
 
+import random
 from collections import defaultdict
-from decimal import Decimal
 
 
 class Point(object):
@@ -57,3 +57,31 @@ class RandomPointInCircle:
             x, y = random.uniform(self.xmin, self.xmax), random.uniform(self.ymin, self.ymax)
             if (x - self.x_center) ** 2 + (y - self.y_center) ** 2 <= self.radius_pow:
                 return [x, y]
+
+
+class RandomPointFromAreas:
+
+    def __init__(self, rects: list):
+        self.areas = []
+        for i, r in enumerate(rects):
+            x1, y1, x2, y2 = r
+            self.areas.append((x2 - x1 + 1) * (y2 - y1 + 1) + (self.areas[i - 1] if i != 0 else 0))
+        self.rects = rects
+        print(self.rects, self.areas)
+
+    def pick(self) -> list:
+        selected = random.randint(1, self.areas[-1])  # select a rect by area size
+        low, high = 0, len(self.areas) - 1
+        while low <= high:
+            mid = (low + high) // 2
+            if selected <= self.areas[mid]:
+                high = mid - 1
+            else:
+                low = mid + 1
+
+        print(selected)
+        x1, y1, x2, y2 = self.rects[low]
+        if low != 0:
+            selected -= self.areas[low - 1]  # specific point: each rect can be regarded as a rang of points
+        selected -= 1  # start from 0,0
+        return [x1 + selected % (x2 - x1 + 1), y1 + selected // (x2 - x1 + 1)]
