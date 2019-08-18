@@ -52,7 +52,6 @@ class RandomPointInCircle:
         self.radius_pow = radius ** 2
 
     def randPoint(self) -> list:
-        import random
         while True:
             x, y = random.uniform(self.xmin, self.xmax), random.uniform(self.ymin, self.ymax)
             if (x - self.x_center) ** 2 + (y - self.y_center) ** 2 <= self.radius_pow:
