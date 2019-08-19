@@ -2849,3 +2849,15 @@ class ArraySolution:
                 else:
                     tmp.append([p, c])
         return W
+
+    def nextGreaterElements(self, nums: list) -> list:
+        # to improve: start from the max number
+        stack, l, ans = [], len(nums), [-1] * len(nums)
+        for i in range(l * 2): # to traverse circularly
+            print(stack)
+            while stack and nums[stack[-1]] < nums[i % l]: # the last one must be smallest in stack
+                ans[stack[-1]] = nums[i % l]
+                stack.pop()
+            if i < len(nums):
+                stack.append(i)
+        return ans
