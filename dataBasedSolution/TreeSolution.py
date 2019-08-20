@@ -722,3 +722,15 @@ class TreeSolution:
         dfs(root)
         common = max([v for v in self.sums.values()])
         return [k for k in self.sums if self.sums[k] == common]
+
+    def findBottomLeftValue(self, root: TreeNode) -> int:
+        layer = [root]
+        while layer:
+            tmp = []
+            for node in layer:
+                if node.left: tmp.append(node.left)
+                if node.right: tmp.append(node.right)
+            if not tmp:
+                break
+            layer = tmp
+        return layer[0].val
