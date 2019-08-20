@@ -383,7 +383,6 @@ class TreeSolution:
             n.left = None
             cur = cur.right
 
-
             # Definition for binary tree with next pointer.
             #  class TreeLinkNode:
             #     def __init__(self, x):
@@ -696,7 +695,7 @@ class TreeSolution:
             root.left = self.deleteNode(root.left, key)
         elif root.val < key:
             root.right = self.deleteNode(root.right, key)
-        else: # the operation node
+        else:  # the operation node
             if not root.right:
                 return root.left
             if not root.left:
@@ -708,3 +707,18 @@ class TreeSolution:
             root.val = tmpv
             root.right = self.deleteNode(root.right, root.val)
         return root
+
+    def findFrequentTreeSum(self, root: TreeNode) -> list:
+        from collections import defaultdict
+        self.sums = defaultdict(int)
+
+        def dfs(node: TreeNode):
+            if not node:
+                return 0
+            sum = dfs(node.left) + dfs(node.right) + node.val
+            self.sums[sum] += 1
+            return sum
+
+        dfs(root)
+        common = max([v for v in self.sums.values()])
+        return [k for k in self.sums if self.sums[k] == common]
