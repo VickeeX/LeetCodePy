@@ -605,7 +605,7 @@ class StringSolution:
         for i in range(1, n):
             # swap the two part or not
             if (self.isScramble(s1[:i], s2[:i]) and self.isScramble(s1[i:], s2[i:])) or (
-                        self.isScramble(s1[:i], s2[n - i:]) and self.isScramble(s1[i:], s2[:n - i])):
+                    self.isScramble(s1[:i], s2[n - i:]) and self.isScramble(s1[i:], s2[:n - i])):
                 return True
         return False
 
@@ -1316,3 +1316,24 @@ class StringSolution:
             return ans if ans != float('inf') else -1
 
         return helper(board, dic)
+
+    def findRotateSteps(self, ring: str, key: str) -> int:
+        m, n, memo = len(ring), len(key), {}  # memo (status,pos) to reduce time complexity
+
+        def helper(status, pos):
+            if status == n:
+                return 0
+            if (status, pos) in memo:
+                return memo[(status, pos)]
+            l, r, ls, rs = pos, pos, 0, 0
+            while ring[l] != key[status]:  # turn left: find the pos ans steps
+                l = (l - 1) % m
+                ls += 1
+            while ring[r] != key[status]:  # turn right
+                r = (r + 1) % m
+                rs += 1
+            ans = min(ls + helper(status + 1, l), rs + helper(status + 1, r))  # choose min of left and right
+            memo[(status, pos)] = ans  # append current status to memo
+            return ans
+
+        return helper(0, 0) + n
