@@ -734,3 +734,17 @@ class TreeSolution:
                 break
             layer = tmp
         return layer[0].val
+
+    def largestValues(self, root: TreeNode) -> list:
+        if not root: return []
+        layer, ans = [root], [root.val]
+        while layer:
+            tmp = []
+            for node in layer:
+                if node.left: tmp.append(node.left)
+                if node.right: tmp.append(node.right)
+            if not tmp:
+                break
+            layer = tmp
+            ans.append(max([node.val for node in tmp]))
+        return ans
