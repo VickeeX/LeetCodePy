@@ -514,6 +514,13 @@ class IntegerSolution:
             N -= 1
         return b
 
+    def change(self, amount: int, coins: list) -> int:
+        dp = [1] + [0] * amount
+        for c in coins:
+            for s in range(amount - c + 1):
+                dp[s + c] += dp[s]  # plan of no c, one c, two c, ...
+        return dp[-1]
+
 
 def guess(num):
     if num < 3:
