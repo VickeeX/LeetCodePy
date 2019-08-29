@@ -2853,11 +2853,42 @@ class ArraySolution:
     def nextGreaterElements(self, nums: list) -> list:
         # to improve: start from the max number
         stack, l, ans = [], len(nums), [-1] * len(nums)
-        for i in range(l * 2): # to traverse circularly
+        for i in range(l * 2):  # to traverse circularly
             print(stack)
-            while stack and nums[stack[-1]] < nums[i % l]: # the last one must be smallest in stack
+            while stack and nums[stack[-1]] < nums[i % l]:  # the last one must be smallest in stack
                 ans[stack[-1]] = nums[i % l]
                 stack.pop()
             if i < len(nums):
                 stack.append(i)
         return ans
+
+    def findMinMoves(self, machines: list) -> int:
+        if not machines: return 0
+        s, n = sum(machines), len(machines)
+        if s % n != 0: return -1
+        targ, left, right, ans = s // n, 0, s, 0
+        for i, m in enumerate(machines):
+            right -= m
+            l, r = left - i * targ, right - s + i * targ + targ
+            left += m
+            m -= targ
+            if l * r >= 0:
+                # need l+r dresses for max(l,r) times, or put into left and right for m times
+                ans = max(l, r, ans) if m < 0 else max(m, ans)
+            elif l * m > 0:
+                # l+m+r=0, right put/get abs(r) from left+mid
+                ans = max(abs(r), ans)
+            else:
+                # left get/put abs(r) from right+mid
+                ans = max(abs(l), ans)
+        return ans
+
+    def findMinMoves_(self, machines: list) -> int:
+        if not machines: return 0
+        s, n = sum(machines), len(machines)
+        if s % n != 0: return -1
+        targ, balance, ans = s // n, 0, 0
+        for m in machines:
+            balance += m - targ  # current unbalance of left and right -- the put times from global view
+            ans = max(abs(balance), ans)
+        return max(max(machines) - targ, ans)  # max(machines) - targ -- the put times from single machine's view
