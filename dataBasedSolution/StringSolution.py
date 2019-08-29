@@ -1352,3 +1352,28 @@ class StringSolution:
                 else:
                     dp[i][j] = max(dp[i + 1][j], dp[i][j - 1])
         return dp[0][-1]
+
+    def shortestCompletingWord(self, licensePlate: str, words: list) -> str:
+        # 748. Shortest Completing Word
+        plate = Counter([c.lower() for c in licensePlate if c.isalpha()])
+        for word in sorted(words, key=len):
+            counter = Counter(word)
+            tag = True
+            for k, v in plate.items():
+                if k not in counter or v > counter[k]:
+                    tag = False
+                    break
+            if tag:
+                return word
+
+    def shortestCompletingWord_(self, licensePlate: str, words: list) -> str:
+        plate = [c.lower() for c in licensePlate if c.isalpha()]
+        for word in sorted(words, key=len()):
+            tmp = plate.copy()
+            for c in word:
+                if c in tmp:
+                    # i = tmp.index(c)
+                    # tmp = tmp[:i] + tmp[i + 1:]
+                    del tmp[tmp.index(c)]
+            if not tmp:
+                return word

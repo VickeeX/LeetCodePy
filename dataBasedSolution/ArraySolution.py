@@ -2863,6 +2863,7 @@ class ArraySolution:
         return ans
 
     def findMinMoves(self, machines: list) -> int:
+        # 517. Super Washing Machines
         if not machines: return 0
         s, n = sum(machines), len(machines)
         if s % n != 0: return -1
@@ -2884,6 +2885,7 @@ class ArraySolution:
         return ans
 
     def findMinMoves_(self, machines: list) -> int:
+        # 517. Super Washing Machines
         if not machines: return 0
         s, n = sum(machines), len(machines)
         if s % n != 0: return -1
@@ -2892,3 +2894,24 @@ class ArraySolution:
             balance += m - targ  # current unbalance of left and right -- the put times from global view
             ans = max(abs(balance), ans)
         return max(max(machines) - targ, ans)  # max(machines) - targ -- the put times from single machine's view
+
+    def countArrangement(self, N: int) -> int:
+        # 526. Beautiful Arrangement
+        # divs = [set() for i in range(N + 1)]
+        # for i in range(1, N + 1):
+        #     for j in range(1, N + 1):
+        #         if i % j == 0 or j % i == 0:
+        #             divs[i].add(j)
+        visited = {}
+
+        def helper(rest, n):
+            if n == 1:
+                return 1
+            if (rest, n) in visited:
+                return visited[(rest, n)]
+            ans = sum(helper(rest[:i] + rest[i + 1:], n - 1) for i, x in enumerate(rest) if x % n == 0 or n % x == 0)
+            # ans = sum(helper(rest[:i] + rest[i + 1:], n - 1) for i, x in enumerate(rest) if x in divs[n])
+            visited[(rest, n)] = ans
+            return ans
+
+        return helper(tuple(range(1, N + 1)), N)
