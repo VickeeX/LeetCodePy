@@ -1377,3 +1377,28 @@ class StringSolution:
                     del tmp[tmp.index(c)]
             if not tmp:
                 return word
+
+    def findLongestWord(self, s: str, d: list) -> str:
+        # 524. Longest Word in Dictionary through Deleting
+        for word in sorted(sorted(d), key=len, reverse=True):  # sorted by len first, then lexicographically
+            tmp = iter(s)
+            if all(c in tmp for c in word):
+                return word
+        return ""
+
+    def findLongestWord_(self, s: str, d: list) -> str:
+        def helper(word):  # faster than iter(...)
+            pos = 0
+            for c in word:
+                j = s.find(c, pos)  # according to arrange
+                if j == -1:
+                    return False
+                pos = j + 1
+            return True
+
+        ans = ""
+        for word in d:
+            if len(word) > len(ans) or (len(word) == len(ans) and word < ans):
+                if helper(word):
+                    ans = word
+        return ans
