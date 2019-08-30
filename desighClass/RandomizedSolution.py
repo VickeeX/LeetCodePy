@@ -106,3 +106,18 @@ class RandomFlipMatrixSolution:
     def reset(self) -> None:
         self.last = self.rows * self.cows
         self.rec = {}
+
+
+class RandomPickWithWeightSolution:
+    # 528. Random Pick with Weight
+    def __init__(self, w: list):
+        self.sum = 0
+        self.w = []
+        for n in w:
+            self.sum += n
+            self.w.append(self.sum)
+
+    def pickIndex(self) -> int:
+        import bisect
+        choice = random.randint(1, self.sum)
+        return bisect.bisect_left(self.w, choice)
