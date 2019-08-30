@@ -2915,3 +2915,16 @@ class ArraySolution:
             return ans
 
         return helper(tuple(range(1, N + 1)), N)
+
+    def findMaxLength(self, nums: list) -> int:
+        # 525. Contiguous Array
+        records, ans, balance = {}, 0, 0
+        for i, n in enumerate(nums):
+            balance = balance + 1 if n == 0 else balance - 1
+            if balance == 0:
+                ans = i + 1
+            elif balance in records:
+                ans = max(ans, i - records[balance])  # the span satisfies requirement
+            else:
+                records[balance] = i  # records the **first** occurrence of balance
+        return ans
