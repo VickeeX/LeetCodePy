@@ -1402,3 +1402,29 @@ class StringSolution:
                 if helper(word):
                     ans = word
         return ans
+
+    def complexNumberMultiply(self, a: str, b: str) -> str:
+        # 537. Complex Number Multiplication
+        A = [int(x) for x in a.replace('i', '').split('+')]
+        B = [int(x) for x in b.replace('i', '').split('+')]
+        return str(A[0] * B[0] - A[1] * B[1]) + "+" + str(A[0] * B[1] + A[1] * B[0]) + "i"
+
+    def findMinDifference(self, timePoints: list) -> int:
+        # 539. Minimum Time Difference
+        def sub(a, b):
+            dif = (int(b[:2]) - int(a[:2])) * 60 + int(b[3:]) - int(a[3:])
+            if dif > 720:
+                dif = (int(a[:2]) + 24 - int(b[:2])) * 60 + int(a[3:]) - int(b[3:])
+            return dif
+
+        timePoints.sort()
+        ans = 2000
+        for i, t in enumerate(timePoints):
+            if i == len(timePoints) - 1:
+                a, b = timePoints[0], timePoints[i]
+            else:
+                a, b = timePoints[i], timePoints[i + 1]
+            dif = sub(a, b)
+            if dif < ans:
+                ans = dif
+        return ans

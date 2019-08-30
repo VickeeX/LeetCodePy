@@ -2928,3 +2928,31 @@ class ArraySolution:
             else:
                 records[balance] = i  # records the **first** occurrence of balance
         return ans
+
+    def singleNonDuplicate(self, nums: list) -> int:
+        # 540. Single Element in a Sorted Array
+        # O(n) time: xor / search sequentially
+        # O(lg n) time: binary search
+        # L = len(nums)
+        #
+        # def helper(l, r):
+        #     if l <= r:
+        #         mid = (l + r) // 2
+        #         if (mid == 0 and nums[mid] != nums[mid + 1]) or (mid == L - 1 and nums[mid] != nums[mid - 1]) or (
+        #                 nums[mid - 1] != nums[mid] and nums[mid] != nums[mid + 1]):
+        #             return nums[mid]  # nums[mid] is the single number
+        #         left = helper(l, mid - 1)
+        #         if left: return left
+        #         right = helper(mid + 1, r)
+        #         if right: return right
+        #     return 0
+        #
+        # if L == 1:
+        #     return nums[0]
+        # return helper(0, L - 1)
+        return reduce(lambda x, y: x ^ y, nums)
+
+    def optimalDivision(self, nums: list) -> str:
+        # 553. Optimal Division
+        # maximum: a/(b/c/d...) = a*c*d*.../b
+        return "/".join(map(str, nums)) if len(nums) < 3 else f'{nums[0]}/({"/".join(map(str, nums[1:]))})'
