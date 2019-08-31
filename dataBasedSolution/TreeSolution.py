@@ -748,3 +748,25 @@ class TreeSolution:
             layer = tmp
             ans.append(max([node.val for node in tmp]))
         return ans
+
+    def addOneRow(self, root: TreeNode, v: int, d: int) -> TreeNode:
+        # 623. Add One Row to Tree
+        if d == 1:
+            new = TreeNode(v)
+            new.left = root
+            return new
+        layer = [root]
+        while d > 1:
+            d -= 1
+            if d == 1:
+                for node in layer:
+                    l, r = node.left, node.right
+                    node.left, node.right = TreeNode(v), TreeNode(v)
+                    node.left.left, node.right.right = l, r
+            else:
+                tmp = []
+                for node in layer:
+                    if node.left: tmp.append(node.left)
+                    if node.right: tmp.append(node.right)
+                layer = tmp
+        return root
