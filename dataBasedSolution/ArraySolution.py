@@ -2956,3 +2956,65 @@ class ArraySolution:
         # 553. Optimal Division
         # maximum: a/(b/c/d...) = a*c*d*.../b
         return "/".join(map(str, nums)) if len(nums) < 3 else f'{nums[0]}/({"/".join(map(str, nums[1:]))})'
+
+    def subarraySum(self, nums: list, k: int) -> int:
+        # 560. Subarray Sum Equals K
+        # ans, sums = 0, [0]
+        # for n in nums:
+        #     sums.append(sums[-1] + n)
+        # for i, s in enumerate(sums[1:], 1):
+        #     for ps in sums[:i]:
+        #         if s - ps == k:
+        #             ans += 1
+        # return ans
+        ans, dic, s = 0, defaultdict(int), 0
+        dic[0] = 1
+        for n in nums:
+            s += n
+            ans += dic[s - k]
+            dic[s] += 1
+        return ans
+
+    def arrayNesting(self, nums: list) -> int:
+        # 565. Array Nesting
+        dic = {}
+        for i in range(len(nums)):
+            if nums[i] == -1: continue
+            idx, cnt = i, 0
+            while nums[idx] != -1:
+                nums[idx], idx, pre_idx, cnt = -1, nums[idx], idx, cnt + 1
+            dic[i] = cnt + dic.get(pre_idx, 0)
+        return max(dic.values())
+
+    def leastBricks(self, wall: list) -> int:
+        # 554. Brick Wall
+        dic = defaultdict(int)
+        for row in wall:
+            s = 0
+            for n in row[:-1]:
+                s += n
+                dic[s] += 1
+        return len(wall) - max(dic.values()) if dic else len(wall)
+
+    def checkSubarraySum(self, nums: list, k: int) -> bool:
+        # 523. Continuous Subarray Sum
+        # find two equal mods
+        s, mods = 0, {}
+        for i, n in enumerate(nums):
+            if s not in mods:
+                mods[s] = i
+            s += n
+            if k != 0:
+                s %= k
+            if s in mods and mods[s] < i:
+                return True
+        return False
+
+    def triangleNumber(self, nums: list) -> int:
+        # 611. Valid Triangle Number
+        nums.sort()
+        ans, L = 0, len(nums)
+        for i in range(L - 2):
+            for j in range(i + 1, L - 1):
+                ans += bisect.bisect_left(nums, nums[i] + nums[j], lo=j + 1) - j - 1
+        return ans
