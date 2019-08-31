@@ -3018,3 +3018,22 @@ class ArraySolution:
             for j in range(i + 1, L - 1):
                 ans += bisect.bisect_left(nums, nums[i] + nums[j], lo=j + 1) - j - 1
         return ans
+
+    def minDistance(self, word1: str, word2: str) -> int:
+        # 583. Delete Operation for Two Strings
+        l1, l2 = len(word1), len(word2)
+        dp = [[0] * (l2 + 1) for _ in range(l1 + 1)]
+        for i in range(1, l1 + 1):
+            for j in range(1, l2 + 1):
+                if word1[i - 1] == word2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                else:
+                    dp[i][j] = max(dp[i][j - 1], dp[i - 1][j])
+        return l1 + l2 - dp[-1][-1] - dp[-1][-1]  # deleting chars not in common subsequence
+
+    def leastInterval(self, tasks: list, n: int) -> int:
+        # 621. Task Scheduler
+        # schedule the most frequent tasks for (most-1) idles + (most-1) execution + last span for all frequent tasks
+        ts = Counter(tasks)
+        most = max(ts.values())
+        return max((most - 1) * (n + 1) + list(ts.values()).count(most), len(tasks))
