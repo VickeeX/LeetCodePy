@@ -7,6 +7,8 @@
     Author       :    VickeeX
 """
 
+from collections import defaultdict
+
 
 class TreeNode:
     def __init__(self, x):
@@ -770,3 +772,56 @@ class TreeSolution:
                     if node.right: tmp.append(node.right)
                 layer = tmp
         return root
+
+    def constructMaximumBinaryTree(self, nums: list) -> TreeNode:
+        # 654. Maximum Binary Tree
+        if not nums:
+            return None
+        num = max(nums)
+        idx, root = nums.index(num), TreeNode(num)
+        root.left, root.right = self.constructMaximumBinaryTree(nums[:idx]), self.constructMaximumBinaryTree(
+            nums[idx + 1:])
+        return root
+
+    def printTree(self, root: TreeNode) -> list:
+        # 655. Print Binary Tree
+        def findDepth(r: TreeNode):
+            if not r:
+                return 0
+            return 1 + max(findDepth(r.left), findDepth(r.right))
+
+        depth = findDepth(root)
+        width, layer, d = 2 ** depth - 1, [root], 1
+        ans = [[""] * width for _ in range(depth)]
+        while d <= depth:
+            tmp = []
+            pos = 2 ** (depth - d) - 1
+            for node in layer:
+                if not node or not node.left:
+                    tmp.append(None)
+                else:
+                    tmp.append(node.left)
+                if not node or not node.right:
+                    tmp.append(None)
+                else:
+                    tmp.append(node.right)
+                if node:
+                    ans[d - 1][pos] = str(node.val)
+                pos += 2 ** (depth - d + 1)
+            layer, d = tmp, d + 1
+        return ans
+
+    def findDuplicateSubtrees(self, root: TreeNode) -> list:
+        # 652. Find Duplicate Subtrees
+        dic, ans = defaultdict(int), []
+
+        def helper(node):
+            if not node:
+                return '*'
+            s = helper(node.left) + '/' + helper(node.right) + '/' + str(node.val)
+            if dic[s] == 1:  # add once
+                ans.append(node)
+            dic[s] += 1
+            return s
+
+        return ans
