@@ -1428,3 +1428,45 @@ class StringSolution:
             if dif < ans:
                 ans = dif
         return ans
+
+    def findLUSlength(self, strs: list) -> int:
+        # 522. Longest Uncommon Subsequence II
+        def is_sub(s1, s2):  # whether s1 is the sub string of s2
+            i = j = 0
+            while i < len(s1) and j < len(s2):
+                if s1[i] == s2[j]:
+                    i, j = i + 1, j + 1
+                else:
+                    j += 1
+            return i == len(s1)
+
+        uncom, common = set(), set()
+        for s in strs:
+            if s in uncom:
+                uncom.remove(s)
+                common.add(s)
+            elif s not in common:
+                uncom.add(s)
+        for s in sorted(uncom, key=len, reverse=True):
+            for ss in common:
+                if len(s) < len(ss) and is_sub(s, ss):  # common
+                    break
+            else:  # s is uncommon
+                return len(s)
+        return -1
+
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        # 567. Permutation in String
+        # using sliding window
+        size, s2 = len(s1), "-" + s2
+        c1, c2 = Counter(s1), Counter(s2[:size])
+        for i, c in enumerate(s2[size:], size):
+            c2[s2[i - size]] -= 1
+            c2[c] += 1
+            for k, v in c1.items():
+                if v != c2[k]:
+                    break
+            else:
+                return True
+        return False
+
