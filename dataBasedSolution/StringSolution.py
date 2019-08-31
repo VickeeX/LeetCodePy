@@ -1492,3 +1492,14 @@ class StringSolution:
             else:
                 dp2 = tmp
         return ans
+
+    def findDuplicate(self, paths: list) -> list:
+        # 609. Find Duplicate File in System
+        dic = defaultdict(list)
+        for p in paths:
+            path = p.split(' ')
+            pre = path[0]
+            for file in path[1:]:
+                idx = file.index('(')
+                dic[file[idx + 1:-1]].append(pre + "/" + file[:idx])
+        return [v for v in dic.values() if len(v) > 1]

@@ -3037,3 +3037,32 @@ class ArraySolution:
         ts = Counter(tasks)
         most = max(ts.values())
         return max((most - 1) * (n + 1) + list(ts.values()).count(most), len(tasks))
+
+    def updateMatrix(self, matrix: list) -> list:
+        # 542. 01 Matrix
+        from collections import deque
+        w, h = len(matrix[0]), len(matrix)
+
+        def bfs(i, j):
+            queue, visited = deque(), set()
+            moves = [(-1, 0), (0, -1), (0, 1), (1, 0)]
+            queue.append(((i, j), 0))
+            while queue:
+                cl = len(queue)
+                for i in range(cl):  # traverse nodes with same distance
+                    pos, dist = queue.popleft()
+                    x, y = pos
+                    if matrix[x][y] == 0:
+                        return dist
+                    visited.add(pos)
+                    for move in moves:  # to traverse nodes for dist+1
+                        nx, ny = x + move[0], y + move[1]
+                        if 0 <= nx < h and 0 <= ny < w and (nx, ny) not in visited:
+                            queue.append(((nx, ny), dist + 1))
+            return -1
+
+        for i in range(h):
+            for j in range(w):
+                if matrix[i][j] == 1:
+                    matrix[i][j] = bfs(i, j)
+        return matrix
