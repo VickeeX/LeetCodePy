@@ -1470,3 +1470,25 @@ class StringSolution:
                 return True
         return False
 
+    def countSubstrings(self, s: str) -> int:
+        # 647. Palindromic Substrings
+        size = len(s)
+        dp1, dp2 = [1] * size, [1 if c == s[i + 1] else 0 for i, c in enumerate(s[:-1])]
+        ans = sum(dp1) + sum(dp2)
+        for i in range(2, size):
+            if i % 2 == 0:
+                dp = dp1
+            else:
+                dp = dp2
+            tmp = []
+            for j in range(size - i):
+                if dp[j + 1] == 1 and s[j] == s[j + i]:
+                    tmp.append(1)
+                    ans += 1
+                else:
+                    tmp.append(0)
+            if i % 2 == 0:
+                dp1 = tmp
+            else:
+                dp2 = tmp
+        return ans
