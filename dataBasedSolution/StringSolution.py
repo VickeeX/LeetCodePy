@@ -1503,3 +1503,47 @@ class StringSolution:
                 idx = file.index('(')
                 dic[file[idx + 1:-1]].append(pre + "/" + file[:idx])
         return [v for v in dic.values() if len(v) > 1]
+
+    def replaceWords(self, dict: list, sentence: str) -> str:
+        # 648. Replace Words
+        words = sentence.split(" ")
+        dict.sort(key=len)
+        for i, w in enumerate(words):
+            for r in dict:
+                if len(r) > len(w):
+                    break
+                elif w.startswith(r):
+                    words[i] = r
+                    break
+        return " ".join(words)
+
+    def solveEquation(self, equation: str) -> str:
+        # 640. Solve the Equation
+        a, b, cur, tag = 0, 0, "", True  # a: coefficient of x, b is the constant term,
+        cur = ""
+        for i, c in enumerate(equation):
+            if c in "+-=" or i == len(equation) - 1:
+                if i == len(equation) - 1:
+                    cur += c
+                if not cur:
+                    cur = c
+                    continue
+                symbol = +1 if tag else -1
+                if cur[0] in "+-":
+                    symbol *= +1 if cur[0] == '+' else -1
+                    cur = cur[1:]
+                if cur[-1] == 'x':
+                    a += symbol * int(cur[:-1] if len(cur) > 1 else 1)
+                else:
+                    b += symbol * int(cur)
+                cur = c
+                if c == '=':
+                    tag, cur = False, ""
+            else:
+                cur += c
+        if a == 0 and b != 0:
+            return "No solution"
+        elif a == 0 and b == 0:
+            return "Infinite solutions"
+        else:
+            return "x=" + str(-b // a) if -b % a == 0 else "x=" + str(-b / a)

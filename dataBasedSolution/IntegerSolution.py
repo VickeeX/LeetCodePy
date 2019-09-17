@@ -521,6 +521,40 @@ class IntegerSolution:
                 dp[s + c] += dp[s]  # plan of no c, one c, two c, ...
         return dp[-1]
 
+    def minSteps(self, n: int) -> int:
+        # 650. 2 Keys Keyboard
+        cur, ans, copied, yet = 1, 0, 1, False
+        while cur < n:
+            ans += 1
+            if n % cur == 0 and not yet:
+                copied, yet = cur, True
+            else:
+                cur += copied
+                yet = False
+        return ans
+        # current, self.steps, self.copied, self.yet = 1, 0, 1, False
+        # while self.current < n:
+        #     if n % self.current == 0 and not self.yet:
+        #         self.steps += 1
+        #         self.copied = self.current
+        #         self.yet = True
+        #     else:
+        #         self.steps += 1
+        #         self.current += self.copied
+        #         self.yet = False
+        # return self.steps
+
+    def constructArray(self, n: int, k: int) -> list:
+        # 667. Beautiful Arrangement II
+        if k == 1:
+            return list(range(1, n + 1))
+        # sub: k, -(k-1), k-2, -(k-3), 1, 1, 1, ...
+        ans, sign = [1], 1
+        for sub in range(k, 0, -1):
+            ans.append(ans[-1] + sign * sub)
+            sign *= -1
+        return ans + list(range(k + 2, n + 1))
+
 
 def guess(num):
     if num < 3:

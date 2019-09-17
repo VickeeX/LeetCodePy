@@ -3066,3 +3066,13 @@ class ArraySolution:
                 if matrix[i][j] == 1:
                     matrix[i][j] = bfs(i, j)
         return matrix
+
+    def findLongestChain(self, pairs: list) -> int:
+        # 646. Maximum Length of Pair Chain
+        pairs.sort(key=lambda x: x[1])
+        ans, cur = 0, -sys.maxsize
+        for x, y in pairs:
+            if cur < x:
+                ans += 1
+                cur = y
+        return ans
