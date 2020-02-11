@@ -3,7 +3,8 @@
 """
     @File name    :    SortingAlgorithm.py
     @Date         :    2020-02-09 16:45
-    @Description  :    sorting algorithms
+    @Description  :    Bubble Sort, Select Sort, Insertion Sort, Shell Sort, Merge Sort,
+                       Quick Sort, Heap Sort, Counting Sort, Bucket Sort, Raidx Sort
     @Author       :    VickeeX
 """
 """
@@ -12,7 +13,7 @@
 """
 
 
-def bubbleSort(arr):
+def bubble_sort(arr):
     """
     Time complexity:
         avg: O(n^2); best: O(n); worst: O(n^2)
@@ -33,7 +34,7 @@ def bubbleSort(arr):
     return arr
 
 
-def selectSort(arr, tag):
+def select_sort(arr, tag):
     """
     Time complexity:
         avg: O(n^2); best: O(n^2); worst: O(n^2)
@@ -44,7 +45,7 @@ def selectSort(arr, tag):
     if len(arr) == 0:
         return arr
 
-    def minSelectSort(arr):
+    def min_select_sort(arr):
         for i in range(len(arr)):
             min_idx = i
             for j in range(i + 1, len(arr)):
@@ -53,7 +54,7 @@ def selectSort(arr, tag):
             arr[i], arr[min_idx] = arr[min_idx], arr[i]
         return arr
 
-    def maxSelectSort(arr):
+    def max_select_sort(arr):
         for i in range(len(arr) - 1, -1, -1):
             max_idx = i
             for j in range(i):
@@ -63,12 +64,12 @@ def selectSort(arr, tag):
         return arr
 
     if tag:
-        return minSelectSort(arr)
+        return min_select_sort(arr)
     else:
-        return maxSelectSort(arr)
+        return max_select_sort(arr)
 
 
-def insertionSort(arr):
+def insertion_sort(arr):
     """
     Time complexity:
         avg: O(n^2); best: O(n); worst: O(n^2)
@@ -87,7 +88,7 @@ def insertionSort(arr):
     return arr
 
 
-def shellSort(arr):
+def shell_sort(arr):
     """
     Time complexity:
         avg: O(nlgn); best: O(nlgn); worst: O(nlgn)
@@ -109,7 +110,7 @@ def shellSort(arr):
     return arr
 
 
-def mergeSort(arr):
+def merge_sort(arr):
     """
     Time complexity:
         avg: O(nlgn); best: O(nlgn); worst: O(nlgn)
@@ -131,6 +132,79 @@ def mergeSort(arr):
         return tmp
 
     mid = len(arr) // 2
-    left_arr = mergeSort(arr[:mid])
-    right_arr = mergeSort(arr[mid:])
+    left_arr = merge_sort(arr[:mid])
+    right_arr = merge_sort(arr[mid:])
     return merge(left_arr, right_arr)
+
+
+def quick_sort(arr):
+    """
+    choose a pivot as base
+    sort list as two parts: smaller than pivot, bigger than pivot
+    recursive sort the left part and right part
+
+    Time complexity:
+        avg: O(nlgn); best: O(nlgn); worst: O(n^2)
+    Space complexity:
+        O(nlgn) or O(lgn) : O(1*lgn) here as O(1) for partition and O(lgn) for recursion times
+    """
+
+    def recursion(ar, start, end):
+        if len(ar) == 0 or start < 0 or end >= len(ar) or start > end:
+            return []
+        idx = partition(ar, start, end)
+        if idx > start:
+            recursion(ar, start, idx - 1)
+        if idx < end:
+            recursion(ar, idx + 1, end)
+        return ar
+
+    def partition(ar, start, end):
+        from random import randint
+        pivot = randint(start, end)
+        idx = start - 1  # the last position of smaller part
+        ar[pivot], ar[end] = ar[end], ar[pivot]
+        for i in range(start, end + 1):
+            if ar[i] <= ar[end]:  # use <= to put the pivot to the middle of partition
+                idx += 1
+                ar[i], ar[idx] = ar[idx], ar[i]
+        # # if use "ar[i] < ar[end]"
+        # idx += 1
+        # ar[idx], ar[end] = ar[end], ar[idx]
+        return idx
+
+    return recursion(arr, 0, len(arr) - 1)
+
+
+def heap_sort(arr):
+    """
+    build a standard max heap
+    each round: swap the max heap(first element) to expand the sorted part, and adjust the left part
+
+    Time complexity:
+        avg: O(nlgn); best: O(nlgn); worst: O(nlgn)
+    Space complexity:
+        O(lg1): in place
+    """
+    if len(arr) < 2:
+        return arr
+
+    def adjust(ar, i, l):
+        # l is the total length of unsorted partition
+        idx = i
+        for j in (i * 2, i * 2 + 1):  # if left or right child is bigger
+            if j < l and ar[j] > ar[idx]:
+                idx = j
+        if idx != i:  # if any swap, adjust the sub tree to max heap
+            ar[idx], ar[i] = ar[i], ar[idx]
+            adjust(ar, idx, l)
+
+    # build max heap first by adjusting each sub tree as heap
+    for i in range(len(arr) // 2 - 1, -1, -1):
+        adjust(arr, i, len(arr))
+
+    # each round: move the heap to sorted right partition, and adjust left unsorted partition
+    for i in range(len(arr) - 1, 0, -1):
+        arr[0], arr[i] = arr[i], arr[0]
+        adjust(arr, 0, i)
+    return arr
