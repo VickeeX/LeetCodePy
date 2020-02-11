@@ -3,13 +3,12 @@
 """
     @File name    :    SortingAlgorithm.py
     @Date         :    2020-02-09 16:45
-    @Description  :    Bubble Sort, Select Sort, Insertion Sort, Shell Sort, Merge Sort,
-                       Quick Sort, Heap Sort, Counting Sort, Bucket Sort, Raidx Sort
+    @Description  :    Thanks to: https://blog.csdn.net/weixin_41190227/article/details/86600821
+                       * Compare Sort:
+                            Bubble Sort, Select Sort, Insertion Sort, Shell Sort, Merge Sort, Quick Sort, Heap Sort,
+                       * Non-compare Sort:
+                            Counting Sort, Bucket Sort, Raidx Sort
     @Author       :    VickeeX
-"""
-"""
-比较排序：冒泡排序，归并排序，快速排序，堆排序
-非比较排序：计数排序、基数排序、桶排序
 """
 
 
@@ -208,3 +207,105 @@ def heap_sort(arr):
         arr[0], arr[i] = arr[i], arr[0]
         adjust(arr, 0, i)
     return arr
+
+
+def counting_sort(arr):
+    """
+    find the min and max num of array
+    count the occurrences of i, store into the i'th place of tmp array
+    fill the original array according to counts
+    note: here use bias to reduce the extra space of tmp array
+
+    Time complexity:
+        avg: O(n+k); best: O(n+k); worst: O(n+k)
+        k = max_num - min_num while use bias
+    Space complexity:
+        O(k)
+    """
+    if len(arr) < 2:
+        return arr
+    min_n = max_n = arr[0]
+    for n in arr:  # find the min and max num
+        if n < min_n:
+            min_n = n
+        if n > max_n:
+            max_n = n
+    bias, counts = 0 - min_n, [0] * (max_n - min_n + 1)  # use bias to reduce extra space
+    for n in arr:
+        counts[n + bias] += 1
+    idx = 0
+    for n, count in enumerate(counts):
+        if count != 0:
+            arr[idx:idx + count] = [n - bias] * count
+        idx += count
+    return arr
+
+
+def bucket_sort(arr, bucket_size):
+    """
+    upper level of counting sort
+    put nums to buckets according to nums' value mapping
+    use bucket sort recursively or other sort method to sort each bucket
+    factually, bucket_size is the gap of values instead size of buckets ——> bucket_size==1, but bucket may be [1,1,1]
+
+    Time complexity:
+        avg: O(n+k); best: O(n+k); worst: O(n^2)
+        k = max_num - min_num while use bias
+    Space complexity:
+        O(n+k)
+    """
+    if len(arr) < 2:
+        return arr
+    min_n = max_n = arr[0]
+    for n in arr:
+        if n < min_n:
+            min_n = n
+        if n > max_n:
+            max_n = n
+
+    bucket_count, buckets = (max_n - min_n) // bucket_size + 1, []
+    for i in range(bucket_count):
+        buckets.append([])
+    for n in arr:  # map num to buckets as back buckets have larger numbers
+        buckets[(n - min_n) // bucket_size].append(n)
+
+    ans = []
+    for bucket in buckets:
+        if bucket_size == 1:  # do not use "ans.append(bucket[0])" as the bucket may have repeated nums
+            ans += bucket
+        else:
+            if bucket_count == 1:  # to avoid endless loop in one bucket
+                bucket_size -= 1
+            tmp = bucket_sort(bucket, bucket_size)
+            ans += tmp
+    return ans
+
+
+def raidx_sort(arr):
+    """
+    sort from low digit to high digit
+
+    Time complexity:
+        avg: O(n*k); best: O(n*k); worst: O(n*k)
+        k = max_num - min_num while use bias
+    Space complexity:
+        O(n+k)
+    """
+    if len(arr) < 2:
+        return arr
+    max_n = max(arr)
+    max_digit, buckets, mod, div = len(str(max_n)), [], 10, 1
+    for i in range(10):
+        buckets.append([])
+    for i in range(max_digit):
+        for n in arr:
+            buckets[(n % mod) // div].append(n)
+        arr = []
+        for bucket in buckets:
+            for n in bucket:
+                arr.append(n)
+            bucket.clear()
+        mod, div = mod * 10, div * 10
+    return arr
+
+# TODO: doubt the time complexity of Bucket Sort and Raidx Sort
