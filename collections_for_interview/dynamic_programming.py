@@ -8,7 +8,7 @@
 """
 
 
-class DynamicProgrammingSolution():
+class DynamicProgrammingSolution:
 
     def longestPalindrome(self, s):
         """ 5. Longest Palindromic Substring
@@ -66,3 +66,20 @@ class DynamicProgrammingSolution():
                     else:
                         dp[i + 1][j + 1] = dp[i + 1][j - 1] or dp[i][j] or dp[i][j + 1]
         return dp[len(s)][len(p)]
+
+    def dp_coins(self, coins, aim):
+        dp = []
+        for i in range(len(coins)):
+            dp.append([0] * (aim + 1))
+
+        # dp[i][j]: ways to use coins[:i] reach j
+        for k in range(coins[0], aim + 1, coins[0]):
+            dp[0][k] = 1
+        for i in range(len(coins)):
+            dp[i][0] = 1
+            for j in range(1, aim + 1):
+                dp[i][j] = dp[i - 1][j] if coins[i] > j else dp[i - 1][j] + dp[i][j - coins[i]]
+        return dp[len(coins) - 1][aim]
+
+# TODO: longest palindromic substring，longest increasing subsequence, longest continuous string,
+#       longest common subsequence, longest common substring
