@@ -173,6 +173,57 @@ def longest_common_subsequence(s1: str, s2: str):
     return records[-1]
 
 
+def longest_common_string(s1: str, s2: str):
+    """
+    dp[i][j] represents the length of current longest common string ended with s1[i],s2[j]
+    which means dp[i][j]=0 if  s1[i]!=s2[j]
+
+    Time complexity: O(m*n)
+    Space complexity:  O( m*n )
+    """
+    if not s1 or not s2:
+        return ""
+    l1, l2 = len(s1), len(s2)
+    dp, ml, end = [[0] * l2 for _ in range(l1)], 0, -1  # ml is the max LCS now and ends with pos "end" of s1
+    for i, c in enumerate(s1):  # compute the first column
+        if s2[0] == c:
+            dp[i][0], ml, end = 1, 1, i
+    for i, c in enumerate(s2):  # compute the first row
+        if s1[0] == c:
+            dp[0][i], ml, end = 1, 1, 0
+    for i in range(1, l1):
+        for j in range(1, l2):
+            if s1[i] == s2[j]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+                if dp[i][j] > ml:
+                    ml, end = dp[i][j], i
+    return s1[end - ml + 1:end + 1]
+
+
+def longest_common_string_1(s1: str, s2: str):
+    """
+    dp[i][j] only relates with dp[i-1][j-1], the dp matrix could be split into m or n slants
+    for each slant:
+        dp[0][i], dp[1][i+1], ..., dp[k][i+k]
+    or  dp[i][0], dp[i+1][1], ..., dp[i+k][k]
+    ——> we could use only one var to record dp values for each slant
+    ——> slants are unrelated, so the single var could be reused between them
+
+    Time complexity: O(m*n)
+    Space complexity:  O(1)
+    """
+    if not s1 or not s2:
+        return ""
+    l1, l2 = len(s1), len(s2)
+    dp, ml, end = 0, 0, -1
+    for i, j in [(x, 0) for x in range(l1)] + [(0, x) for x in range(l2)]:  # start position for slants
+        for k in range(min(l1 - i, l2 - j)):  # or "while i<l1 and j<l2"
+            dp = dp + 1 if s1[i + k] == s2[j + k] else 0
+            if dp > ml:
+                ml, end = dp, i + k
+    return s1[end - ml + 1:end + 1]
+
+
 def is_match(s, p):
     """ 10. Regular Expression Matching
     """
