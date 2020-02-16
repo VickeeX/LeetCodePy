@@ -8,8 +8,8 @@
 """
 
 
-# TODO: longest palindromic substring ✓，longest increasing subsequence, longest continuous string,
-#       longest common subsequence, longest common substring
+# TODO: longest palindromic substring ✓，longest increasing subsequence ✓,
+#       longest common subsequence ✓, longest common substring, longest continuous string
 
 
 def longest_palindrome(s):
@@ -134,6 +134,43 @@ def longest_increasing_subsequence_2(nums):
                 r = m - 1
         right, ends[l], dp[i] = max(right, l), nums[i], l + 1
     return reversed_generate_LIS(nums, dp)
+
+
+def longest_common_subsequence(s1: str, s2: str):
+    """
+    Original Method:
+        dp[i][j] represents the longest common subsequence between s[:i+1] and s[:j+1]
+        reversed traversal to get th LCS from dp
+    Optimized Method:
+        1. reduce dp from O(m*n) to O(n) [ O(m) is ok too ], iter dp in each round.
+           need to use extra O(1) space to delay one step write/
+        2. use records to avoid reverse traversal for LCS, extra max O(m*n) space to save O(m*n) time.
+
+    Time complexity: O(m*n)
+    Space complexity:  O(m*n) could be optimized to min( O(m), O(n) ) as extra O(m*n) time
+    """
+    if not s1 or not s2:
+        return ""
+    l1, l2 = len(s1), len(s2)
+    idx1, idx2 = s1.index(s2[0]), s2.index(s1[0])
+    dp, records = [0] * idx2 + [1] * (l2 - idx2), [""] * idx2 + [str(s1[0])] * (l2 - idx2)
+    for i in range(1, l1):
+        pre, cur = 0 if i < idx1 else 1, 0
+        pre_s, cur_s = "" if i < idx1 else str(s2[0]), ""
+        for j in range(1, l2):
+            if pre < dp[j]:
+                cur, cur_s = dp[j], records[j]
+            else:
+                cur, cur_s = pre, pre_s
+
+            # cur = max(pre, dp[j])
+            if s1[i] == s2[j] and dp[j - 1] + 1 > cur:
+                cur, cur_s = dp[j - 1] + 1, records[j - 1] + str(s1[i])
+            dp[j - 1], pre = pre, cur  # delay one step writing dp[j-1] as cur use older values of that
+            records[j - 1], pre_s = pre_s, cur_s
+        dp[-1], records[-1] = cur, cur_s
+
+    return records[-1]
 
 
 def is_match(s, p):
