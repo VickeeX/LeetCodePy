@@ -263,6 +263,7 @@ def minimal_editing_cost_1(s1, s2, ic, dc, rc):
             cur = min(dp[j + 1] + dc, pre + ic, dp[j] if s1[i] == s2[j] else dp[j] + rc)
             dp[j], pre = pre, cur
         dp[-1] = cur
+    return dp[-1]
 
 
 def is_match(s, p):
