@@ -7,9 +7,12 @@
     @Author       :    VickeeX
 """
 
-
-# TODO: longest palindromic substring ✓，longest increasing subsequence ✓,
-#       longest common subsequence ✓, longest common substring, longest continuous string
+"""
+    longest palindromic substring ✓，longest increasing subsequence ✓,
+    longest common subsequence ✓, longest common substring ✓
+    minimal editing cost ✓,
+    other DP problems
+"""
 
 
 def longest_palindrome(s):
@@ -222,6 +225,44 @@ def longest_common_string_1(s1: str, s2: str):
             if dp > ml:
                 ml, end = dp, i + k
     return s1[end - ml + 1:end + 1]
+
+
+def minimal_editing_cost(s1, s2, ic, dc, rc):
+    """
+    :param ic: inserting cost
+    :param dc: deleting cost
+    :param rc: replacing cost
+
+    dp[i][j] represents the min editing cost from s1[:i] to s2[:j]
+    Time complexity: O(m*n)
+    Space complexity:  O(m*n)
+    """
+    l1, l2 = len(s1), len(s2)
+    dp = [[ic * j if i == 0 else i * dc if j == 0 else -1 for j in range(l2 + 1)] for i in range(l1 + 1)]
+
+    for i in range(1, l1 + 1):
+        for j in range(1, l2 + 1):
+            dp[i][j] = min(dp[i - 1][j] + dc,
+                           dp[i][j - 1] + ic,
+                           dp[i - 1][j - 1] if s1[i - 1] == s2[j - 1] else dp[i - 1][j - 1] + rc)
+    return dp[-1][-1]
+
+
+def minimal_editing_cost_1(s1, s2, ic, dc, rc):
+    """
+    dp[j] in round i: represents the min editing cost from s1[:i+1] to s2[:j]
+    Time complexity: O(m*n)
+    Space complexity:  O(n), n is the length of s2; MARK: not min( O(m),O(n) )
+    """
+    l1, l2 = len(s1), len(s2)
+    dp = [ic * i for i in range(l2 + 1)]
+
+    for i in range(l1):  # to reduce a little code, here use range(l1), range(l2), note the indexes' change
+        pre, cur = (i + 1) * dc, 0
+        for j in range(l2):
+            cur = min(dp[j + 1] + dc, pre + ic, dp[j] if s1[i] == s2[j] else dp[j] + rc)
+            dp[j], pre = pre, cur
+        dp[-1] = cur
 
 
 def is_match(s, p):
