@@ -9,8 +9,8 @@
 
 """
     longest palindromic substring ✓，longest increasing subsequence ✓,
-    longest common subsequence ✓, longest common substring ✓
-    minimal editing cost ✓,
+    longest common subsequence ✓, longest common substring ✓,
+    minimal editing cost ✓, interleaved composition of strings ✓
     other DP problems
 """
 
@@ -252,7 +252,7 @@ def minimal_editing_cost_1(s1, s2, ic, dc, rc):
     """
     dp[j] in round i: represents the min editing cost from s1[:i+1] to s2[:j]
     Time complexity: O(m*n)
-    Space complexity:  O(n), n is the length of s2; MARK: not min( O(m),O(n) )
+    Space complexity:  O(n), n is the length of s2; MARK: not O(min(m,n))
     """
     l1, l2 = len(s1), len(s2)
     dp = [ic * i for i in range(l2 + 1)]
@@ -264,6 +264,24 @@ def minimal_editing_cost_1(s1, s2, ic, dc, rc):
             dp[j], pre = pre, cur
         dp[-1] = cur
     return dp[-1]
+
+
+def interleaved_composition_string(s1, s2, aim):
+    """
+    dp[i][j] represents whether s1[:i] and s2[:j] interleaving compose to aim[:i+j]
+    Time complexity: O(m*n)
+    Space complexity:  O(m*n), can be optimized to O(min(m,n)) —— easy and omitted here
+    """
+    l1, l2, l3 = len(s1), len(s2), len(aim)
+    if l1 + l2 != l3:
+        return False
+    dp = [[True if i == 0 and s2[:j] == aim[:j] or j == 0 and s1[:i] == aim[:i] else False
+           for j in range(l2 + 1)] for i in range(l1 + 1)]
+    for i in range(l1 + 1):
+        for j in range(l2 + 1):
+            if dp[i][j - 1] and aim[i + j - 1] == s2[j - 1] or dp[i - 1][j] and aim[i + j - 1] == s1[i - 1]:
+                dp[i][j] = True
+    return dp[-1][-1]
 
 
 def is_match(s, p):
