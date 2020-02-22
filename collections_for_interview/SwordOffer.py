@@ -6,6 +6,7 @@
     @Description  :    {TODO}
     @Author       :    VickeeX
 """
+import heapq
 
 
 def topic_3_repeated_num(nums):
@@ -666,7 +667,7 @@ def topic_35_clone_complex_linked_list(head):
     return newh
 
 
-def topic_35_clone_complex_linked_list_(head):
+def topic_35_clone_complex_linked_list_1(head):
     # NOT PASSED !!!
     # time complexity: O(n)
     # space complexity: O(1)
@@ -697,3 +698,494 @@ def topic_35_clone_complex_linked_list_(head):
         t1 = t1.next
         t2 = t2.next
     return newh
+
+
+class Topic36ConvertTreeToLinkedList:
+    last = None
+
+    def Convert(self, root):
+        # should use helper method: to avoid return node in sub-recursion
+        if not root:
+            return None
+        if root.left:
+            self.Convert(root.left)
+        root.left = self.last
+        if self.last:
+            self.last.right = root
+        self.last = root
+        if root.right:
+            self.Convert(root.right)
+
+        while root and root.left:
+            root = root.left
+        return root
+
+
+def topic_38_permutation(ss):
+    if len(ss) == 1:
+        return [ss]
+    dic = set()
+    for i in range(len(ss)):
+        for ps in topic_38_permutation(ss[:i] + ss[i + 1:]):
+            dic.add(ss[i] + ps)
+    return sorted(list(dic))
+
+
+def topic_38_permutation_1(ss):
+    from itertools import permutations
+    return sorted(list(set(map(''.join, permutations(ss))))) if ss else []
+
+
+def topic_39_more_than_half_number(numbers):
+    if not numbers:
+        return 0
+    num, count = numbers[0], 1
+    for n in numbers[1:]:
+        if n == num:
+            count += 1
+        else:
+            count -= 1
+            if count == 0:
+                num, count = n, 1
+    # check in case the number doesn't exist
+    return num if numbers.count(num) > (len(numbers) // 2) else 0
+
+
+def topic_40_get_least_k_numbers(nums, k):
+    import heapq
+    if k > len(nums) or k == 0:
+        return []
+    heap = []
+    for n in nums:
+        if len(heap) < k:
+            heap.append(-n)
+        else:
+            heap.append(max(-n, heapq.heappop(heap)))
+        heapq.heapify(heap)
+    return sorted([-n for n in heap])
+
+
+class Topic41MedianSolution:
+    left, right = [], []
+
+    def Insert(self, num):
+        if not self.left:
+            self.left.append(-num)
+            heapq.heapify(self.left)
+        else:
+            tag = True
+            if not self.right or len(self.left) > len(self.right):
+                n = -self.left[0]
+            else:
+                n, tag = self.right[0], False
+            n, num = min(n, num), max(n, num)
+            if tag:
+                self.left[0] = -n
+                self.right.append(num)
+            else:
+                self.left.append(-n)
+                self.right[0] = num
+            heapq.heapify(self.left)
+            heapq.heapify(self.right)
+
+    def GetMedian(self):
+        # if Python2,use "xx / 2.0"
+        return -self.left[0] if len(self.left) > len(self.right) else (-self.left[0] + self.right[0]) / 2
+
+
+def topic_42_find_greatest_sum_of_subArray(array):
+    tmp = max(array)
+    if tmp < 0:
+        return tmp
+    ans = s = 0
+    for i, n in enumerate(array):
+        s += n
+        if s < 0:
+            s = 0
+        if s > ans:
+            ans = s
+    return ans
+
+
+def topic_42_find_greatest_sum_of_subArray_dp(array):
+    if not array:
+        return 0
+    dp = [array[0]]
+    for n in array[1:]:
+        dp.append(n if dp[-1] < 0 else dp[-1] + n)
+    return max(dp)
+
+
+def topic_43_number_of_1_between_1_and_n(n):
+    ans, tmp, base = 0, n, 1
+    while tmp:
+        last = tmp % 10
+        tmp = tmp // 10
+        ans += tmp * base  # ones from "1 to 9" increasing
+        if last == 1:
+            ans += n % base + 1  # the one in match position
+        elif last > 1:
+            ans += base
+        base *= 10
+    return ans
+
+
+def topic_44_numer_in_sequence(n):
+    counts = [1]
+    tmp, i = n, 0
+    while tmp > 0:
+        i += 1
+        counts.append((10 ** i - 10 ** (i - 1)) * i)
+        tmp -= counts[-1]
+    # i is the bit number of n
+    s = sum(counts[:-1])
+    return [int(k) for k in str((n - s) // i + 10 ** (i - 1))][(n - sum(counts[:-1])) % i]
+
+
+def topic_45_concat_min_number(numbers):
+    # bug: if 0 appears ?
+    from functools import cmp_to_key
+    if not numbers:
+        return ""
+    # # python2
+    # numbers = sorted(numbers, lambda x, y: int(str(x) + str(y)) - int(str(y) + str(x)))
+    numbers = sorted(numbers, key=cmp_to_key(lambda x, y: int(str(x) + str(y)) - int(str(y) + str(x))))
+    return int(''.join([str(n) for n in numbers]))
+
+
+def topic_46_number_to_string(number):
+    s = [int(c) for c in str(number)]
+    dp = [1]
+    for i, c in enumerate(s[1:], 1):
+        if s[i - 1] * 10 + c > 25:
+            dp.append(dp[i - 1])
+        else:
+            dp.append(dp[i - 1] + dp[i - 2])
+    return dp
+
+
+def topic_48_non_repeated_string(s):
+    ans, cur = "", ""
+    for i, c in enumerate(s):
+        if c not in cur:
+            cur += str(c)
+            if len(cur) > len(ans):
+                ans = cur
+        else:
+            cur = cur[cur.index(c) + 1:] + str(c)
+    return ans
+
+
+def topic_49_get_ugly_number(index):
+    uglys = [1]
+    idx = [0, 0, 0]
+    base = [2, 3, 5]
+
+    while index > 1:
+        tmps = [uglys[idx[i]] * base[i] for i in range(3)]
+        t = min(tmps)
+        for i in range(3):
+            if tmps[i] == t:
+                idx[i] += 1
+        uglys.append(t)
+        index -= 1
+    return uglys[- 1]
+
+
+def topic_50_first_not_repeatingchar(s):
+    records = [0] * 80
+    for c in s:
+        print(ord(c), ord(c) - 65)
+        records[ord(c) - 65] += 1
+    for i, c in enumerate(s):
+        if records[ord(c) - 65] == 1:
+            return i
+    return -1
+
+
+class Topic50FirstNotRepeatingCharStreamSolution:
+    # records = [0] * 80
+    # s = ""
+    #
+    # def FirstAppearingOnce(self):
+    #     for i, c in enumerate(self.s):
+    #         if self.records[ord(c) - 65] == 1:
+    #             return c
+    #     return '#'
+    #
+    # def Insert(self, char):
+    #     self.records[ord(char) - 65] += 1
+    #     self.s += str(char)
+    #
+
+    records = [0] * 80
+    ans = []
+
+    def FirstAppearingOnce(self):
+        return self.ans[0] if self.ans else "#"
+
+    def Insert(self, char):
+        self.records[ord(char) - 65] += 1
+        if self.records[ord(char) - 65] == 1:
+            self.ans.append(char)
+        elif char in self.ans:
+            self.ans.remove(char)
+
+
+def topic_51_inverse_pairs(data):
+    def merge(i, j, l):
+        count = 0
+        i1, j1 = i, j
+        tmp = []
+        while i1 < i + l and j1 < min(j + l, end):
+            if data[i1] < data[j1]:
+                tmp.append(data[i1])
+                i1 += 1
+            else:
+                tmp.append(data[j1])
+                j1 += 1
+                count += i + l - i1
+        while i1 < i + l:
+            tmp.append(data[i1])
+            i1 += 1
+        while j1 < min(j + l, end):
+            tmp.append(data[j1])
+            j1 += 1
+        data[i:min(j + l, end)] = tmp
+        return count
+
+    if len(data) < 2:
+        return 0
+    end = len(data)
+    count = 0
+    l = 1
+    while l < end:
+        begins, i = [], 0
+        while i < end:
+            begins.append(i)
+            i += l
+        for i in range(1, len(begins), 2):
+            count += merge(begins[i - 1], begins[i], l)
+        l *= 2
+    return count % 1000000007
+
+
+def topic_51_inverse_pairs_recursive(self, data):
+    if len(data) == 0:
+        return 0
+
+    def mergeSort(data, begin, end):
+        if begin == end - 1:
+            return 0
+        mid = int((begin + end) / 2)
+        left_count = mergeSort(data, begin, mid)
+        right_count = mergeSort(data, mid, end)
+        merge_count = merge(data, begin, mid, end)
+        return left_count + right_count + merge_count
+
+    def merge(data, begin, mid, end):
+        i = begin
+        j = mid
+        count = 0
+        temp = []
+        while i < mid and j < end:
+            if data[i] <= data[j]:
+                temp.append(data[i])
+                i += 1
+            else:
+                temp.append(data[j])
+                j += 1
+                count += mid - i
+        while i < mid:
+            temp.append(data[i])
+            i += 1
+        while j < end:
+            temp.append(data[j])
+            j += 1
+        data[begin: end] = temp
+        del temp
+        return count
+
+    begin = 0
+    end = len(data)
+    ans = mergeSort(data, begin, end)
+    return ans % 1000000007
+
+
+def topic_52_find_first_common_node(h1, h2):
+    # s1 = []
+    # tmp = h1
+    # while tmp:
+    #     s1.append(tmp)
+    #     tmp = tmp.next
+    # tmp = h2
+    # while tmp:
+    #     if tmp in s1:
+    #         return tmp
+    #     tmp = tmp.next
+    # return None
+    from collections import deque
+    # reduce time complexity from O(m*n) to O(m+n)
+    def travesal(head):
+        tmp, nodes = head, deque()
+        while tmp:
+            nodes.append(tmp)
+            tmp = tmp.next
+        return nodes
+
+    s1, s2, ans = travesal(h1), travesal(h2), None
+    while s1 and s2:
+        if s1[-1] == s2[-1]:
+            ans = s1.pop()
+            s2.pop()
+        else:
+            break
+    return ans
+
+
+def topic_53_num_frequency_in_sorted_array(data, k):
+    # # trick: return data.count(k)
+    # the following method reduce time complexity from O(n) to O(lgn)
+    def find_first(l, r):
+        if l > r:
+            return -1
+        mid = (l + r) // 2
+        if data[mid] == k:
+            if mid == 0 or data[mid - 1] != k:
+                return mid
+            else:
+                r = mid - 1
+        elif data[mid] < k:
+            l = mid + 1
+        else:
+            r = mid - 1
+        return find_first(l, r)
+
+    def find_last(l, r):
+        if l > r:
+            return -1
+        mid = (l + r) // 2
+        if data[mid] == k:
+            if mid == len(data) - 1 or data[mid + 1] != k:
+                return mid
+            else:
+                l = mid + 1
+        elif data[mid] < k:
+            l = mid + 1
+        else:
+            r = mid - 1
+        return find_last(l, r)
+
+    a, b = find_first(0, len(data) - 1), find_last(0, len(data) - 1)
+    if a != -1 and b != -1:
+        return b - a + 1
+    return 0
+
+
+def topic_53_find_missing_number(numbers):
+    if not numbers:
+        return -1
+    l, r = 0, len(numbers) - 1
+    while l <= r:
+        mid = (l + r) // 2
+        if numbers[mid] != mid:
+            if mid == 0 or numbers[mid - 1] == mid - 1:
+                return mid
+            r = mid - 1
+        else:
+            l = mid + 1
+    if l == len(numbers):
+        return l
+    return -1
+
+
+def topic_53_find_right_number(numbers):
+    if not numbers:
+        return -1
+    l, r = 0, len(numbers) - 1
+    while l <= r:
+        mid = (l + r) // 2
+        if numbers[mid] == mid:
+            return mid
+        elif numbers[mid] < mid:
+            l = mid + 1
+        else:
+            r = mid - 1
+    return -1
+
+
+def topic_54_kth_node_in_tree(root, k):
+    if not root or k == 0:
+        return None
+
+    def helper(node, n):
+        ans = None
+        if node.left:
+            ans, n = helper(node.left, n)
+        if n == 1:
+            return node.val, -1
+        n -= 1
+        if not ans and node.right:
+            ans, n = helper(node.right, n)
+        return ans, n
+
+    return helper(root, k)[0]
+
+
+def topic_55_depth_of_tree(root):
+    def dfs(node, h):
+        if not node:
+            return h
+        h += 1
+        return max(dfs(node.left, h), dfs(node.right, h))
+
+    return dfs(root, 0)
+
+
+def topic_55_balance_tree(root):
+    def dfs(node, h):
+        if not node:
+            return h, True
+        h += 1
+        h1, f1 = dfs(node.left, h)
+        h2, f2 = dfs(node.right, h)
+        return max(h1, h2), f1 and f2 and -1 <= h1 - h2 <= 1
+
+    return dfs(root, 0)[1]
+
+
+def topic_56_find_single_nums(array):
+    # TODO: unclear for bit operation
+    from functools import reduce
+    if len(array) < 2: return array
+    xor = reduce(lambda x, y: x ^ y, array)
+    if xor != 1:
+        xor = xor & (~xor + 1)
+    lst1, lst2 = [], []
+    for i in array:
+        if i & xor:
+            lst1.append(i)
+        else:
+            lst2.append(i)
+    return [reduce(lambda x, y: x ^ y, lst1), reduce(lambda x, y: x ^ y, lst2)]
+
+
+def topic_56_single_nums(array):
+    records = [0] * 32
+    for n in array:
+        for i, c in enumerate(bin(n)[:1:-1]):
+            records[i] += 1 if c == '1' else 0
+    return int("0b" + ''.join([str(n % 3) for n in records][::-1]), 2)
+
+
+def topic_57_find_numbers_with_sum(array, sum):
+    i, j = 0, len(array) - 1
+    while i < j:
+        s = array[i] + array[j]
+        if s == sum:
+            return array[i], array[j]
+        elif s < sum:
+            i += 1
+        else:
+            j -= 1
+    return []
