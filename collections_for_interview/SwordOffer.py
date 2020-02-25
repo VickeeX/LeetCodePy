@@ -7,6 +7,7 @@
     @Author       :    VickeeX
 """
 import heapq
+from collections import deque
 
 
 def topic_3_repeated_num(nums):
@@ -1178,14 +1179,141 @@ def topic_56_single_nums(array):
     return int("0b" + ''.join([str(n % 3) for n in records][::-1]), 2)
 
 
-def topic_57_find_numbers_with_sum(array, sum):
+def topic_57_find_numbers_with_sum(array, s):
     i, j = 0, len(array) - 1
     while i < j:
-        s = array[i] + array[j]
-        if s == sum:
+        t = array[i] + array[j]
+        if t == s:
             return array[i], array[j]
-        elif s < sum:
+        elif t < s:
             i += 1
         else:
             j -= 1
     return []
+
+
+def topic_57_find_continuous_sequence(target):
+    if target < 3:
+        return []
+    ans, s, i, j = [], 3, 1, 2
+    while j <= target // 2 + 1:
+        while s > target:
+            s -= i
+            i += 1
+        if s == target:
+            ans.append([x for x in range(i, j + 1)])
+        j += 1
+        s += j
+    return ans
+
+
+def topic_58_reverse_sentence(s):
+    return ' '.join(s.split(' ')[::-1])
+
+
+def topic_58_left_rotate_string(s, n):
+    return "" if not s else s[n % len(s):] + s[:n % len(s)]
+
+
+def topic_59_max_num_windows(num, size):
+    # que records the max number postion while the pos in window
+    # each pos can be regarded as a watershed:
+    # neighboring poses[i,j] in que:
+    #   while the start of window is in num[i+1:j+1], the max is num[j]
+    if not num or len(num) < size or size < 1:
+        return []
+    que, ans = deque(), []
+    for i, n in enumerate(num):
+        if i < size:
+            while que and que[-1] <= n:
+                que.pop()
+            que.append(n)
+        else:
+            ans.append(que[0])
+            while que and que[-1] <= n:
+                que.pop()
+            if que and que[0] <= num[i - size]:
+                que.popleft()
+            que.append(n)
+    ans.append(que[0])
+    return ans
+
+
+class Topi59MaxNumQueue:
+    que = deque()
+    maxs = deque()
+
+    def push(self, num):
+        self.que.append(num)
+        while self.maxs and self.maxs[-1] <= num:
+            self.maxs.pop()
+        self.maxs.append(num)
+
+    def pop(self):
+        if self.maxs[0] == self.que[0]:
+            self.maxs.popleft()
+        self.que.popleft()
+
+    def max(self):
+        return self.maxs[0]
+
+
+def topic_61_is_continuous_cards(numbers):
+    if not numbers:
+        return False
+    numbers, zeros, needs = sorted(numbers), 0, 0
+    for i, n in enumerate(numbers[:-1]):
+        if n == 0:
+            zeros += 1
+        elif n == numbers[i + 1]:
+            return False
+        else:
+            needs += numbers[i + 1] - n - 1
+    return zeros >= needs
+
+
+def topic_62_last_remaining(n, m):
+    if n == 0 or m == 0:
+        return -1
+    nums = [i for i in range(n)]
+    i = 0
+    while len(nums) > 1:
+        i = (i + m - 1) % len(nums)
+        nums.pop(i)
+    return nums[0]
+
+
+def topic_65_add_without_arithmetic(x, y):
+    while y != 0:
+        x, y = (x ^ y) & 0xFFFFFFFF, (x & y) << 1
+    return x if x >> 31 == 0 else x - 4294967296
+
+
+def topic_66_product(A):
+    if not A:
+        return []
+    n1, n2, l = [1], [1], len(A)
+    for n in A:
+        n1.append(n * n1[-1])
+    for n in A[::-1]:
+        n2.append(n * n2[-1])
+    return [n1[i] * n2[l - i - 1] for i in range(l)]
+
+
+def topic_67_str_to_int(s):
+    if not s:
+        return 0
+    ans, sign, tag = 1, 1, True
+    if s[0] in '+-':
+        if s[0] == '-':
+            sign = -1
+        s = s[1:]
+    if not s:
+        return 0
+    for c in s:
+        if c in "0123456789":
+            ans = ord(c) - 48 if tag else ans * 10 + ord(c) - 48
+        else:
+            return 0
+
+    return 0 if ans > 2147483648 or (ans == 2147483648 and sign == 1) else sign * ans
